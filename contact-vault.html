@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restricted — Piyush Tomar</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="Website_logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#08050A; --surface:rgba(199,154,87,0.03); --text:#E8DCC8; --text-dim:#9A8B72; --text-faint:#5A4D3C;
+  --border:rgba(199,154,87,0.08); --border-hi:rgba(199,154,87,0.16);
+  --crimson:#C5293A; --crimson-bright:#E63950; --wine:#6B1F2E; --gold:#C79A57; --gold-bright:#E3BC7F; --red:#E63950;
+  --grad:linear-gradient(135deg, var(--crimson), var(--wine));
+  --serif:'Cinzel',sans-serif; --display:'Cormorant Garamond',serif; --sans:'Inter',sans-serif; --mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--void); color:var(--text); font-family:var(--sans);
+  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+  overflow:hidden;
+}
+#bg{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+#bg .dots{
+  position:absolute; inset:-2px;
+  background-image:radial-gradient(rgba(199,154,87,0.1) 1px, transparent 1.4px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 20%, black 30%, transparent 85%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 20%, black 30%, transparent 85%);
+}
+#bg .aurora{ position:absolute; border-radius:50%; filter:blur(110px); }
+#bg .aurora.a{ width:480px; height:480px; background:var(--crimson); opacity:0.28; left:-120px; top:-100px; }
+#bg .aurora.b{ width:420px; height:420px; background:var(--wine); opacity:0.22; right:-100px; bottom:-100px; }
+.gate{
+  width:100%; max-width:420px; padding:46px; background:var(--surface);
+  border:1px solid var(--border); border-radius:24px; text-align:center;
+  position:relative; z-index:1; animation:fadeUp 0.8s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.mark{
+  width:52px; height:52px; border-radius:15px; position:relative; margin:0 auto 26px;
+  background:linear-gradient(155deg, rgba(197,41,58,0.18), rgba(199,154,87,0.08)); border:1px solid var(--border-hi);
+  display:flex; align-items:center; justify-content:center; transition:transform 0.4s;
+}
+.mark-icon{
+  width:60%; height:60%;
+  background:linear-gradient(155deg, var(--gold-bright), var(--crimson));
+  -webkit-mask:url('dragon-seal.svg') center/contain no-repeat; mask:url('dragon-seal.svg') center/contain no-repeat;
+}
+.gate:hover .mark{ transform:rotate(-6deg) scale(1.05); }
+.gate h1{font-family:var(--display);font-size:26px;font-weight:600;margin-bottom:12px}
+.gate p{font-size:13.5px;color:var(--text-dim);margin-bottom:34px;line-height:1.6}
+.gate input{
+  width:100%; background:var(--void); border:1px solid var(--border); border-radius:12px;
+  padding:15px 17px; font-size:14.5px; color:var(--text); font-family:var(--sans);
+  margin-bottom:13px; transition:all 0.2s;
+}
+.gate input:focus{outline:none;border-color:var(--crimson);box-shadow:0 0 0 3px rgba(197,41,58,0.12)}
+.gate-btn{
+  width:100%; background:var(--grad); color:#fff; font-weight:700; font-size:14.5px;
+  padding:15px; border-radius:12px; transition:all 0.2s; cursor:pointer; font-family:var(--sans);
+}
+.gate-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(197,41,58,0.3); }
+.gate-error{color:var(--red);font-size:12.5px;margin-top:15px;display:none;font-weight:500}
+.gate-error.show{display:block}
+.vault-content{display:none;width:100%;max-width:580px;position:relative;z-index:1;animation:fadeUp 0.8s ease}
+.vault-content.show{display:block}
+.vault-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:42px;
+}
+.vault-card h2{font-family:var(--display);font-size:28px;font-weight:600;margin-bottom:10px}
+.vault-card .sub{font-size:13.5px;color:var(--text-dim);margin-bottom:34px}
+.vault-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:19px 0; border-top:1px solid var(--border);
+}
+.vault-row:last-child{border-bottom:1px solid var(--border)}
+.vault-row .k{font-size:10.5px;color:var(--text-faint);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em}
+.vault-row .v{font-size:14.5px;font-weight:500}
+.vault-back{
+  display:inline-flex; align-items:center; gap:8px; margin-top:30px;
+  font-size:13.5px; color:var(--text-dim); font-weight:500; transition:all 0.2s;
+}
+.vault-back:hover{color:var(--crimson-bright);transform:translateX(-4px)}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div id="bg"><div class="dots"></div><div class="aurora a"></div><div class="aurora b"></div></div>
+
+<div class="gate" id="gate">
+  <div class="mark"><span class="mark-icon"></span></div>
+  <h1>Restricted area</h1>
+  <p>This page is not linked anywhere on the site. Enter the access code to continue.</p>
+  <input type="email" id="gateUser" placeholder="Email" autocomplete="off">
+  <input type="password" id="gatePass" placeholder="Password" autocomplete="off">
+  <button class="gate-btn" id="gateBtn">Unlock</button>
+  <div class="gate-error" id="gateError">Incorrect email or password.</div>
+</div>
+
+<div class="vault-content" id="vaultContent">
+  <div class="vault-card">
+    <h2>Direct contact details</h2>
+    <div class="sub">Unlisted contact info — not published on the public site.</div>
+    <div class="vault-row"><span class="k">Phone</span><span class="v">+91 70583-42101</span></div>
+    <div class="vault-row"><span class="k">Email</span><span class="v">piyushtomar1222@gmail.com</span></div>
+    <div class="vault-row"><span class="k">Location</span><span class="v">Navi Mumbai, Maharashtra</span></div>
+    <div class="vault-row"><span class="k">LinkedIn</span><span class="v">linkedin.com/in/tomarpiyush</span></div>
+    <a href="index.html" class="vault-back">← Back to main site</a>
+  </div>
+</div>
+
+<script>
+const VALID_USER = 'piyushtomar1222@gmail.com';
+const VALID_PASS = 'PIYUSH11';
+const gate = document.getElementById('gate');
+const vault = document.getElementById('vaultContent');
+const err = document.getElementById('gateError');
+
+document.getElementById('gateBtn').addEventListener('click', tryUnlock);
+document.getElementById('gatePass').addEventListener('keydown', e => { if(e.key === 'Enter') tryUnlock(); });
+
+function tryUnlock(){
+  const u = document.getElementById('gateUser').value.trim().toLowerCase();
+  const p = document.getElementById('gatePass').value;
+  if(u === VALID_USER && p === VALID_PASS){
+    gate.style.display = 'none';
+    vault.classList.add('show');
+  } else {
+    err.classList.add('show');
+  }
+}
+</script>
+</body>
+</html>
