@@ -1,274 +1,197 @@
 /* ============================================================
-   PIYUSH TOMAR — LUXURY GOLD EDITION v2
-   ReactBits-style dot grid + silk aurora on single canvas.
-   Fixed cursor with proper lerp. All features isolated in try/catch.
+   PIYUSH TOMAR — LUXURY GOLD EDITION
+   Every feature is isolated in its own try/catch so nothing can
+   take the rest of the page down. The interactive dot grid and
+   aurora both live only inside the hero and are masked to fade
+   out at the bottom of the section — never full-page.
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function(){
 
-  /* ---------- LOADER ---------- */
-  (function(){
-    var el = document.getElementById('loader');
-    if(!el) return;
-    var done = false;
-    function finish(){ if(done) return; done = true; el.classList.add('out'); setTimeout(function(){ el.style.display = 'none'; }, 700); }
+  /* ---------- LOADER: fade in / hold / fade out, then gone ---------- */
+  (function loader(){
+    var loaderEl = document.getElementById('loader');
+    if(!loaderEl) return;
+    var finished = false;
+    function finish(){
+      if(finished) return;
+      finished = true;
+      loaderEl.classList.add('out');
+      setTimeout(function(){ loaderEl.style.display = 'none'; }, 650);
+    }
+    // One full breathing cycle (2.2s) plus a little air, then a hard
+    // fallback in case anything upstream ever stalls.
     setTimeout(finish, 2600);
-    setTimeout(finish, 4200);
+    setTimeout(finish, 5000);
   })();
 
-  /* ---------- HERO CANVAS: SILK AURORA + DOT GRID ---------- */
+  /* ---------- HERO INTERACTIVE GOLD DOT GRID ---------- */
   try{
-    var canvas = document.getElementById('heroCanvas');
-    var hero = document.querySelector('.hero');
-    if(!canvas || !canvas.getContext || !hero) throw 'no canvas';
-
-    var ctx = canvas.getContext('2d');
-    var w, h, dots = [];
-    var mouse = { x: -9999, y: -9999, active: false };
-    var spacing = 30;
-    var heroActive = true;
-    var t = 0;
-
-    // Silk aurora config (ReactBits params)
-    var silkScale = 0.4;
-    var silkSpeed = 6;
-    var silkRotation = 4.4;
-    var silkNoise = 1.5;
-
-    function resize(){
+    var canvas = document.getElementById('heroField');
+    var heroEl = document.querySelector('.hero');
+    if(canvas && canvas.getContext && heroEl){
+      var ctx = canvas.getContext('2d');
+      var w, h, dots = [];
+      var mouse = {x:-9999, y:-9999, active:false};
+      var spacing = 32;
+      var heroActive = true;
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = canvas.width = hero.offsetWidth * dpr;
-      h = canvas.height = hero.offsetHeight * dpr;
-      canvas.style.width = hero.offsetWidth + 'px';
-      canvas.style.height = hero.offsetHeight + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      buildDots();
-    }
 
-    function buildDots(){
-      dots = [];
-      var sw = hero.offsetWidth, sh = hero.offsetHeight;
-      var cols = Math.ceil(sw / spacing) + 2;
-      var rows = Math.ceil(sh / spacing) + 2;
-      for(var i = 0; i < cols; i++){
-        for(var j = 0; j < rows; j++){
-          dots.push({
-            bx: i * spacing - spacing * 0.5,
-            by: j * spacing - spacing * 0.5,
-            x: i * spacing - spacing * 0.5,
-            y: j * spacing - spacing * 0.5,
-            size: 1.3,
-            ts: 1.3,
-            alpha: 0.1,
-            ta: 0.1,
-            phase: Math.random() * Math.PI * 2
-          });
+      function buildGrid(){
+        w = heroEl.offsetWidth;
+        h = heroEl.offsetHeight;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        dots = [];
+        var cols = Math.ceil(w / spacing) + 1;
+        var rows = Math.ceil(h / spacing) + 1;
+        for(var i=0;i<cols;i++){
+          for(var j=0;j<rows;j++){
+            dots.push({ x:i*spacing, y:j*spacing, ox:i*spacing, oy:j*spacing });
+          }
         }
       }
-    }
+      buildGrid();
+      window.addEventListener('resize', buildGrid);
 
-    resize();
-    window.addEventListener('resize', resize);
+      heroEl.addEventListener('mousemove', function(e){
+        var rect = heroEl.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+        mouse.active = true;
+      });
+      heroEl.addEventListener('mouseleave', function(){ mouse.active = false; });
 
-    hero.addEventListener('mousemove', function(e){
-      var rect = hero.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-      mouse.active = true;
-    });
-    hero.addEventListener('mouseleave', function(){ mouse.active = false; });
-
-    if('IntersectionObserver' in window){
-      new IntersectionObserver(function(entries){ heroActive = entries[0].isIntersecting; }, {threshold:0.01}).observe(hero);
-    }
-
-    // ---- SILK AURORA (ReactBits-style) ----
-    function drawSilk(time){
-      var now = time * 0.001;
-      var speed = silkSpeed;
-      var cosR = Math.cos(silkRotation);
-      var sinR = Math.sin(silkRotation);
-
-      ctx.save();
-      ctx.translate(hero.offsetWidth / 2, hero.offsetHeight / 2);
-      ctx.rotate(silkRotation);
-      ctx.translate(-hero.offsetWidth / 2, -hero.offsetHeight / 2);
-
-      // Layer 1: Large warm gold flow
-      var cx1 = hero.offsetWidth * (0.5 + 0.3 * Math.sin(now * speed * 0.018));
-      var cy1 = hero.offsetHeight * (0.4 + 0.2 * Math.cos(now * speed * 0.014));
-      var g1 = ctx.createRadialGradient(cx1, cy1, 0, cx1, cy1, Math.max(hero.offsetWidth, hero.offsetHeight) * 0.65);
-      g1.addColorStop(0, 'rgba(201, 162, 39, 0.065)');
-      g1.addColorStop(0.5, 'rgba(184, 148, 31, 0.025)');
-      g1.addColorStop(1, 'rgba(201, 162, 39, 0)');
-      ctx.fillStyle = g1;
-      ctx.fillRect(-hero.offsetWidth, -hero.offsetHeight, hero.offsetWidth * 3, hero.offsetHeight * 3);
-
-      // Layer 2: Champagne flow
-      var cx2 = hero.offsetWidth * (0.3 + 0.4 * Math.cos(now * speed * 0.016));
-      var cy2 = hero.offsetHeight * (0.6 + 0.3 * Math.sin(now * speed * 0.02));
-      var g2 = ctx.createRadialGradient(cx2, cy2, 0, cx2, cy2, Math.max(hero.offsetWidth, hero.offsetHeight) * 0.55);
-      g2.addColorStop(0, 'rgba(232, 213, 163, 0.045)');
-      g2.addColorStop(1, 'rgba(232, 213, 163, 0)');
-      ctx.fillStyle = g2;
-      ctx.fillRect(-hero.offsetWidth, -hero.offsetHeight, hero.offsetWidth * 3, hero.offsetHeight * 3);
-
-      // Layer 3: Bronze accent
-      var cx3 = hero.offsetWidth * (0.7 + 0.2 * Math.sin(now * speed * 0.022 + 2));
-      var cy3 = hero.offsetHeight * (0.3 + 0.2 * Math.cos(now * speed * 0.017 + 1));
-      var g3 = ctx.createRadialGradient(cx3, cy3, 0, cx3, cy3, Math.max(hero.offsetWidth, hero.offsetHeight) * 0.45);
-      g3.addColorStop(0, 'rgba(139, 105, 20, 0.055)');
-      g3.addColorStop(1, 'rgba(139, 105, 20, 0)');
-      ctx.fillStyle = g3;
-      ctx.fillRect(-hero.offsetWidth, -hero.offsetHeight, hero.offsetWidth * 3, hero.offsetHeight * 3);
-
-      // Flowing silk lines
-      ctx.strokeStyle = 'rgba(201, 162, 39, 0.025)';
-      ctx.lineWidth = 1.5;
-      for(var i = -8; i < 18; i++){
-        ctx.beginPath();
-        var baseY = i * hero.offsetHeight / 12;
-        for(var x = 0; x < hero.offsetWidth; x += 8){
-          var y = baseY + Math.sin(x * 0.008 + now * speed * 0.012) * 40 + Math.sin(x * 0.003 + now * speed * 0.008) * 80;
-          if(x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
+      if('IntersectionObserver' in window){
+        var heroObs = new IntersectionObserver(function(entries){
+          heroActive = entries[0].isIntersecting;
+        }, {threshold:0.01});
+        heroObs.observe(heroEl);
       }
 
-      ctx.restore();
-    }
+      var t = 0;
+      var radius = 160;
+      function draw(){
+        requestAnimationFrame(draw);
+        if(!heroActive) return;
+        t += 0.006;
+        ctx.clearRect(0,0,w,h);
 
-    // ---- DOT GRID (ReactBits-style) ----
-    function drawDots(){
-      var radius = 170;
-      var mx = mouse.active ? mouse.x : -9999;
-      var my = mouse.active ? mouse.y : -9999;
-
-      for(var i = 0; i < dots.length; i++){
-        var d = dots[i];
-        var dx = d.bx - mx;
-        var dy = d.by - my;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-
-        // Idle drift
-        var driftX = Math.sin(t * 0.5 + d.phase) * 0.3;
-        var driftY = Math.cos(t * 0.4 + d.phase * 1.2) * 0.3;
-
-        if(dist < radius && mouse.active){
-          var force = 1 - dist / radius;
-          var ease = 0.12;
-          d.x += (d.bx - dx * force * 0.3 + driftX - d.x) * ease;
-          d.y += (d.by - dy * force * 0.3 + driftY - d.y) * ease;
-          d.ts = 1.3 + force * 3.8;
-          d.ta = 0.08 + force * 0.82;
-        } else {
-          d.x += (d.bx + driftX - d.x) * 0.07;
-          d.y += (d.by + driftY - d.y) * 0.07;
-          d.ts = 1.3;
-          d.ta = 0.08 + Math.sin(t * 0.8 + d.phase) * 0.04;
+        if(mouse.active){
+          var glow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 260);
+          glow.addColorStop(0, 'rgba(255,215,0,0.14)');
+          glow.addColorStop(1, 'rgba(255,215,0,0)');
+          ctx.fillStyle = glow;
+          ctx.fillRect(0,0,w,h);
         }
 
-        d.size += (d.ts - d.size) * 0.1;
-        d.alpha += (d.ta - d.alpha) * 0.08;
+        for(var i=0;i<dots.length;i++){
+          var d = dots[i];
+          var dx = mouse.active ? d.ox - mouse.x : 9999;
+          var dy = mouse.active ? d.oy - mouse.y : 9999;
+          var dist = Math.sqrt(dx*dx + dy*dy);
+          var idle = 0.28 + 0.1*Math.sin(t*1.2 + d.ox*0.02 + d.oy*0.02);
 
-        var a = d.alpha;
-        var s = d.size;
-
-        // Color: gray at rest → gold when active
-        var r, g, b;
-        if(a > 0.4){
-          var mix = (a - 0.4) / 0.6;
-          r = Math.round(180 + (201 - 180) * mix);
-          g = Math.round(180 + (162 - 180) * mix);
-          b = Math.round(180 + (39 - 180) * mix);
-        } else {
-          var mix = a / 0.4;
-          r = Math.round(120 + (180 - 120) * mix);
-          g = Math.round(120 + (180 - 120) * mix);
-          b = Math.round(120 + (180 - 120) * mix);
-        }
-
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, s, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-        ctx.fill();
-
-        // Soft glow for bright dots
-        if(a > 0.5 && s > 2.5){
-          ctx.beginPath();
-          ctx.arc(d.x, d.y, s * 2.2, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + (a * 0.1) + ')';
-          ctx.fill();
+          if(dist < radius){
+            var pull = (1 - dist/radius);
+            d.x = d.ox - dx*pull*0.26;
+            d.y = d.oy - dy*pull*0.26;
+            var size = 1 + pull*2.2;
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, size, 0, Math.PI*2);
+            ctx.fillStyle = 'rgba(255,215,0,' + (0.3 + pull*0.6) + ')';
+            ctx.fill();
+          } else {
+            d.x += (d.ox - d.x) * 0.12;
+            d.y += (d.oy - d.y) * 0.12;
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, 1, 0, Math.PI*2);
+            ctx.fillStyle = 'rgba(212,175,55,' + (idle*0.55) + ')';
+            ctx.fill();
+          }
         }
       }
+      requestAnimationFrame(draw);
     }
+  } catch(err){}
 
-    function loop(time){
-      requestAnimationFrame(loop);
-      if(!heroActive) return;
-      t = time * 0.001;
-      ctx.clearRect(0, 0, hero.offsetWidth, hero.offsetHeight);
-      drawSilk(time);
-      drawDots();
-    }
-    requestAnimationFrame(loop);
-
-  } catch(e){ console.log('Hero canvas:', e); }
-
-  /* ---------- NAV SCROLL ---------- */
+  /* ---------- NAV SCROLL STATE ---------- */
   try{
     var nav = document.getElementById('nav');
-    if(nav) window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 40); }, {passive:true});
-  } catch(e){}
+    if(nav){
+      window.addEventListener('scroll', function(){
+        nav.classList.toggle('scrolled', window.scrollY > 20);
+      }, {passive:true});
+    }
+  } catch(err){}
 
   /* ---------- MOBILE MENU ---------- */
   try{
     var burger = document.getElementById('burger');
     var mobile = document.getElementById('navMobile');
     if(burger && mobile){
-      burger.addEventListener('click', function(){ mobile.classList.toggle('open'); burger.classList.toggle('open'); });
-      mobile.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ mobile.classList.remove('open'); burger.classList.remove('open'); }); });
+      burger.addEventListener('click', function(){
+        mobile.classList.toggle('open');
+        burger.classList.toggle('open');
+      });
+      mobile.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){
+          mobile.classList.remove('open');
+          burger.classList.remove('open');
+        });
+      });
     }
-  } catch(e){}
+  } catch(err){}
 
   /* ---------- REVEAL ON SCROLL ---------- */
   try{
     var reveals = document.querySelectorAll('.reveal');
     if('IntersectionObserver' in window){
-      var obs = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
-      }, {threshold:0.08, rootMargin:'0px 0px -50px 0px'});
-      reveals.forEach(function(el){ obs.observe(el); });
+      var revObs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ e.target.classList.add('visible'); revObs.unobserve(e.target); }
+        });
+      }, {threshold:0.08, rootMargin:'0px 0px -40px 0px'});
+      reveals.forEach(function(el){ revObs.observe(el); });
     } else {
       reveals.forEach(function(el){ el.classList.add('visible'); });
     }
-  } catch(e){ document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); }); }
+  } catch(err){
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
+  }
 
   /* ---------- COUNT UP ---------- */
   try{
-    function count(el){
+    function animCount(el){
       var target = parseInt(el.dataset.count, 10) || 0;
       var suffix = el.dataset.suffix || '';
-      var dur = 2000, start = null;
+      var dur = 1600, start = null;
       function frame(ts){
         if(!start) start = ts;
-        var p = Math.min(1, (ts - start) / dur);
-        var e = 1 - Math.pow(1 - p, 4);
-        el.textContent = Math.round(target * e) + suffix;
-        if(p < 1) requestAnimationFrame(frame);
+        var tt = Math.min(1, (ts-start)/dur);
+        var eased = 1 - Math.pow(1-tt, 3);
+        el.textContent = Math.round(target*eased) + suffix;
+        if(tt < 1) requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
     }
     var stats = document.querySelectorAll('.stat-value');
     if('IntersectionObserver' in window){
-      var so = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){ if(e.isIntersecting){ count(e.target); so.unobserve(e.target); } });
+      var cntObs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ animCount(e.target); cntObs.unobserve(e.target); }
+        });
       }, {threshold:0.5});
-      stats.forEach(function(el){ so.observe(el); });
-    } else { stats.forEach(count); }
-  } catch(e){}
+      stats.forEach(function(el){ cntObs.observe(el); });
+    } else {
+      stats.forEach(animCount);
+    }
+  } catch(err){}
 
-  /* ---------- FAQ ---------- */
+  /* ---------- FAQ ACCORDION ---------- */
   try{
     var openFaq = null;
     document.querySelectorAll('.faq-q').forEach(function(btn){
@@ -279,48 +202,38 @@ document.addEventListener('DOMContentLoaded', function(){
         openFaq = item.classList.contains('open') ? item : null;
       });
     });
-  } catch(e){}
+  } catch(err){}
 
   /* ---------- MAGNETIC BUTTONS ---------- */
   try{
     document.querySelectorAll('.magnetic').forEach(function(btn){
       btn.addEventListener('mousemove', function(e){
         var rect = btn.getBoundingClientRect();
-        btn.style.transform = 'translate(' + ((e.clientX - rect.left - rect.width/2) * 0.1) + 'px,' + ((e.clientY - rect.top - rect.height/2) * 0.1) + 'px)';
+        var x = e.clientX - rect.left - rect.width/2;
+        var y = e.clientY - rect.top - rect.height/2;
+        btn.style.transform = 'translate(' + (x*0.15) + 'px,' + (y*0.15) + 'px)';
       });
       btn.addEventListener('mouseleave', function(){ btn.style.transform = ''; });
     });
-  } catch(e){}
+  } catch(err){}
 
   /* ---------- CUSTOM CURSOR ---------- */
   try{
     var cursor = document.getElementById('cursor');
-    var glow = document.getElementById('cursor-glow');
-    if(!cursor || !glow) throw 'no cursor elements';
-    if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches) throw 'touch device';
-
-    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    var cx = mx, cy = my, gx = mx, gy = my;
-
-    document.addEventListener('mousemove', function(e){ mx = e.clientX; my = e.clientY; });
-
-    function updateCursor(){
-      cx += (mx - cx) * 0.18;
-      cy += (my - cy) * 0.18;
-      gx += (mx - gx) * 0.09;
-      gy += (my - gy) * 0.09;
-      cursor.style.transform = 'translate3d(' + (cx - 3) + 'px,' + (cy - 3) + 'px,0)';
-      glow.style.transform = 'translate3d(' + (gx - 18) + 'px,' + (gy - 18) + 'px,0)';
-      requestAnimationFrame(updateCursor);
+    var trail = document.getElementById('cursorTrail');
+    if(cursor && trail && window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+      var cx=0, cy=0, tx=0, ty=0, tx2=0, ty2=0;
+      window.addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; });
+      function updateCursor(){
+        cx += (tx - cx) * 0.15; cy += (ty - cy) * 0.15;
+        tx2 += (tx - tx2) * 0.08; ty2 += (ty - ty2) * 0.08;
+        cursor.style.transform = 'translate(' + (cx-4) + 'px,' + (cy-4) + 'px)';
+        trail.style.transform = 'translate(' + (tx2-16) + 'px,' + (ty2-16) + 'px)';
+        requestAnimationFrame(updateCursor);
+      }
+      updateCursor();
     }
-    updateCursor();
-
-    // Hover states
-    document.querySelectorAll('a, button, .magnetic, input, textarea').forEach(function(el){
-      el.addEventListener('mouseenter', function(){ glow.classList.add('hover'); });
-      el.addEventListener('mouseleave', function(){ glow.classList.remove('hover'); });
-    });
-  } catch(e){ console.log('Cursor:', e); }
+  } catch(err){}
 
   /* ---------- SMOOTH SCROLL ---------- */
   try{
@@ -332,9 +245,9 @@ document.addEventListener('DOMContentLoaded', function(){
         if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
       });
     });
-  } catch(e){}
+  } catch(err){}
 
-  /* ---------- SPOTLIGHT ---------- */
+  /* ---------- SPOTLIGHT CARDS ---------- */
   try{
     document.querySelectorAll('.spot').forEach(function(card){
       card.addEventListener('mousemove', function(e){
@@ -343,7 +256,77 @@ document.addEventListener('DOMContentLoaded', function(){
         card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
       });
     });
-  } catch(e){}
+  } catch(err){}
+
+  /* ---------- CAROUSEL ---------- */
+  try{
+    function initCarousel(root){
+      var track = root.querySelector('.carousel-track');
+      if(!track) return;
+      var slides = Array.prototype.slice.call(track.children);
+      var dotsWrap = root.querySelector('.carousel-dots');
+      var prevBtn = root.querySelector('.carousel-arrow.prev');
+      var nextBtn = root.querySelector('.carousel-arrow.next');
+      var perView = window.innerWidth <= 768 ? 1 : 2;
+      var index = 0;
+
+      slides.forEach(function(_, i){
+        if(i % perView === 0){
+          var dot = document.createElement('span');
+          dot.className = 'carousel-dot';
+          dot.addEventListener('click', function(){ goTo(i); });
+          dotsWrap.appendChild(dot);
+        }
+      });
+
+      function maxIndex(){ return Math.max(0, slides.length - perView); }
+      function update(){
+        var slideWidth = slides[0].getBoundingClientRect().width + 20;
+        track.style.transform = 'translateX(-' + (index * slideWidth) + 'px)';
+        var dots = Array.prototype.slice.call(dotsWrap.children);
+        dots.forEach(function(d,i){ d.classList.toggle('active', i === Math.floor(index/perView)); });
+      }
+      function goTo(i){ index = Math.max(0, Math.min(maxIndex(), i)); update(); }
+      if(prevBtn) prevBtn.addEventListener('click', function(){ goTo(index - perView); });
+      if(nextBtn) nextBtn.addEventListener('click', function(){ goTo(index + perView); });
+
+      var startX = 0, startIndex = 0, dragging = false, delta = 0;
+      function slideWidthPx(){ return slides[0].getBoundingClientRect().width + 20; }
+      track.addEventListener('pointerdown', function(e){
+        dragging = true; startX = e.clientX; startIndex = index;
+        try{ track.setPointerCapture(e.pointerId); }catch(_e){}
+      });
+      track.addEventListener('pointermove', function(e){
+        if(!dragging) return;
+        delta = e.clientX - startX;
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(' + (-(startIndex*slideWidthPx()) + delta) + 'px)';
+      });
+      function endDrag(){
+        if(!dragging) return;
+        dragging = false;
+        track.style.transition = '';
+        var sw = slideWidthPx();
+        if(Math.abs(delta) > sw*0.2){
+          goTo(startIndex + (delta < 0 ? perView : -perView));
+        } else {
+          update();
+        }
+        delta = 0;
+      }
+      track.addEventListener('pointerup', endDrag);
+      track.addEventListener('pointerleave', endDrag);
+
+      window.addEventListener('resize', function(){
+        perView = window.innerWidth <= 768 ? 1 : 2;
+        index = Math.min(index, maxIndex());
+        update();
+      });
+
+      update();
+    }
+    document.querySelectorAll('.carousel').forEach(initCarousel);
+  } catch(err){}
 
 });
 
