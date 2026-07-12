@@ -189,7 +189,7 @@ authentication — treat it as light obscurity, not security.
 
 | Token         | Value                    | Use                                 |
 |---------------|---------------------------|---------------------------------------|
-| `--void`      | `#050505`                 | Page background                       |
+| `--void`      | `#18181B`                 | Page background (dark charcoal grey, not pure black) |
 | `--text`      | `#F7F3E9`                 | Primary text                          |
 | `--text-dim`  | `#A69C87`                 | Secondary text / descriptions         |
 | `--text-faint`| `#5E5747`                 | Tertiary text / meta labels           |
@@ -247,8 +247,8 @@ licensed copy of Geist or Satoshi.)*
 |--------------------------|----------------------------------|------------------------------------------------------------------|
 | Loader fade/hold/fade    | `#loader .loader-mark`           | CSS `@keyframes loaderBreathe` — opacity + glow pulse, looping    |
 | Hero dot grid             | `#heroField` canvas              | `requestAnimationFrame` loop; dots displace toward the cursor within a radius, drift back when idle |
-| Hero aurora               | `#heroAurora .blob`              | CSS `@keyframes auroraDrift` — slow translate + scale, staggered per blob |
-| Hero fade-to-plain        | `#heroField`, `#heroAurora`      | CSS `mask-image` gradient — both layers fade to transparent before the hero ends, so the effect dissolves rather than cutting off |
+| Hero silk flow             | `#heroSilk` canvas               | `requestAnimationFrame` loop drawing layered sine-wave ribbons with independent speed/amplitude/hue — reads as soft flowing gold silk |
+| Hero fade-to-plain        | `#heroField`, `#heroSilk`        | CSS `mask-image` gradient — both layers fade to transparent before the hero ends, so the effect dissolves rather than cutting off |
 | Scroll reveals            | any `.reveal` element            | `IntersectionObserver` adds `.visible`, CSS transitions the rest |
 | Stat counters              | `.stat-value`                    | `IntersectionObserver` + `requestAnimationFrame` count-up with easing |
 | Magnetic buttons           | `.magnetic`                      | `mousemove` offsets the element slightly toward the cursor        |
