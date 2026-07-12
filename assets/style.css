@@ -6,10 +6,10 @@
    ============================================================ */
 
 :root{
-  --void:#050505;
-  --void-2:#0A0A0A;
-  --void-3:#121212;
-  --surface:rgba(212,175,55,0.045);
+  --void:#18181B;
+  --void-2:#1E1E22;
+  --void-3:#242428;
+  --surface:rgba(212,175,55,0.05);
   --surface-hi:rgba(212,175,55,0.09);
   --border:rgba(212,175,55,0.14);
   --border-hi:rgba(212,175,55,0.32);
@@ -158,15 +158,16 @@ a:hover .mark-icon, .magnetic:hover .mark-icon{ transform:rotate(-8deg) scale(1.
   position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center;
   padding:160px 0 100px; overflow:hidden; z-index:1; text-align:center;
 }
-#heroAurora{ position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none;
+#heroSilk{ position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none;
   -webkit-mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 96%);
   mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 96%);
 }
-#heroAurora .blob{ position:absolute; border-radius:50%; filter:blur(100px); }
-#heroAurora .blob.a{ width:620px; height:620px; background:var(--gold); opacity:0.16; left:-160px; top:-140px; animation:auroraDrift 22s ease-in-out infinite; }
-#heroAurora .blob.b{ width:520px; height:520px; background:var(--gold-bright); opacity:0.1; right:-140px; top:10%; animation:auroraDrift 26s ease-in-out infinite reverse; }
-#heroAurora .blob.c{ width:480px; height:480px; background:var(--champagne); opacity:0.08; left:20%; bottom:-160px; animation:auroraDrift 19s ease-in-out infinite; }
-@keyframes auroraDrift{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(50px,35px) scale(1.08); } }
+/* soft static glow behind the silk canvas for extra depth */
+#heroSilk::before{
+  content:''; position:absolute; inset:-10%; z-index:0;
+  background:radial-gradient(50% 40% at 50% 15%, rgba(212,175,55,0.14), transparent 70%);
+  filter:blur(40px);
+}
 #heroField{
   position:absolute; inset:0; z-index:1;
   -webkit-mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 96%);

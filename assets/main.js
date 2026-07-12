@@ -25,6 +25,70 @@ document.addEventListener('DOMContentLoaded', function(){
     setTimeout(finish, 5000);
   })();
 
+  /* ---------- HERO SILK FLOW (soft flowing gold ribbons) ---------- */
+  try{
+    var silkCanvas = document.getElementById('heroSilk');
+    var silkHero = document.querySelector('.hero');
+    if(silkCanvas && silkCanvas.getContext && silkHero){
+      var sctx = silkCanvas.getContext('2d');
+      var sw, sh, silkActive = true;
+      var sdpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      function resizeSilk(){
+        sw = silkHero.offsetWidth;
+        sh = silkHero.offsetHeight;
+        silkCanvas.width = sw * sdpr;
+        silkCanvas.height = sh * sdpr;
+        silkCanvas.style.width = sw + 'px';
+        silkCanvas.style.height = sh + 'px';
+        sctx.setTransform(sdpr, 0, 0, sdpr, 0, 0);
+      }
+      resizeSilk();
+      window.addEventListener('resize', resizeSilk);
+
+      if('IntersectionObserver' in window){
+        var silkObs = new IntersectionObserver(function(entries){
+          silkActive = entries[0].isIntersecting;
+        }, {threshold:0.01});
+        silkObs.observe(silkHero);
+      }
+
+      // A handful of layered sine ribbons, each with its own speed,
+      // amplitude and vertical band — reads as soft flowing silk.
+      var ribbons = [
+        { yFrac:0.30, amp:34, freq:1.6, speed:0.16, width:2.2, alpha:0.22, hue:'212,175,55' },
+        { yFrac:0.42, amp:46, freq:1.1, speed:-0.12, width:1.6, alpha:0.16, hue:'255,215,0' },
+        { yFrac:0.55, amp:28, freq:2.0, speed:0.10, width:1.8, alpha:0.14, hue:'247,231,206' },
+        { yFrac:0.66, amp:50, freq:0.85, speed:-0.08, width:1.4, alpha:0.10, hue:'212,175,55' }
+      ];
+
+      var st = 0;
+      function drawSilk(){
+        requestAnimationFrame(drawSilk);
+        if(!silkActive) return;
+        st += 0.006;
+        sctx.clearRect(0,0,sw,sh);
+        for(var r=0;r<ribbons.length;r++){
+          var rb = ribbons[r];
+          var baseY = sh * rb.yFrac;
+          sctx.beginPath();
+          for(var x=0;x<=sw;x+=8){
+            var y = baseY + Math.sin((x*0.0022*rb.freq) + st*rb.speed*10) * rb.amp
+                          + Math.sin((x*0.0009*rb.freq) - st*rb.speed*6) * rb.amp*0.4;
+            if(x===0) sctx.moveTo(x,y); else sctx.lineTo(x,y);
+          }
+          sctx.strokeStyle = 'rgba(' + rb.hue + ',' + rb.alpha + ')';
+          sctx.lineWidth = rb.width;
+          sctx.shadowColor = 'rgba(' + rb.hue + ',0.5)';
+          sctx.shadowBlur = 14;
+          sctx.stroke();
+          sctx.shadowBlur = 0;
+        }
+      }
+      requestAnimationFrame(drawSilk);
+    }
+  } catch(err){}
+
   /* ---------- HERO INTERACTIVE GOLD DOT GRID ---------- */
   try{
     var canvas = document.getElementById('heroField');
