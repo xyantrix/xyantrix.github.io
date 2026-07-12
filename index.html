@@ -8,82 +8,79 @@
 <link rel="icon" type="image/png" href="Website_logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
-<base target="_blank">
 </head>
 <body class="no-js">
-<script>document.body.classList.remove("no-js");</script>
+<script>document.body.classList.remove('no-js');</script>
 
-<!-- NOISE OVERLAY -->
-<svg id="noise" width="100%" height="100%">
-  <filter id="nf"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter>
-  <rect width="100%" height="100%" filter="url(#nf)"/>
+<svg id="grain" width="100%" height="100%" style="position:fixed;inset:0;z-index:0;pointer-events:none;">
+  <filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter>
+  <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
 </svg>
 
-<!-- LUXURY LOADER -->
+<!-- LOADER: logo only, fade in / hold / fade out -->
 <div id="loader">
-  <div class="loader-diamond"></div>
+  <div class="loader-mark"></div>
 </div>
 
 <!-- CUSTOM CURSOR -->
 <div id="cursor"></div>
-<div id="cursor-glow"></div>
+<div id="cursorTrail"></div>
 
-<!-- NAVIGATION -->
+<!-- NAVIGATION: floating glass pill -->
 <nav id="nav">
-  <div class="wrap nav-inner">
-    <a href="#top" class="nav-brand">
-      <span class="nav-mark"></span>
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand" target="_self">
+      <span class="mark-icon nav-mark"></span>
       <span>Piyush Tomar</span>
     </a>
     <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
-      <a href="#contact">Contact</a>
+      <a href="#about" target="_self">About</a>
+      <a href="#capabilities" target="_self">Capabilities</a>
+      <a href="#experience" target="_self">Experience</a>
+      <a href="#projects" target="_self">Projects</a>
+      <a href="#contact" target="_self">Contact</a>
     </div>
-    <a href="#contact" class="nav-cta">Get in touch</a>
-    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <a href="#contact" class="nav-cta" target="_self">Get in touch</a>
+    <button class="nav-burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
 <div class="nav-mobile" id="navMobile">
-  <a href="#about">About</a>
-  <a href="#experience">Experience</a>
-  <a href="#projects">Projects</a>
-  <a href="#skills">Skills</a>
-  <a href="#contact" class="accent">Get in touch</a>
+  <a href="#about" target="_self">About</a>
+  <a href="#capabilities" target="_self">Capabilities</a>
+  <a href="#experience" target="_self">Experience</a>
+  <a href="#projects" target="_self">Projects</a>
+  <a href="#contact" target="_self" class="accent">Get in touch</a>
 </div>
 
 <main id="top">
 
-<!-- HERO -->
+<!-- HERO: gold aurora + interactive dot grid, centered -->
 <section class="hero">
-  <canvas id="heroCanvas"></canvas>
-  <div class="hero-vignette"></div>
+  <div id="heroAurora"><div class="blob a"></div><div class="blob b"></div><div class="blob c"></div></div>
+  <canvas id="heroField"></canvas>
   <div class="wrap hero-inner">
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      <span>Available for opportunities</span>
+    <span class="mark-icon hero-mark"></span>
+    <div class="hero-badges">
+      <span class="badge-solid"><span class="dot"></span>Available</span>
+      <span class="badge-outline">Navi Mumbai · 2026</span>
     </div>
-    <h1 class="hero-title">
-      <span class="hero-line">Finance &</span>
-      <span class="hero-line">Accounting</span>
-      <span class="hero-line grad">Specialist.</span>
-    </h1>
-    <p class="hero-desc">The invoice that has to match the PO, the ledger that has to tie out, the filing that lands on time — that's the part I own. End-to-end P2P, GST/TDS compliance, and reconciliation across Oracle, NetSuite, Navision & Tally.</p>
+    <h1 class="hero-title">Finance &amp; Accounting<br><span class="grad">Specialist.</span></h1>
+    <p class="hero-desc">The invoice that has to match the PO, the ledger that has to tie out, the filing that lands on time — that's the part I own. End-to-end P2P, GST/TDS compliance, and reconciliation across Oracle, NetSuite, Navision &amp; Tally.</p>
     <div class="hero-actions">
-      <a href="#contact" class="btn-primary magnetic">Get in touch</a>
-      <a href="#experience" class="btn-secondary magnetic">View experience</a>
+      <a href="#contact" class="btn-primary magnetic" target="_self">Get in touch <span>→</span></a>
+      <a href="#experience" class="btn-secondary magnetic" target="_self">View experience</a>
     </div>
     <div class="hero-meta">
-      <div class="meta-item"><span class="meta-num">2+</span><span class="meta-label">Years Experience</span></div>
-      <div class="meta-sep"></div>
-      <div class="meta-item"><span class="meta-num">5</span><span class="meta-label">ERP Systems</span></div>
-      <div class="meta-sep"></div>
-      <div class="meta-item"><span class="meta-num">450+</span><span class="meta-label">Invoices / Month</span></div>
+      <span>2+ Years Experience</span>
+      <span class="meta-dot"></span>
+      <span>5 ERP Systems</span>
+      <span class="meta-dot"></span>
+      <span>450+ Invoices / Month</span>
     </div>
   </div>
 </section>
@@ -91,26 +88,26 @@
 <!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track" id="marqueeTrack">
-    <span class="marquee-item">Oracle Financials</span><span class="marquee-dot"></span>
-    <span class="marquee-item">NetSuite</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Navision</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Tally Prime</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Zoho Books</span><span class="marquee-dot"></span>
-    <span class="marquee-item">GST & TDS Compliance</span><span class="marquee-dot"></span>
-    <span class="marquee-item">3-Way Matching</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Advanced Excel</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Vendor Reconciliation</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Form 15CA / 15CB</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Oracle Financials</span><span class="marquee-dot"></span>
-    <span class="marquee-item">NetSuite</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Navision</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Tally Prime</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Zoho Books</span><span class="marquee-dot"></span>
-    <span class="marquee-item">GST & TDS Compliance</span><span class="marquee-dot"></span>
-    <span class="marquee-item">3-Way Matching</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Advanced Excel</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Vendor Reconciliation</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Form 15CA / 15CB</span><span class="marquee-dot"></span>
+    <span class="marquee-item"><span class="dot"></span>Oracle Financials</span>
+    <span class="marquee-item"><span class="dot"></span>NetSuite</span>
+    <span class="marquee-item"><span class="dot"></span>Navision</span>
+    <span class="marquee-item"><span class="dot"></span>Tally Prime</span>
+    <span class="marquee-item"><span class="dot"></span>Zoho Books</span>
+    <span class="marquee-item"><span class="dot"></span>GST &amp; TDS Compliance</span>
+    <span class="marquee-item"><span class="dot"></span>3-Way Matching</span>
+    <span class="marquee-item"><span class="dot"></span>Advanced Excel</span>
+    <span class="marquee-item"><span class="dot"></span>Vendor Reconciliation</span>
+    <span class="marquee-item"><span class="dot"></span>Form 15CA / 15CB</span>
+    <span class="marquee-item"><span class="dot"></span>Oracle Financials</span>
+    <span class="marquee-item"><span class="dot"></span>NetSuite</span>
+    <span class="marquee-item"><span class="dot"></span>Navision</span>
+    <span class="marquee-item"><span class="dot"></span>Tally Prime</span>
+    <span class="marquee-item"><span class="dot"></span>Zoho Books</span>
+    <span class="marquee-item"><span class="dot"></span>GST &amp; TDS Compliance</span>
+    <span class="marquee-item"><span class="dot"></span>3-Way Matching</span>
+    <span class="marquee-item"><span class="dot"></span>Advanced Excel</span>
+    <span class="marquee-item"><span class="dot"></span>Vendor Reconciliation</span>
+    <span class="marquee-item"><span class="dot"></span>Form 15CA / 15CB</span>
   </div>
 </div>
 
@@ -120,20 +117,55 @@
     <div class="about-text reveal">
       <div class="section-eyebrow">About</div>
       <h2 class="section-title">The numbers person<br><span class="grad">behind the scenes.</span></h2>
-      <p>Currently a Finance Executive at CarTrade Tech (CarWale, BikeWale & OLX), I manage the full Accounts Payable cycle — from invoice ingestion to payment disbursement — across Oracle, NetSuite, Navision, and Tally.</p>
+      <p>Currently a Finance Executive at CarTrade Tech (CarWale, BikeWale &amp; OLX), I manage the full Accounts Payable cycle — from invoice ingestion to payment disbursement — across Oracle, NetSuite, Navision, and Tally.</p>
       <p>My day revolves around 3-way matching, vendor reconciliations, GST/TDS compliance, and keeping the books audit-ready. I led the data migration from Navision to Oracle and resolved 100+ system issues during our NetSuite implementation.</p>
       <p>I hold a BMS in Finance from Pillai HOC College and certifications from IBM SkillBuild in Corporate Finance, Data Analysis, and SAP Basics.</p>
       <div class="about-facts">
-        <div class="about-fact"><span class="af-label">Location</span><span class="af-value">Navi Mumbai, IN</span></div>
-        <div class="about-fact"><span class="af-label">Experience</span><span class="af-value">2+ Years</span></div>
-        <div class="about-fact"><span class="af-label">Education</span><span class="af-value">BMS — Finance</span></div>
+        <div><span class="af-label">Location</span><span class="af-value">Navi Mumbai, IN</span></div>
+        <div><span class="af-label">Experience</span><span class="af-value">2+ Years</span></div>
+        <div><span class="af-label">Education</span><span class="af-value">BMS — Finance</span></div>
       </div>
     </div>
     <div class="about-photo reveal">
-      <div class="photo-frame">
-        <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar">
+      <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar">
+      <div class="photo-frame"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES (masonry feature grid) -->
+<section id="capabilities">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Capabilities</div>
+      <h2 class="section-title">What I actually <span class="grad">handle, day to day.</span></h2>
+    </div>
+    <div class="cap-grid">
+      <div class="cap-card large spot reveal">
+        <div class="cap-icon">↔</div>
+        <h3>End-to-End Accounts Payable</h3>
+        <p>Full P2P cycle ownership — invoice ingestion, 3-way matching, vendor payments, and corporate card reconciliation, across Oracle, NetSuite, Navision, and Tally.</p>
       </div>
-      <div class="photo-glow"></div>
+      <div class="cap-card spot reveal">
+        <div class="cap-icon">%</div>
+        <h3>GST &amp; TDS Compliance</h3>
+        <p>Accurate tax calculation, timely filing, and ITC reconciliation across every invoice that crosses my desk.</p>
+      </div>
+      <div class="cap-card spot reveal">
+        <div class="cap-icon">⇄</div>
+        <h3>Reconciliation</h3>
+        <p>Vendor, employee, and bank reconciliations — kept current, kept correct.</p>
+      </div>
+      <div class="cap-card spot reveal">
+        <div class="cap-icon">⌘</div>
+        <h3>Multi-ERP Fluency</h3>
+        <p>Comfortable moving between Oracle, NetSuite, Navision, Tally, and Zoho Books without missing a step.</p>
+      </div>
+      <div class="cap-card spot reveal">
+        <div class="cap-icon">✓</div>
+        <h3>Audit &amp; Compliance Support</h3>
+        <p>Statutory and internal audit support, Form 15CA/15CB for foreign remittances, and vendor KYC/MSME/LDC compliance.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -157,19 +189,20 @@
         </div>
         <ul class="exp-bullets">
           <li>Managed end-to-end Accounts Payable (P2P cycle) including invoice processing, 3-way matching, and vendor payments.</li>
-          <li>Processed invoices with accurate GST & TDS calculations, ensuring compliance with Indian tax regulations.</li>
-          <li>Handled vendor onboarding & compliance (KYC, MSME, LDC) and maintained accurate vendor master data.</li>
-          <li>Executed vendor & employee ledger reconciliations and bank reconciliations.</li>
+          <li>Processed invoices with accurate GST &amp; TDS calculations, ensuring compliance with Indian tax regulations.</li>
+          <li>Handled vendor onboarding &amp; compliance (KYC, MSME, LDC) and maintained accurate vendor master data.</li>
+          <li>Executed vendor &amp; employee ledger reconciliations and bank reconciliations.</li>
           <li>Managed corporate card transactions — GL coding, CCV mapping, and reconciliation.</li>
-          <li>Handled foreign remittances with Form 15CA & 15CB compliance.</li>
+          <li>Handled foreign remittances with Form 15CA &amp; 15CB compliance.</li>
           <li>Processed 450+ monthly employee reimbursements and supported payroll validation.</li>
-          <li>Supported month-end & year-end closing, statutory & internal audits, and MIS/AOP reporting.</li>
+          <li>Supported month-end &amp; year-end closing, statutory &amp; internal audits, and MIS/AOP reporting.</li>
           <li>Led data migration from Navision to Oracle, ensuring smooth transition and data accuracy.</li>
         </ul>
         <div class="exp-tags">
           <span>Oracle Financials</span><span>NetSuite</span><span>Navision</span><span>Tally</span><span>GST / TDS</span><span>15CA / 15CB</span>
         </div>
       </div>
+
       <div class="exp-card spot reveal">
         <span class="exp-num">/ 02</span>
         <div class="exp-head">
@@ -186,6 +219,7 @@
         </ul>
         <div class="exp-tags"><span>GST Returns</span><span>ITC Claims</span><span>Reconciliation</span></div>
       </div>
+
       <div class="exp-card spot reveal">
         <span class="exp-num">/ 03</span>
         <div class="exp-head">
@@ -207,101 +241,101 @@
   </div>
 </section>
 
-<!-- PROJECTS -->
-<section id="projects" class="projects-section">
+<!-- PROJECTS (carousel) -->
+<section id="projects">
   <div class="wrap">
     <div class="section-header reveal">
       <div class="section-eyebrow">Projects</div>
       <h2 class="section-title">Beyond day-to-day <span class="grad">operations.</span></h2>
     </div>
-    <div class="projects-grid">
-      <div class="proj-card spot reveal">
-        <div class="proj-header">
-          <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Aug 2025 — Nov 2025</span></div>
-          <h3>Oracle NetSuite Implementation</h3>
-          <p class="proj-sub">Employee expense reimbursement module — migration & UAT</p>
+    <div class="carousel reveal" id="projectsCarousel">
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <div class="proj-card spot">
+            <div class="proj-meta">
+              <span class="proj-co">CarTrade Tech</span>
+              <span class="proj-date">Aug 2025 — Nov 2025</span>
+            </div>
+            <h3>Oracle NetSuite Implementation</h3>
+            <p class="proj-sub">Employee expense reimbursement module — migration &amp; UAT</p>
+            <ul class="proj-bullets">
+              <li>Supported Oracle AP implementation for the employee expense reimbursement module.</li>
+              <li>Managed opening balance setup for employee advances during migration.</li>
+              <li>Identified and resolved 100+ system and process issues.</li>
+              <li>Performed root cause analysis and implemented fixes for reimbursement mismatches.</li>
+              <li>Supported UAT and ensured a smooth go-live transition.</li>
+            </ul>
+            <div class="proj-tags"><span>Oracle AP</span><span>UAT</span><span>Data Migration</span><span>RCA</span></div>
+          </div>
+          <div class="proj-card spot">
+            <div class="proj-meta">
+              <span class="proj-co">CarTrade Tech</span>
+              <span class="proj-date">May 2025 — Mar 2026</span>
+            </div>
+            <h3>Employee Reimbursement Optimization</h3>
+            <p class="proj-sub">Policy tightening &amp; tracking system overhaul</p>
+            <ul class="proj-bullets">
+              <li>Implemented a strict reimbursement policy requiring mandatory bill submission.</li>
+              <li>Managed deviation cases with proper approvals and deduction rules.</li>
+              <li>Developed an Excel tracker with formulas for aging, status, and payment summaries.</li>
+              <li>Improved reimbursement processing efficiency and reporting accuracy.</li>
+            </ul>
+            <div class="proj-tags"><span>Policy Design</span><span>Excel Tracker</span><span>Compliance</span></div>
+          </div>
+          <div class="proj-card spot">
+            <div class="proj-meta">
+              <span class="proj-co">CarTrade Tech</span>
+              <span class="proj-date">Ongoing</span>
+            </div>
+            <h3>Navision → Oracle Data Migration</h3>
+            <p class="proj-sub">Ledger &amp; master data transition</p>
+            <ul class="proj-bullets">
+              <li>Led the migration of vendor, GL, and transaction data from Navision to Oracle.</li>
+              <li>Validated opening balances and reconciled discrepancies pre and post go-live.</li>
+              <li>Coordinated with cross-functional teams to ensure zero data loss.</li>
+            </ul>
+            <div class="proj-tags"><span>Data Migration</span><span>Reconciliation</span><span>Oracle</span></div>
+          </div>
         </div>
-        <ul class="proj-bullets">
-          <li>Supported Oracle AP implementation for the employee expense reimbursement module.</li>
-          <li>Managed opening balance setup for employee advances during migration.</li>
-          <li>Identified and resolved 100+ system and process issues.</li>
-          <li>Performed root cause analysis and implemented fixes for reimbursement mismatches.</li>
-          <li>Supported UAT and ensured a smooth go-live transition.</li>
-        </ul>
-        <div class="proj-tags"><span>Oracle AP</span><span>UAT</span><span>Data Migration</span><span>RCA</span></div>
       </div>
-      <div class="proj-card spot reveal">
-        <div class="proj-header">
-          <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">May 2025 — Mar 2026</span></div>
-          <h3>Employee Reimbursement Optimization</h3>
-          <p class="proj-sub">Policy tightening & tracking system overhaul</p>
-        </div>
-        <ul class="proj-bullets">
-          <li>Implemented a strict reimbursement policy requiring mandatory bill submission.</li>
-          <li>Managed deviation cases with proper approvals and deduction rules.</li>
-          <li>Developed an Excel tracker with formulas for aging, status, and payment summaries.</li>
-          <li>Improved reimbursement processing efficiency and reporting accuracy.</li>
-        </ul>
-        <div class="proj-tags"><span>Policy Design</span><span>Excel Tracker</span><span>Compliance</span></div>
-      </div>
-      <div class="proj-card spot reveal">
-        <div class="proj-header">
-          <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Ongoing</span></div>
-          <h3>Navision → Oracle Data Migration</h3>
-          <p class="proj-sub">Ledger & master data transition</p>
-        </div>
-        <ul class="proj-bullets">
-          <li>Led the migration of vendor, GL, and transaction data from Navision to Oracle.</li>
-          <li>Validated opening balances and reconciled discrepancies pre and post go-live.</li>
-          <li>Coordinated with cross-functional teams to ensure zero data loss.</li>
-        </ul>
-        <div class="proj-tags"><span>Data Migration</span><span>Reconciliation</span><span>Oracle</span></div>
+      <div class="carousel-controls">
+        <button class="carousel-arrow prev" aria-label="Previous">←</button>
+        <div class="carousel-dots"></div>
+        <button class="carousel-arrow next" aria-label="Next">→</button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- SKILLS -->
-<section id="skills" class="skills-section">
+<section id="skills" class="skill-section">
   <div class="wrap">
     <div class="section-header reveal">
       <div class="section-eyebrow">Skills</div>
       <h2 class="section-title">Finance, operations, <span class="grad">and the tools.</span></h2>
     </div>
-    <div class="skills-grid">
+    <div class="skill-grid">
       <div class="skill-card spot reveal">
-        <span class="skill-num">/ 01</span>
-        <h3>Finance & Compliance</h3>
+        <span class="num">/ 01</span>
+        <h3>Finance &amp; Compliance</h3>
         <div class="skill-tags">
-          <span>Accounts Payable & Receivable</span><span>Audit Support & Month-End</span><span>Budgeting & Financial Planning</span><span>Financial Accounting & Reporting</span><span>Taxation (GST, TDS) & Compliance</span>
+          <span>Accounts Payable &amp; Receivable</span><span>Audit Support &amp; Month-End</span><span>Budgeting &amp; Financial Planning</span><span>Financial Accounting &amp; Reporting</span><span>Taxation (GST, TDS) &amp; Compliance</span>
         </div>
       </div>
       <div class="skill-card spot reveal">
-        <span class="skill-num">/ 02</span>
-        <h3>Operations & Management</h3>
+        <span class="num">/ 02</span>
+        <h3>Operations &amp; Management</h3>
         <div class="skill-tags">
-          <span>Business Process Optimization</span><span>Process Improvement</span><span>Strategic Planning & Execution</span><span>Team Coordination</span><span>Vendor & Stakeholder Management</span><span>Workflow Automation</span>
+          <span>Business Process Optimization</span><span>Process Improvement</span><span>Strategic Planning &amp; Execution</span><span>Team Coordination</span><span>Vendor &amp; Stakeholder Management</span><span>Workflow Automation</span>
         </div>
       </div>
       <div class="skill-card spot reveal">
-        <span class="skill-num">/ 03</span>
-        <h3>Analytical & Technical</h3>
+        <span class="num">/ 03</span>
+        <h3>Analytical &amp; Technical</h3>
         <div class="skill-tags">
-          <span>Advanced Excel & PowerPoint</span><span>Data Analysis & Forecasting</span><span>Data-Driven Decision Making</span><span>ERP (Tally, Zoho, Oracle, Navision, NetSuite)</span>
+          <span>Advanced Excel &amp; PowerPoint</span><span>Data Analysis &amp; Forecasting</span><span>Data-Driven Decision Making</span><span>ERP (Tally, Zoho, Oracle, Navision, NetSuite)</span>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<section class="stats-section">
-  <div class="wrap">
-    <div class="stats-grid">
-      <div class="stat-item reveal"><div class="stat-value" data-count="450" data-suffix="+">0</div><div class="stat-label">Invoices processed / month</div></div>
-      <div class="stat-item reveal"><div class="stat-value" data-count="100" data-suffix="+">0</div><div class="stat-label">System issues resolved</div></div>
-      <div class="stat-item reveal"><div class="stat-value" data-count="5">0</div><div class="stat-label">ERP systems worked in</div></div>
-      <div class="stat-item reveal"><div class="stat-value" data-count="2" data-suffix="+">0</div><div class="stat-label">Years of hands-on experience</div></div>
     </div>
   </div>
 </section>
@@ -327,11 +361,35 @@
     <div class="reveal">
       <div class="section-eyebrow">Certifications — IBM SkillBuild</div>
       <div class="cert-list">
-        <div class="cert-item"><span>Corporate Finance, Financial Accounting & Reporting</span><span class="cert-check">✓</span></div>
+        <div class="cert-item"><span>Corporate Finance, Financial Accounting &amp; Reporting</span><span class="cert-check">✓</span></div>
         <div class="cert-item"><span>Data Analysis Fundamentals</span><span class="cert-check">✓</span></div>
-        <div class="cert-item"><span>Understanding & Managing Risk</span><span class="cert-check">✓</span></div>
-        <div class="cert-item"><span>SAP Basics, Excel & PowerPoint Training</span><span class="cert-check">✓</span></div>
-        <div class="cert-item"><span>Customer Engagement & Design Thinking</span><span class="cert-check">✓</span></div>
+        <div class="cert-item"><span>Understanding &amp; Managing Risk</span><span class="cert-check">✓</span></div>
+        <div class="cert-item"><span>SAP Basics, Excel &amp; PowerPoint Training</span><span class="cert-check">✓</span></div>
+        <div class="cert-item"><span>Customer Engagement &amp; Design Thinking</span><span class="cert-check">✓</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-value" data-count="450" data-suffix="+">0</div>
+        <div class="stat-label">Invoices processed / month</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-value" data-count="100" data-suffix="+">0</div>
+        <div class="stat-label">System issues resolved</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-value" data-count="5">0</div>
+        <div class="stat-label">ERP systems worked in</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-value" data-count="2" data-suffix="+">0</div>
+        <div class="stat-label">Years of hands-on experience</div>
       </div>
     </div>
   </div>
@@ -369,29 +427,47 @@
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact" class="contact-section">
-  <div class="wrap contact-inner">
-    <div class="contact-left reveal">
-      <h2 class="section-title">Let's talk about<br>your next <span class="grad">hire.</span></h2>
-      <p>Open to finance, AP, and compliance roles. I respond directly and promptly.</p>
-      <div class="contact-rows">
-        <a href="tel:+917058342101" class="contact-row"><span class="cr-k">Phone</span><span class="cr-v">+91 70583-42101</span></a>
-        <a href="mailto:piyushtomar1222@gmail.com" class="contact-row"><span class="cr-k">Email</span><span class="cr-v">piyushtomar1222@gmail.com</span></a>
-        <span class="contact-row"><span class="cr-k">Location</span><span class="cr-v">Navi Mumbai, Maharashtra</span></span>
+<!-- CTA BANNER -->
+<section>
+  <div class="wrap">
+    <div class="cta-banner reveal">
+      <h2 class="section-title">Ready to add a details<br>person to your <span class="grad">finance team?</span></h2>
+      <p>Open to finance, AP, and compliance roles — I respond directly and promptly to every message.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary magnetic" target="_self">Get in touch <span>→</span></a>
       </div>
     </div>
-    <form class="contact-form spot reveal" id="cfForm" onsubmit="return submitForm(event)">
-      <div class="cf-title">Send a message</div>
-      <div class="cf-row">
-        <div class="cf-field"><label for="cfName">Name</label><input id="cfName" type="text" placeholder="Your name" required></div>
-        <div class="cf-field"><label for="cfEmail">Email</label><input id="cfEmail" type="email" placeholder="you@email.com" required></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="wrap">
+    <div class="section-header center reveal">
+      <div class="section-eyebrow">Contact</div>
+      <h2 class="section-title">Let's talk about<br>your next <span class="grad">hire.</span></h2>
+    </div>
+    <div class="contact-inner">
+      <div class="contact-left reveal">
+        <p>Open to finance, AP, and compliance roles. I respond directly and promptly.</p>
+        <div class="contact-rows">
+          <a href="tel:+917058342101" class="contact-row" target="_self"><span class="cr-k">Phone</span><span class="cr-v">+91 70583-42101</span></a>
+          <a href="mailto:piyushtomar1222@gmail.com" class="contact-row" target="_self"><span class="cr-k">Email</span><span class="cr-v">piyushtomar1222@gmail.com</span></a>
+          <span class="contact-row"><span class="cr-k">Location</span><span class="cr-v">Navi Mumbai, Maharashtra</span></span>
+        </div>
       </div>
-      <div class="cf-field"><label for="cfSubject">Subject</label><input id="cfSubject" type="text" placeholder="Job opportunity / Collaboration"></div>
-      <div class="cf-field"><label for="cfMsg">Message</label><textarea id="cfMsg" placeholder="Tell me about the role…" required></textarea></div>
-      <button class="cf-btn magnetic" type="submit">Send message →</button>
-      <div class="cf-success" id="cfSuccess">Message sent — I'll be in touch within 24 hours.</div>
-    </form>
+      <form class="contact-form spot reveal" id="cfForm" onsubmit="return submitForm(event)">
+        <div class="cf-title">Send a message</div>
+        <div class="cf-row">
+          <div class="cf-field"><label for="cfName">Name</label><input id="cfName" type="text" placeholder="Your name" required></div>
+          <div class="cf-field"><label for="cfEmail">Email</label><input id="cfEmail" type="email" placeholder="you@email.com" required></div>
+        </div>
+        <div class="cf-field"><label for="cfSubject">Subject</label><input id="cfSubject" type="text" placeholder="Job opportunity / Collaboration"></div>
+        <div class="cf-field"><label for="cfMsg">Message</label><textarea id="cfMsg" placeholder="Tell me about the role…" required></textarea></div>
+        <button class="cf-btn magnetic" type="submit">Send message <span>→</span></button>
+        <div class="cf-success" id="cfSuccess">Message sent — I'll be in touch within 24 hours.</div>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -400,9 +476,12 @@
 <!-- FOOTER -->
 <footer class="footer">
   <div class="wrap foot-inner">
-    <div class="foot-brand"><span class="foot-mark"></span><span>Piyush Tomar</span></div>
+    <div class="foot-brand">
+      <span class="mark-icon foot-mark"></span>
+      <span>Piyush Tomar</span>
+    </div>
     <span class="foot-copy">© 2026</span>
-    <a href="#top" class="foot-back">Back to top ↑</a>
+    <a href="#top" class="foot-back" target="_self">Back to top ↑</a>
   </div>
 </footer>
 
