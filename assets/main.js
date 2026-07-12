@@ -1,152 +1,134 @@
 /* ============================================================
-   PIYUSH TOMAR — AUREUM EDITION
-   Every feature is isolated in its own try/catch. The loader uses
-   only an inline SVG path (already in the DOM) — nothing is ever
-   loaded from an external image file, so there is no risk of the
-   canvas-tainting issue that broke earlier versions under file://.
+   PIYUSH TOMAR — NOVA EDITION
+   Every feature is isolated in its own try/catch so nothing can
+   take the rest of the page down. The interactive dot grid lives
+   entirely inside the hero canvas and is masked to fade out at
+   the bottom of the section (see #heroField mask in CSS) — it
+   never runs full-page.
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function(){
 
-  /* ---------- LOADER: SVG line-draw ---------- */
+  /* ---------- LOADER: logo breathing, nothing else ---------- */
   (function loader(){
     var loaderEl = document.getElementById('loader');
     if(!loaderEl) return;
     var finished = false;
-
     function finish(){
       if(finished) return;
       finished = true;
       loaderEl.classList.add('out');
-      setTimeout(function(){ loaderEl.style.display = 'none'; }, 750);
+      setTimeout(function(){ loaderEl.style.display = 'none'; }, 650);
     }
-
-    var hardFallback = setTimeout(finish, 4200);
-
-    try{
-      var progressEl = document.getElementById('loaderProgress');
-      var svg = document.getElementById('loaderSvg');
-      var path = document.getElementById('loaderPath');
-      var fillPath = document.getElementById('loaderFill');
-      var lockup = document.getElementById('loaderLockup');
-
-      function setProgress(pct){ if(progressEl) progressEl.style.width = pct + '%'; }
-
-      if(!path || !path.getTotalLength){ throw new Error('no path'); }
-
-      var len = path.getTotalLength();
-      path.style.strokeDasharray = len;
-      path.style.strokeDashoffset = len;
-      // force layout before transition
-      path.getBoundingClientRect();
-      path.style.transition = 'stroke-dashoffset 1500ms cubic-bezier(0.65,0,0.35,1)';
-
-      var t0 = null;
-      function trackProgress(ts){
-        if(!t0) t0 = ts;
-        var t = Math.min(1, (ts - t0) / 1500);
-        setProgress(t * 55);
-        if(t < 1) requestAnimationFrame(trackProgress);
-      }
-      requestAnimationFrame(function(){
-        path.style.strokeDashoffset = '0';
-        requestAnimationFrame(trackProgress);
-      });
-
-      setTimeout(function(){
-        if(fillPath) fillPath.classList.add('show');
-        if(svg) svg.classList.add('hide-stroke');
-        setProgress(80);
-        setTimeout(function(){
-          if(lockup) lockup.classList.add('show');
-          setProgress(100);
-          setTimeout(finish, 850);
-        }, 500);
-      }, 1550);
-
-    } catch(err){
-      clearTimeout(hardFallback);
-      finish();
-    }
+    // Two breathing cycles (~3.2s), then a hard fallback just in case.
+    setTimeout(finish, 3200);
+    setTimeout(finish, 5000);
   })();
 
-  /* ---------- CONSTELLATION FIELD (original, self-generated only) ---------- */
+  /* ---------- HERO INTERACTIVE DOT GRID (React-Bits-style) ---------- */
   try{
-    var canvas = document.getElementById('constellation');
-    if(canvas && canvas.getContext){
+    var canvas = document.getElementById('heroField');
+    var heroEl = document.querySelector('.hero');
+    if(canvas && canvas.getContext && heroEl){
       var ctx = canvas.getContext('2d');
-      var w, h, nodes = [];
-      var mouse = {x:-1000, y:-1000};
+      var w, h, dots = [];
+      var mouse = {x:-9999, y:-9999, active:false};
+      var spacing = 34;
+      var heroActive = true;
 
-      function resize(){
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
+      function buildGrid(){
+        w = canvas.width = heroEl.offsetWidth;
+        h = canvas.height = heroEl.offsetHeight;
+        dots = [];
+        var cols = Math.ceil(w / spacing) + 1;
+        var rows = Math.ceil(h / spacing) + 1;
+        for(var i=0;i<cols;i++){
+          for(var j=0;j<rows;j++){
+            dots.push({
+              x: i*spacing, y: j*spacing,
+              ox: i*spacing, oy: j*spacing,
+              r: 1.1
+            });
+          }
+        }
       }
-      resize();
-      window.addEventListener('resize', resize);
-      window.addEventListener('mousemove', function(e){ mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
+      buildGrid();
+      window.addEventListener('resize', buildGrid);
 
-      var count = Math.min(70, Math.floor((window.innerWidth * window.innerHeight) / 22000));
-      var palette = ['214,173,104', '107,124,184', '243,239,230'];
-      for(var i=0;i<count;i++){
-        nodes.push({
-          x: Math.random()*w, y: Math.random()*h,
-          vx: (Math.random()-0.5)*0.18, vy: (Math.random()-0.5)*0.18,
-          r: 1 + Math.random()*1.4,
-          color: palette[i % palette.length]
-        });
+      heroEl.addEventListener('mousemove', function(e){
+        var rect = heroEl.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+        mouse.active = true;
+      });
+      heroEl.addEventListener('mouseleave', function(){ mouse.active = false; });
+
+      // Pause the animation once the hero has scrolled out of view —
+      // saves cycles and matches "only in the hero" requirement.
+      if('IntersectionObserver' in window){
+        var heroObs = new IntersectionObserver(function(entries){
+          heroActive = entries[0].isIntersecting;
+        }, {threshold:0.01});
+        heroObs.observe(heroEl);
       }
 
-      function step(){
+      var t = 0;
+      function draw(){
+        requestAnimationFrame(draw);
+        if(!heroActive) return;
+        t += 0.006;
         ctx.clearRect(0,0,w,h);
-        for(var i=0;i<nodes.length;i++){
-          var n = nodes[i];
-          n.x += n.vx; n.y += n.vy;
-          if(n.x < 0 || n.x > w) n.vx *= -1;
-          if(n.y < 0 || n.y > h) n.vy *= -1;
 
-          var dxm = n.x - mouse.x, dym = n.y - mouse.y;
-          var dm = Math.sqrt(dxm*dxm + dym*dym);
-          if(dm < 140){
-            n.x += (dxm/dm) * 0.6;
-            n.y += (dym/dm) * 0.6;
-          }
+        // ambient animated gradient wash beneath the dots
+        var gx = w * (0.5 + 0.18*Math.sin(t*0.7));
+        var gy = h * (0.4 + 0.14*Math.cos(t*0.5));
+        var g1 = ctx.createRadialGradient(gx, gy, 0, gx, gy, Math.max(w,h)*0.6);
+        g1.addColorStop(0, 'rgba(45,212,191,0.10)');
+        g1.addColorStop(0.5, 'rgba(255,138,101,0.05)');
+        g1.addColorStop(1, 'rgba(8,9,11,0)');
+        ctx.fillStyle = g1;
+        ctx.fillRect(0,0,w,h);
 
-          for(var j=i+1;j<nodes.length;j++){
-            var o = nodes[j];
-            var dx = n.x - o.x, dy = n.y - o.y;
-            var d = Math.sqrt(dx*dx + dy*dy);
-            if(d < 150){
-              ctx.beginPath();
-              ctx.moveTo(n.x, n.y);
-              ctx.lineTo(o.x, o.y);
-              ctx.strokeStyle = 'rgba(' + n.color + ',' + (0.12 * (1 - d/150)) + ')';
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
+        if(mouse.active){
+          var g2 = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 240);
+          g2.addColorStop(0, 'rgba(45,212,191,0.16)');
+          g2.addColorStop(1, 'rgba(45,212,191,0)');
+          ctx.fillStyle = g2;
+          ctx.fillRect(0,0,w,h);
+        }
+
+        var radius = 150;
+        for(var i=0;i<dots.length;i++){
+          var d = dots[i];
+          var dx = mouse.active ? d.ox - mouse.x : 9999;
+          var dy = mouse.active ? d.oy - mouse.y : 9999;
+          var dist = Math.sqrt(dx*dx + dy*dy);
+          var idle = 0.35 + 0.12*Math.sin(t*1.3 + d.ox*0.02 + d.oy*0.02);
+
+          if(dist < radius){
+            var pull = (1 - dist/radius);
+            d.x = d.ox - dx*pull*0.28;
+            d.y = d.oy - dy*pull*0.28;
+            var size = 1.1 + pull*2.1;
+            var mix = pull;
+            var cr = Math.round(45 + (255-45)*mix*0.5);
+            var cg = Math.round(212 + (138-212)*mix*0.5);
+            var cb = Math.round(191 + (101-191)*mix*0.5);
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, size, 0, Math.PI*2);
+            ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + (0.35 + pull*0.55) + ')';
+            ctx.fill();
+          } else {
+            d.x += (d.ox - d.x) * 0.12;
+            d.y += (d.oy - d.y) * 0.12;
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, 1.1, 0, Math.PI*2);
+            ctx.fillStyle = 'rgba(240,240,236,' + (idle*0.4) + ')';
+            ctx.fill();
           }
         }
-        for(var k=0;k<nodes.length;k++){
-          var p = nodes[k];
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-          ctx.fillStyle = 'rgba(' + p.color + ',0.55)';
-          ctx.fill();
-        }
-        requestAnimationFrame(step);
       }
-      requestAnimationFrame(step);
-    }
-  } catch(err){}
-
-  /* ---------- POINTER SPOTLIGHT ---------- */
-  try{
-    var glow = document.getElementById('glow');
-    if(glow){
-      window.addEventListener('mousemove', function(e){
-        glow.style.setProperty('--gx', e.clientX + 'px');
-        glow.style.setProperty('--gy', e.clientY + 'px');
-      }, {passive:true});
+      requestAnimationFrame(draw);
     }
   } catch(err){}
 
@@ -203,10 +185,10 @@ document.addEventListener('DOMContentLoaded', function(){
       var dur = 1600, start = null;
       function frame(ts){
         if(!start) start = ts;
-        var t = Math.min(1, (ts-start)/dur);
-        var eased = 1 - Math.pow(1-t, 3);
+        var tt = Math.min(1, (ts-start)/dur);
+        var eased = 1 - Math.pow(1-tt, 3);
         el.textContent = Math.round(target*eased) + suffix;
-        if(t < 1) requestAnimationFrame(frame);
+        if(tt < 1) requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
     }
@@ -287,18 +269,6 @@ document.addEventListener('DOMContentLoaded', function(){
         card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
         card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
       });
-    });
-  } catch(err){}
-
-  /* ---------- ORBIT PANEL NODE PLACEMENT ---------- */
-  try{
-    document.querySelectorAll('.orbit-node').forEach(function(node){
-      var angle = parseFloat(node.dataset.angle || '0');
-      var radius = node.dataset.radius || '50%';
-      node.style.left = '50%';
-      node.style.top = '50%';
-      node.style.transform =
-        'translate(-50%,-50%) rotate(' + angle + 'deg) translate(' + radius + ') rotate(' + (-angle) + 'deg)';
     });
   } catch(err){}
 
