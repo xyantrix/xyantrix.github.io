@@ -8,35 +8,22 @@
 <link rel="icon" type="image/png" href="Website_logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <base target="_blank">
 </head>
 <body class="no-js">
-<script>document.body.classList.remove('no-js');</script>
+<script>document.body.classList.remove("no-js");</script>
 
-<!-- NOISE TEXTURE OVERLAY -->
-<svg id="noise" width="100%" height="100%" style="position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.025;">
-  <filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter>
-  <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+<!-- NOISE OVERLAY -->
+<svg id="noise" width="100%" height="100%">
+  <filter id="nf"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter>
+  <rect width="100%" height="100%" filter="url(#nf)"/>
 </svg>
 
 <!-- LUXURY LOADER -->
 <div id="loader">
-  <div class="loader-inner">
-    <svg class="loader-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 4L58 18V46L32 60L6 46V18L32 4Z" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"/>
-      <path d="M32 12L50 22V42L32 52L14 42V22L32 12Z" stroke="url(#loaderGrad)" stroke-width="1.5" fill="none"/>
-      <circle cx="32" cy="32" r="4" fill="url(#loaderGrad)"/>
-      <defs>
-        <linearGradient id="loaderGrad" x1="14" y1="12" x2="50" y2="52" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#D4AF37"/>
-          <stop offset="0.5" stop-color="#FFD700"/>
-          <stop offset="1" stop-color="#F7E7CE"/>
-        </linearGradient>
-      </defs>
-    </svg>
-  </div>
+  <div class="loader-diamond"></div>
 </div>
 
 <!-- CUSTOM CURSOR -->
@@ -46,77 +33,57 @@
 <!-- NAVIGATION -->
 <nav id="nav">
   <div class="wrap nav-inner">
-    <a href="#top" class="nav-brand" target="_self">
-      <svg class="nav-mark" viewBox="0 0 40 40" fill="none">
-        <path d="M20 2L36 11V29L20 38L4 29V11L20 2Z" stroke="url(#navGrad)" stroke-width="1.2" fill="none"/>
-        <circle cx="20" cy="20" r="3" fill="url(#navGrad)"/>
-        <defs><linearGradient id="navGrad" x1="4" y1="2" x2="36" y2="38"><stop stop-color="#D4AF37"/><stop offset="1" stop-color="#FFD700"/></linearGradient></defs>
-      </svg>
-      <span class="nav-brand-text">Piyush Tomar</span>
+    <a href="#top" class="nav-brand">
+      <span class="nav-mark"></span>
+      <span>Piyush Tomar</span>
     </a>
     <div class="nav-links">
-      <a href="#about" target="_self"><span>About</span></a>
-      <a href="#experience" target="_self"><span>Experience</span></a>
-      <a href="#projects" target="_self"><span>Projects</span></a>
-      <a href="#skills" target="_self"><span>Skills</span></a>
-      <a href="#contact" target="_self"><span>Contact</span></a>
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
     </div>
-    <a href="#contact" class="nav-cta" target="_self">Get in touch</a>
-    <button class="nav-burger" id="burger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
 <div class="nav-mobile" id="navMobile">
-  <a href="#about" target="_self">About</a>
-  <a href="#experience" target="_self">Experience</a>
-  <a href="#projects" target="_self">Projects</a>
-  <a href="#skills" target="_self">Skills</a>
-  <a href="#contact" target="_self" class="accent">Get in touch</a>
+  <a href="#about">About</a>
+  <a href="#experience">Experience</a>
+  <a href="#projects">Projects</a>
+  <a href="#skills">Skills</a>
+  <a href="#contact" class="accent">Get in touch</a>
 </div>
 
 <main id="top">
 
-<!-- HERO SECTION -->
+<!-- HERO -->
 <section class="hero">
   <canvas id="heroCanvas"></canvas>
   <div class="hero-vignette"></div>
   <div class="wrap hero-inner">
     <div class="hero-badge">
-      <span class="badge-pulse"></span>
-      <span class="badge-text">Available for opportunities</span>
+      <span class="badge-dot"></span>
+      <span>Available for opportunities</span>
     </div>
     <h1 class="hero-title">
-      <span class="hero-title-line">Finance &</span>
-      <span class="hero-title-line">Accounting</span>
-      <span class="hero-title-line grad">Specialist.</span>
+      <span class="hero-line">Finance &</span>
+      <span class="hero-line">Accounting</span>
+      <span class="hero-line grad">Specialist.</span>
     </h1>
     <p class="hero-desc">The invoice that has to match the PO, the ledger that has to tie out, the filing that lands on time — that's the part I own. End-to-end P2P, GST/TDS compliance, and reconciliation across Oracle, NetSuite, Navision & Tally.</p>
     <div class="hero-actions">
-      <a href="#contact" class="btn-primary magnetic" target="_self">
-        <span>Get in touch</span>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a href="#experience" class="btn-secondary magnetic" target="_self">
-        <span>View experience</span>
-      </a>
+      <a href="#contact" class="btn-primary magnetic">Get in touch</a>
+      <a href="#experience" class="btn-secondary magnetic">View experience</a>
     </div>
     <div class="hero-meta">
-      <div class="hero-meta-item">
-        <span class="meta-num">2+</span>
-        <span class="meta-label">Years Experience</span>
-      </div>
-      <div class="meta-separator"></div>
-      <div class="hero-meta-item">
-        <span class="meta-num">5</span>
-        <span class="meta-label">ERP Systems</span>
-      </div>
-      <div class="meta-separator"></div>
-      <div class="hero-meta-item">
-        <span class="meta-num">450+</span>
-        <span class="meta-label">Invoices / Month</span>
-      </div>
+      <div class="meta-item"><span class="meta-num">2+</span><span class="meta-label">Years Experience</span></div>
+      <div class="meta-sep"></div>
+      <div class="meta-item"><span class="meta-num">5</span><span class="meta-label">ERP Systems</span></div>
+      <div class="meta-sep"></div>
+      <div class="meta-item"><span class="meta-num">450+</span><span class="meta-label">Invoices / Month</span></div>
     </div>
   </div>
 </section>
@@ -124,46 +91,26 @@
 <!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track" id="marqueeTrack">
-    <span class="marquee-item">Oracle Financials</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">NetSuite</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Navision</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Tally Prime</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Zoho Books</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">GST & TDS Compliance</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">3-Way Matching</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Advanced Excel</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Vendor Reconciliation</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Form 15CA / 15CB</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Oracle Financials</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">NetSuite</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Navision</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Tally Prime</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Zoho Books</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">GST & TDS Compliance</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">3-Way Matching</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Advanced Excel</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Vendor Reconciliation</span>
-    <span class="marquee-dot"></span>
-    <span class="marquee-item">Form 15CA / 15CB</span>
-    <span class="marquee-dot"></span>
+    <span class="marquee-item">Oracle Financials</span><span class="marquee-dot"></span>
+    <span class="marquee-item">NetSuite</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Navision</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Tally Prime</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Zoho Books</span><span class="marquee-dot"></span>
+    <span class="marquee-item">GST & TDS Compliance</span><span class="marquee-dot"></span>
+    <span class="marquee-item">3-Way Matching</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Advanced Excel</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Vendor Reconciliation</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Form 15CA / 15CB</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Oracle Financials</span><span class="marquee-dot"></span>
+    <span class="marquee-item">NetSuite</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Navision</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Tally Prime</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Zoho Books</span><span class="marquee-dot"></span>
+    <span class="marquee-item">GST & TDS Compliance</span><span class="marquee-dot"></span>
+    <span class="marquee-item">3-Way Matching</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Advanced Excel</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Vendor Reconciliation</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Form 15CA / 15CB</span><span class="marquee-dot"></span>
   </div>
 </div>
 
@@ -177,18 +124,9 @@
       <p>My day revolves around 3-way matching, vendor reconciliations, GST/TDS compliance, and keeping the books audit-ready. I led the data migration from Navision to Oracle and resolved 100+ system issues during our NetSuite implementation.</p>
       <p>I hold a BMS in Finance from Pillai HOC College and certifications from IBM SkillBuild in Corporate Finance, Data Analysis, and SAP Basics.</p>
       <div class="about-facts">
-        <div class="about-fact">
-          <span class="af-label">Location</span>
-          <span class="af-value">Navi Mumbai, IN</span>
-        </div>
-        <div class="about-fact">
-          <span class="af-label">Experience</span>
-          <span class="af-value">2+ Years</span>
-        </div>
-        <div class="about-fact">
-          <span class="af-label">Education</span>
-          <span class="af-value">BMS — Finance</span>
-        </div>
+        <div class="about-fact"><span class="af-label">Location</span><span class="af-value">Navi Mumbai, IN</span></div>
+        <div class="about-fact"><span class="af-label">Experience</span><span class="af-value">2+ Years</span></div>
+        <div class="about-fact"><span class="af-label">Education</span><span class="af-value">BMS — Finance</span></div>
       </div>
     </div>
     <div class="about-photo reveal">
@@ -232,7 +170,6 @@
           <span>Oracle Financials</span><span>NetSuite</span><span>Navision</span><span>Tally</span><span>GST / TDS</span><span>15CA / 15CB</span>
         </div>
       </div>
-
       <div class="exp-card spot reveal">
         <span class="exp-num">/ 02</span>
         <div class="exp-head">
@@ -249,7 +186,6 @@
         </ul>
         <div class="exp-tags"><span>GST Returns</span><span>ITC Claims</span><span>Reconciliation</span></div>
       </div>
-
       <div class="exp-card spot reveal">
         <span class="exp-num">/ 03</span>
         <div class="exp-head">
@@ -281,10 +217,7 @@
     <div class="projects-grid">
       <div class="proj-card spot reveal">
         <div class="proj-header">
-          <div class="proj-meta">
-            <span class="proj-co">CarTrade Tech</span>
-            <span class="proj-date">Aug 2025 — Nov 2025</span>
-          </div>
+          <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Aug 2025 — Nov 2025</span></div>
           <h3>Oracle NetSuite Implementation</h3>
           <p class="proj-sub">Employee expense reimbursement module — migration & UAT</p>
         </div>
@@ -299,10 +232,7 @@
       </div>
       <div class="proj-card spot reveal">
         <div class="proj-header">
-          <div class="proj-meta">
-            <span class="proj-co">CarTrade Tech</span>
-            <span class="proj-date">May 2025 — Mar 2026</span>
-          </div>
+          <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">May 2025 — Mar 2026</span></div>
           <h3>Employee Reimbursement Optimization</h3>
           <p class="proj-sub">Policy tightening & tracking system overhaul</p>
         </div>
@@ -316,10 +246,7 @@
       </div>
       <div class="proj-card spot reveal">
         <div class="proj-header">
-          <div class="proj-meta">
-            <span class="proj-co">CarTrade Tech</span>
-            <span class="proj-date">Ongoing</span>
-          </div>
+          <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Ongoing</span></div>
           <h3>Navision → Oracle Data Migration</h3>
           <p class="proj-sub">Ledger & master data transition</p>
         </div>
@@ -346,33 +273,21 @@
         <span class="skill-num">/ 01</span>
         <h3>Finance & Compliance</h3>
         <div class="skill-tags">
-          <span>Accounts Payable & Receivable</span>
-          <span>Audit Support & Month-End</span>
-          <span>Budgeting & Financial Planning</span>
-          <span>Financial Accounting & Reporting</span>
-          <span>Taxation (GST, TDS) & Compliance</span>
+          <span>Accounts Payable & Receivable</span><span>Audit Support & Month-End</span><span>Budgeting & Financial Planning</span><span>Financial Accounting & Reporting</span><span>Taxation (GST, TDS) & Compliance</span>
         </div>
       </div>
       <div class="skill-card spot reveal">
         <span class="skill-num">/ 02</span>
         <h3>Operations & Management</h3>
         <div class="skill-tags">
-          <span>Business Process Optimization</span>
-          <span>Process Improvement</span>
-          <span>Strategic Planning & Execution</span>
-          <span>Team Coordination</span>
-          <span>Vendor & Stakeholder Management</span>
-          <span>Workflow Automation</span>
+          <span>Business Process Optimization</span><span>Process Improvement</span><span>Strategic Planning & Execution</span><span>Team Coordination</span><span>Vendor & Stakeholder Management</span><span>Workflow Automation</span>
         </div>
       </div>
       <div class="skill-card spot reveal">
         <span class="skill-num">/ 03</span>
         <h3>Analytical & Technical</h3>
         <div class="skill-tags">
-          <span>Advanced Excel & PowerPoint</span>
-          <span>Data Analysis & Forecasting</span>
-          <span>Data-Driven Decision Making</span>
-          <span>ERP (Tally, Zoho, Oracle, Navision, NetSuite)</span>
+          <span>Advanced Excel & PowerPoint</span><span>Data Analysis & Forecasting</span><span>Data-Driven Decision Making</span><span>ERP (Tally, Zoho, Oracle, Navision, NetSuite)</span>
         </div>
       </div>
     </div>
@@ -383,22 +298,10 @@
 <section class="stats-section">
   <div class="wrap">
     <div class="stats-grid">
-      <div class="stat-item reveal">
-        <div class="stat-value" data-count="450" data-suffix="+">0</div>
-        <div class="stat-label">Invoices processed / month</div>
-      </div>
-      <div class="stat-item reveal">
-        <div class="stat-value" data-count="100" data-suffix="+">0</div>
-        <div class="stat-label">System issues resolved</div>
-      </div>
-      <div class="stat-item reveal">
-        <div class="stat-value" data-count="5">0</div>
-        <div class="stat-label">ERP systems worked in</div>
-      </div>
-      <div class="stat-item reveal">
-        <div class="stat-value" data-count="2" data-suffix="+">0</div>
-        <div class="stat-label">Years of hands-on experience</div>
-      </div>
+      <div class="stat-item reveal"><div class="stat-value" data-count="450" data-suffix="+">0</div><div class="stat-label">Invoices processed / month</div></div>
+      <div class="stat-item reveal"><div class="stat-value" data-count="100" data-suffix="+">0</div><div class="stat-label">System issues resolved</div></div>
+      <div class="stat-item reveal"><div class="stat-value" data-count="5">0</div><div class="stat-label">ERP systems worked in</div></div>
+      <div class="stat-item reveal"><div class="stat-value" data-count="2" data-suffix="+">0</div><div class="stat-label">Years of hands-on experience</div></div>
     </div>
   </div>
 </section>
@@ -424,11 +327,11 @@
     <div class="reveal">
       <div class="section-eyebrow">Certifications — IBM SkillBuild</div>
       <div class="cert-list">
-        <div class="cert-item"><span>Corporate Finance, Financial Accounting & Reporting</span><span class="cert-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-        <div class="cert-item"><span>Data Analysis Fundamentals</span><span class="cert-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-        <div class="cert-item"><span>Understanding & Managing Risk</span><span class="cert-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-        <div class="cert-item"><span>SAP Basics, Excel & PowerPoint Training</span><span class="cert-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-        <div class="cert-item"><span>Customer Engagement & Design Thinking</span><span class="cert-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        <div class="cert-item"><span>Corporate Finance, Financial Accounting & Reporting</span><span class="cert-check">✓</span></div>
+        <div class="cert-item"><span>Data Analysis Fundamentals</span><span class="cert-check">✓</span></div>
+        <div class="cert-item"><span>Understanding & Managing Risk</span><span class="cert-check">✓</span></div>
+        <div class="cert-item"><span>SAP Basics, Excel & PowerPoint Training</span><span class="cert-check">✓</span></div>
+        <div class="cert-item"><span>Customer Engagement & Design Thinking</span><span class="cert-check">✓</span></div>
       </div>
     </div>
   </div>
@@ -443,23 +346,23 @@
     </div>
     <div class="faq-list reveal">
       <div class="faq-item">
-        <button class="faq-q">Which ERP systems have you worked in hands-on?<span class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <button class="faq-q">Which ERP systems have you worked in hands-on?<span class="faq-icon">+</span></button>
         <div class="faq-a"><p>Oracle Financials, Oracle NetSuite, Navision, Tally ERP, and Zoho Books — including leading a live data migration from Navision to Oracle.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Are you open to relocation?<span class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <button class="faq-q">Are you open to relocation?<span class="faq-icon">+</span></button>
         <div class="faq-a"><p>Yes — open to relocating for the right opportunity. I'd need a standard notice period to transition out of my current role.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">What's your notice period?<span class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <button class="faq-q">What's your notice period?<span class="faq-icon">+</span></button>
         <div class="faq-a"><p>I'm currently employed and would need to serve a notice period before joining a new role — happy to discuss specifics directly.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Do you handle compliance work, or just processing?<span class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <button class="faq-q">Do you handle compliance work, or just processing?<span class="faq-icon">+</span></button>
         <div class="faq-a"><p>Both. Day to day that's GST/TDS calculation and filing support, vendor KYC/MSME/LDC compliance, Form 15CA/15CB for foreign remittances, and audit-ready documentation.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">What's the best way to reach you?<span class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></button>
+        <button class="faq-q">What's the best way to reach you?<span class="faq-icon">+</span></button>
         <div class="faq-a"><p>Email at piyushtomar1222@gmail.com or call +91 70583-42101 — I respond promptly to both.</p></div>
       </div>
     </div>
@@ -473,21 +376,9 @@
       <h2 class="section-title">Let's talk about<br>your next <span class="grad">hire.</span></h2>
       <p>Open to finance, AP, and compliance roles. I respond directly and promptly.</p>
       <div class="contact-rows">
-        <a href="tel:+917058342101" class="contact-row" target="_self">
-          <span class="cr-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6C3 6 5 3 9 3C13 3 15 6 15 6M3 6V10C3 14 5 16 9 16C13 16 15 14 15 10V6M3 6C3 6 5 9 9 9C13 9 15 6 15 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="cr-k">Phone</span>
-          <span class="cr-v">+91 70583-42101</span>
-        </a>
-        <a href="mailto:piyushtomar1222@gmail.com" class="contact-row" target="_self">
-          <span class="cr-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 5L9 10L16 5M2 5V13H16V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="cr-k">Email</span>
-          <span class="cr-v">piyushtomar1222@gmail.com</span>
-        </a>
-        <span class="contact-row">
-          <span class="cr-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 16C9 16 15 12 15 7C15 4 12 2 9 2C6 2 3 4 3 7C3 12 9 16 9 16Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="2" stroke="currentColor" stroke-width="1.2"/></svg></span>
-          <span class="cr-k">Location</span>
-          <span class="cr-v">Navi Mumbai, Maharashtra</span>
-        </span>
+        <a href="tel:+917058342101" class="contact-row"><span class="cr-k">Phone</span><span class="cr-v">+91 70583-42101</span></a>
+        <a href="mailto:piyushtomar1222@gmail.com" class="contact-row"><span class="cr-k">Email</span><span class="cr-v">piyushtomar1222@gmail.com</span></a>
+        <span class="contact-row"><span class="cr-k">Location</span><span class="cr-v">Navi Mumbai, Maharashtra</span></span>
       </div>
     </div>
     <form class="contact-form spot reveal" id="cfForm" onsubmit="return submitForm(event)">
@@ -498,10 +389,7 @@
       </div>
       <div class="cf-field"><label for="cfSubject">Subject</label><input id="cfSubject" type="text" placeholder="Job opportunity / Collaboration"></div>
       <div class="cf-field"><label for="cfMsg">Message</label><textarea id="cfMsg" placeholder="Tell me about the role…" required></textarea></div>
-      <button class="cf-btn magnetic" type="submit">
-        <span>Send message</span>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
+      <button class="cf-btn magnetic" type="submit">Send message →</button>
       <div class="cf-success" id="cfSuccess">Message sent — I'll be in touch within 24 hours.</div>
     </form>
   </div>
@@ -512,16 +400,9 @@
 <!-- FOOTER -->
 <footer class="footer">
   <div class="wrap foot-inner">
-    <div class="foot-brand">
-      <svg class="foot-mark" viewBox="0 0 32 32" fill="none">
-        <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="url(#footGrad)" stroke-width="1" fill="none"/>
-        <circle cx="16" cy="16" r="2.5" fill="url(#footGrad)"/>
-        <defs><linearGradient id="footGrad" x1="4" y1="2" x2="28" y2="30"><stop stop-color="#D4AF37"/><stop offset="1" stop-color="#FFD700"/></linearGradient></defs>
-      </svg>
-      <span>Piyush Tomar</span>
-    </div>
+    <div class="foot-brand"><span class="foot-mark"></span><span>Piyush Tomar</span></div>
     <span class="foot-copy">© 2026</span>
-    <a href="#top" class="foot-back" target="_self">Back to top ↑</a>
+    <a href="#top" class="foot-back">Back to top ↑</a>
   </div>
 </footer>
 
