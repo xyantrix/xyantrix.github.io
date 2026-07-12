@@ -1,263 +1,274 @@
 /* ============================================================
-   PIYUSH TOMAR — LUXURY GOLD EDITION
-   Interactive dot grid + aurora system. Every feature isolated
-   in try/catch. Canvas runs ONLY in hero section via IntersectionObserver.
+   PIYUSH TOMAR — LUXURY GOLD EDITION v2
+   ReactBits-style dot grid + silk aurora on single canvas.
+   Fixed cursor with proper lerp. All features isolated in try/catch.
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function(){
 
   /* ---------- LOADER ---------- */
-  (function loader(){
-    var loaderEl = document.getElementById('loader');
-    if(!loaderEl) return;
-    var finished = false;
-    function finish(){
-      if(finished) return;
-      finished = true;
-      loaderEl.classList.add('out');
-      setTimeout(function(){ loaderEl.style.display = 'none'; }, 800);
-    }
-    setTimeout(finish, 2800);
-    setTimeout(finish, 4500);
+  (function(){
+    var el = document.getElementById('loader');
+    if(!el) return;
+    var done = false;
+    function finish(){ if(done) return; done = true; el.classList.add('out'); setTimeout(function(){ el.style.display = 'none'; }, 700); }
+    setTimeout(finish, 2600);
+    setTimeout(finish, 4200);
   })();
 
-  /* ---------- HERO CANVAS: DOT GRID + AURORA ---------- */
+  /* ---------- HERO CANVAS: SILK AURORA + DOT GRID ---------- */
   try{
     var canvas = document.getElementById('heroCanvas');
-    var heroEl = document.querySelector('.hero');
-    if(!canvas || !canvas.getContext || !heroEl) return;
+    var hero = document.querySelector('.hero');
+    if(!canvas || !canvas.getContext || !hero) throw 'no canvas';
 
     var ctx = canvas.getContext('2d');
     var w, h, dots = [];
     var mouse = { x: -9999, y: -9999, active: false };
-    var spacing = 32;
+    var spacing = 30;
     var heroActive = true;
     var t = 0;
 
-    // Aurora layers
-    var auroraLayers = [
-      { color: 'rgba(212,175,55,', opacity: 0.06, speed: 0.3, radius: 0.7, xOff: 0, yOff: 0 },
-      { color: 'rgba(255,215,0,', opacity: 0.04, speed: 0.2, radius: 0.6, xOff: 2, yOff: 1 },
-      { color: 'rgba(247,231,206,', opacity: 0.05, speed: 0.25, radius: 0.5, xOff: 1, yOff: 2 },
-      { color: 'rgba(205,127,50,', opacity: 0.03, speed: 0.15, radius: 0.8, xOff: 3, yOff: 0.5 }
-    ];
+    // Silk aurora config (ReactBits params)
+    var silkScale = 0.4;
+    var silkSpeed = 6;
+    var silkRotation = 4.4;
+    var silkNoise = 1.5;
 
-    function buildGrid(){
-      w = canvas.width = heroEl.offsetWidth;
-      h = canvas.height = heroEl.offsetHeight;
+    function resize(){
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.width = hero.offsetWidth * dpr;
+      h = canvas.height = hero.offsetHeight * dpr;
+      canvas.style.width = hero.offsetWidth + 'px';
+      canvas.style.height = hero.offsetHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      buildDots();
+    }
+
+    function buildDots(){
       dots = [];
-      var cols = Math.ceil(w / spacing) + 2;
-      var rows = Math.ceil(h / spacing) + 2;
+      var sw = hero.offsetWidth, sh = hero.offsetHeight;
+      var cols = Math.ceil(sw / spacing) + 2;
+      var rows = Math.ceil(sh / spacing) + 2;
       for(var i = 0; i < cols; i++){
         for(var j = 0; j < rows; j++){
           dots.push({
-            x: i * spacing - spacing,
-            y: j * spacing - spacing,
-            ox: i * spacing - spacing,
-            oy: j * spacing - spacing,
-            size: 1.2,
-            targetSize: 1.2,
-            brightness: 0.15,
-            targetBrightness: 0.15,
+            bx: i * spacing - spacing * 0.5,
+            by: j * spacing - spacing * 0.5,
+            x: i * spacing - spacing * 0.5,
+            y: j * spacing - spacing * 0.5,
+            size: 1.3,
+            ts: 1.3,
+            alpha: 0.1,
+            ta: 0.1,
             phase: Math.random() * Math.PI * 2
           });
         }
       }
     }
 
-    buildGrid();
-    window.addEventListener('resize', buildGrid);
+    resize();
+    window.addEventListener('resize', resize);
 
-    heroEl.addEventListener('mousemove', function(e){
-      var rect = heroEl.getBoundingClientRect();
+    hero.addEventListener('mousemove', function(e){
+      var rect = hero.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
       mouse.active = true;
     });
+    hero.addEventListener('mouseleave', function(){ mouse.active = false; });
 
-    heroEl.addEventListener('mouseleave', function(){
-      mouse.active = false;
-    });
-
-    // Pause when hero not visible
     if('IntersectionObserver' in window){
-      var heroObs = new IntersectionObserver(function(entries){
-        heroActive = entries[0].isIntersecting;
-      }, { threshold: 0.01 });
-      heroObs.observe(heroEl);
+      new IntersectionObserver(function(entries){ heroActive = entries[0].isIntersecting; }, {threshold:0.01}).observe(hero);
     }
 
-    function drawAurora(){
-      for(var i = 0; i < auroraLayers.length; i++){
-        var layer = auroraLayers[i];
-        var ax = w * (0.5 + 0.25 * Math.sin(t * layer.speed + layer.xOff));
-        var ay = h * (0.4 + 0.2 * Math.cos(t * layer.speed * 0.7 + layer.yOff));
-        var r = Math.max(w, h) * layer.radius;
-        var grad = ctx.createRadialGradient(ax, ay, 0, ax, ay, r);
-        grad.addColorStop(0, layer.color + layer.opacity + ')');
-        grad.addColorStop(0.5, layer.color + (layer.opacity * 0.5) + ')');
-        grad.addColorStop(1, layer.color + '0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
+    // ---- SILK AURORA (ReactBits-style) ----
+    function drawSilk(time){
+      var now = time * 0.001;
+      var speed = silkSpeed;
+      var cosR = Math.cos(silkRotation);
+      var sinR = Math.sin(silkRotation);
+
+      ctx.save();
+      ctx.translate(hero.offsetWidth / 2, hero.offsetHeight / 2);
+      ctx.rotate(silkRotation);
+      ctx.translate(-hero.offsetWidth / 2, -hero.offsetHeight / 2);
+
+      // Layer 1: Large warm gold flow
+      var cx1 = hero.offsetWidth * (0.5 + 0.3 * Math.sin(now * speed * 0.018));
+      var cy1 = hero.offsetHeight * (0.4 + 0.2 * Math.cos(now * speed * 0.014));
+      var g1 = ctx.createRadialGradient(cx1, cy1, 0, cx1, cy1, Math.max(hero.offsetWidth, hero.offsetHeight) * 0.65);
+      g1.addColorStop(0, 'rgba(201, 162, 39, 0.065)');
+      g1.addColorStop(0.5, 'rgba(184, 148, 31, 0.025)');
+      g1.addColorStop(1, 'rgba(201, 162, 39, 0)');
+      ctx.fillStyle = g1;
+      ctx.fillRect(-hero.offsetWidth, -hero.offsetHeight, hero.offsetWidth * 3, hero.offsetHeight * 3);
+
+      // Layer 2: Champagne flow
+      var cx2 = hero.offsetWidth * (0.3 + 0.4 * Math.cos(now * speed * 0.016));
+      var cy2 = hero.offsetHeight * (0.6 + 0.3 * Math.sin(now * speed * 0.02));
+      var g2 = ctx.createRadialGradient(cx2, cy2, 0, cx2, cy2, Math.max(hero.offsetWidth, hero.offsetHeight) * 0.55);
+      g2.addColorStop(0, 'rgba(232, 213, 163, 0.045)');
+      g2.addColorStop(1, 'rgba(232, 213, 163, 0)');
+      ctx.fillStyle = g2;
+      ctx.fillRect(-hero.offsetWidth, -hero.offsetHeight, hero.offsetWidth * 3, hero.offsetHeight * 3);
+
+      // Layer 3: Bronze accent
+      var cx3 = hero.offsetWidth * (0.7 + 0.2 * Math.sin(now * speed * 0.022 + 2));
+      var cy3 = hero.offsetHeight * (0.3 + 0.2 * Math.cos(now * speed * 0.017 + 1));
+      var g3 = ctx.createRadialGradient(cx3, cy3, 0, cx3, cy3, Math.max(hero.offsetWidth, hero.offsetHeight) * 0.45);
+      g3.addColorStop(0, 'rgba(139, 105, 20, 0.055)');
+      g3.addColorStop(1, 'rgba(139, 105, 20, 0)');
+      ctx.fillStyle = g3;
+      ctx.fillRect(-hero.offsetWidth, -hero.offsetHeight, hero.offsetWidth * 3, hero.offsetHeight * 3);
+
+      // Flowing silk lines
+      ctx.strokeStyle = 'rgba(201, 162, 39, 0.025)';
+      ctx.lineWidth = 1.5;
+      for(var i = -8; i < 18; i++){
+        ctx.beginPath();
+        var baseY = i * hero.offsetHeight / 12;
+        for(var x = 0; x < hero.offsetWidth; x += 8){
+          var y = baseY + Math.sin(x * 0.008 + now * speed * 0.012) * 40 + Math.sin(x * 0.003 + now * speed * 0.008) * 80;
+          if(x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
       }
+
+      ctx.restore();
     }
 
+    // ---- DOT GRID (ReactBits-style) ----
     function drawDots(){
-      var radius = 180;
-      var baseColor = { r: 220, g: 220, b: 220 };
-      var goldColor = { r: 212, g: 175, b: 55 };
-      var brightGold = { r: 255, g: 215, b: 0 };
+      var radius = 170;
+      var mx = mouse.active ? mouse.x : -9999;
+      var my = mouse.active ? mouse.y : -9999;
 
       for(var i = 0; i < dots.length; i++){
         var d = dots[i];
-        var dx = mouse.active ? d.ox - mouse.x : 9999;
-        var dy = mouse.active ? d.oy - mouse.y : 9999;
+        var dx = d.bx - mx;
+        var dy = d.by - my;
         var dist = Math.sqrt(dx * dx + dy * dy);
 
-        // Idle ambient motion
-        var idleX = Math.sin(t * 0.8 + d.phase) * 0.5;
-        var idleY = Math.cos(t * 0.6 + d.phase * 1.3) * 0.5;
+        // Idle drift
+        var driftX = Math.sin(t * 0.5 + d.phase) * 0.3;
+        var driftY = Math.cos(t * 0.4 + d.phase * 1.2) * 0.3;
 
-        if(dist < radius){
-          var pull = (1 - dist / radius);
-          var ease = 0.15;
-          d.x += (d.ox - dx * pull * 0.35 + idleX - d.x) * ease;
-          d.y += (d.oy - dy * pull * 0.35 + idleY - d.y) * ease;
-          d.targetSize = 1.2 + pull * 3.5;
-          d.targetBrightness = 0.15 + pull * 0.85;
+        if(dist < radius && mouse.active){
+          var force = 1 - dist / radius;
+          var ease = 0.12;
+          d.x += (d.bx - dx * force * 0.3 + driftX - d.x) * ease;
+          d.y += (d.by - dy * force * 0.3 + driftY - d.y) * ease;
+          d.ts = 1.3 + force * 3.8;
+          d.ta = 0.08 + force * 0.82;
         } else {
-          d.x += (d.ox + idleX - d.x) * 0.08;
-          d.y += (d.oy + idleY - d.y) * 0.08;
-          d.targetSize = 1.2;
-          d.targetBrightness = 0.15;
+          d.x += (d.bx + driftX - d.x) * 0.07;
+          d.y += (d.by + driftY - d.y) * 0.07;
+          d.ts = 1.3;
+          d.ta = 0.08 + Math.sin(t * 0.8 + d.phase) * 0.04;
         }
 
-        d.size += (d.targetSize - d.size) * 0.12;
-        d.brightness += (d.targetBrightness - d.brightness) * 0.1;
+        d.size += (d.ts - d.size) * 0.1;
+        d.alpha += (d.ta - d.alpha) * 0.08;
 
-        var alpha = d.brightness;
-        var size = d.size;
+        var a = d.alpha;
+        var s = d.size;
 
-        // Color interpolation
-        var cr, cg, cb;
-        if(d.brightness > 0.5){
-          var mix = (d.brightness - 0.5) * 2;
-          cr = Math.round(goldColor.r + (brightGold.r - goldColor.r) * mix);
-          cg = Math.round(goldColor.g + (brightGold.g - goldColor.g) * mix);
-          cb = Math.round(goldColor.b + (brightGold.b - goldColor.b) * mix);
+        // Color: gray at rest → gold when active
+        var r, g, b;
+        if(a > 0.4){
+          var mix = (a - 0.4) / 0.6;
+          r = Math.round(180 + (201 - 180) * mix);
+          g = Math.round(180 + (162 - 180) * mix);
+          b = Math.round(180 + (39 - 180) * mix);
         } else {
-          var mix = d.brightness * 2;
-          cr = Math.round(baseColor.r + (goldColor.r - baseColor.r) * mix);
-          cg = Math.round(baseColor.g + (goldColor.g - baseColor.g) * mix);
-          cb = Math.round(baseColor.b + (goldColor.b - baseColor.b) * mix);
+          var mix = a / 0.4;
+          r = Math.round(120 + (180 - 120) * mix);
+          g = Math.round(120 + (180 - 120) * mix);
+          b = Math.round(120 + (180 - 120) * mix);
         }
 
         ctx.beginPath();
-        ctx.arc(d.x, d.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + alpha + ')';
+        ctx.arc(d.x, d.y, s, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
         ctx.fill();
 
-        // Glow for bright dots
-        if(d.brightness > 0.6 && size > 2){
+        // Soft glow for bright dots
+        if(a > 0.5 && s > 2.5){
           ctx.beginPath();
-          ctx.arc(d.x, d.y, size * 2, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + (alpha * 0.15) + ')';
+          ctx.arc(d.x, d.y, s * 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + (a * 0.1) + ')';
           ctx.fill();
         }
       }
     }
 
-    function draw(){
-      requestAnimationFrame(draw);
+    function loop(time){
+      requestAnimationFrame(loop);
       if(!heroActive) return;
-      t += 0.004;
-      ctx.clearRect(0, 0, w, h);
-      drawAurora();
+      t = time * 0.001;
+      ctx.clearRect(0, 0, hero.offsetWidth, hero.offsetHeight);
+      drawSilk(time);
       drawDots();
     }
+    requestAnimationFrame(loop);
 
-    requestAnimationFrame(draw);
+  } catch(e){ console.log('Hero canvas:', e); }
 
-  } catch(err){ console.log('Hero canvas error:', err); }
-
-  /* ---------- NAV SCROLL STATE ---------- */
+  /* ---------- NAV SCROLL ---------- */
   try{
     var nav = document.getElementById('nav');
-    if(nav){
-      window.addEventListener('scroll', function(){
-        nav.classList.toggle('scrolled', window.scrollY > 40);
-      }, { passive: true });
-    }
-  } catch(err){}
+    if(nav) window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 40); }, {passive:true});
+  } catch(e){}
 
   /* ---------- MOBILE MENU ---------- */
   try{
     var burger = document.getElementById('burger');
     var mobile = document.getElementById('navMobile');
     if(burger && mobile){
-      burger.addEventListener('click', function(){
-        mobile.classList.toggle('open');
-        burger.classList.toggle('open');
-      });
-      mobile.querySelectorAll('a').forEach(function(a){
-        a.addEventListener('click', function(){
-          mobile.classList.remove('open');
-          burger.classList.remove('open');
-        });
-      });
+      burger.addEventListener('click', function(){ mobile.classList.toggle('open'); burger.classList.toggle('open'); });
+      mobile.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ mobile.classList.remove('open'); burger.classList.remove('open'); }); });
     }
-  } catch(err){}
+  } catch(e){}
 
   /* ---------- REVEAL ON SCROLL ---------- */
   try{
     var reveals = document.querySelectorAll('.reveal');
     if('IntersectionObserver' in window){
-      var revObs = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-          if(e.isIntersecting){
-            e.target.classList.add('visible');
-            revObs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-      reveals.forEach(function(el){ revObs.observe(el); });
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, {threshold:0.08, rootMargin:'0px 0px -50px 0px'});
+      reveals.forEach(function(el){ obs.observe(el); });
     } else {
       reveals.forEach(function(el){ el.classList.add('visible'); });
     }
-  } catch(err){
-    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
-  }
+  } catch(e){ document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); }); }
 
   /* ---------- COUNT UP ---------- */
   try{
-    function animCount(el){
+    function count(el){
       var target = parseInt(el.dataset.count, 10) || 0;
       var suffix = el.dataset.suffix || '';
-      var dur = 2000;
-      var start = null;
+      var dur = 2000, start = null;
       function frame(ts){
         if(!start) start = ts;
-        var tt = Math.min(1, (ts - start) / dur);
-        var eased = 1 - Math.pow(1 - tt, 4);
-        el.textContent = Math.round(target * eased) + suffix;
-        if(tt < 1) requestAnimationFrame(frame);
+        var p = Math.min(1, (ts - start) / dur);
+        var e = 1 - Math.pow(1 - p, 4);
+        el.textContent = Math.round(target * e) + suffix;
+        if(p < 1) requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
     }
     var stats = document.querySelectorAll('.stat-value');
     if('IntersectionObserver' in window){
-      var cntObs = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-          if(e.isIntersecting){ animCount(e.target); cntObs.unobserve(e.target); }
-        });
-      }, { threshold: 0.5 });
-      stats.forEach(function(el){ cntObs.observe(el); });
-    } else {
-      stats.forEach(animCount);
-    }
-  } catch(err){}
+      var so = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ count(e.target); so.unobserve(e.target); } });
+      }, {threshold:0.5});
+      stats.forEach(function(el){ so.observe(el); });
+    } else { stats.forEach(count); }
+  } catch(e){}
 
-  /* ---------- FAQ ACCORDION ---------- */
+  /* ---------- FAQ ---------- */
   try{
     var openFaq = null;
     document.querySelectorAll('.faq-q').forEach(function(btn){
@@ -268,45 +279,48 @@ document.addEventListener('DOMContentLoaded', function(){
         openFaq = item.classList.contains('open') ? item : null;
       });
     });
-  } catch(err){}
+  } catch(e){}
 
   /* ---------- MAGNETIC BUTTONS ---------- */
   try{
     document.querySelectorAll('.magnetic').forEach(function(btn){
       btn.addEventListener('mousemove', function(e){
         var rect = btn.getBoundingClientRect();
-        var x = e.clientX - rect.left - rect.width / 2;
-        var y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = 'translate(' + (x * 0.12) + 'px,' + (y * 0.12) + 'px)';
+        btn.style.transform = 'translate(' + ((e.clientX - rect.left - rect.width/2) * 0.1) + 'px,' + ((e.clientY - rect.top - rect.height/2) * 0.1) + 'px)';
       });
-      btn.addEventListener('mouseleave', function(){
-        btn.style.transform = '';
-      });
+      btn.addEventListener('mouseleave', function(){ btn.style.transform = ''; });
     });
-  } catch(err){}
+  } catch(e){}
 
   /* ---------- CUSTOM CURSOR ---------- */
   try{
     var cursor = document.getElementById('cursor');
     var glow = document.getElementById('cursor-glow');
-    if(cursor && glow && window.matchMedia('(hover: hover) and (pointer: fine)').matches){
-      var cx = 0, cy = 0, tx = 0, ty = 0, gx = 0, gy = 0;
-      window.addEventListener('mousemove', function(e){
-        tx = e.clientX;
-        ty = e.clientY;
-      });
-      function updateCursor(){
-        cx += (tx - cx) * 0.18;
-        cy += (ty - cy) * 0.18;
-        gx += (tx - gx) * 0.1;
-        gy += (ty - gy) * 0.1;
-        cursor.style.transform = 'translate(' + (cx - 4) + 'px,' + (cy - 4) + 'px)';
-        glow.style.transform = 'translate(' + (gx - 20) + 'px,' + (gy - 20) + 'px)';
-        requestAnimationFrame(updateCursor);
-      }
-      updateCursor();
+    if(!cursor || !glow) throw 'no cursor elements';
+    if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches) throw 'touch device';
+
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    var cx = mx, cy = my, gx = mx, gy = my;
+
+    document.addEventListener('mousemove', function(e){ mx = e.clientX; my = e.clientY; });
+
+    function updateCursor(){
+      cx += (mx - cx) * 0.18;
+      cy += (my - cy) * 0.18;
+      gx += (mx - gx) * 0.09;
+      gy += (my - gy) * 0.09;
+      cursor.style.transform = 'translate3d(' + (cx - 3) + 'px,' + (cy - 3) + 'px,0)';
+      glow.style.transform = 'translate3d(' + (gx - 18) + 'px,' + (gy - 18) + 'px,0)';
+      requestAnimationFrame(updateCursor);
     }
-  } catch(err){}
+    updateCursor();
+
+    // Hover states
+    document.querySelectorAll('a, button, .magnetic, input, textarea').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ glow.classList.add('hover'); });
+      el.addEventListener('mouseleave', function(){ glow.classList.remove('hover'); });
+    });
+  } catch(e){ console.log('Cursor:', e); }
 
   /* ---------- SMOOTH SCROLL ---------- */
   try{
@@ -315,15 +329,12 @@ document.addEventListener('DOMContentLoaded', function(){
         var href = this.getAttribute('href');
         if(href.length < 2) return;
         var t = document.querySelector(href);
-        if(t){
-          e.preventDefault();
-          t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
       });
     });
-  } catch(err){}
+  } catch(e){}
 
-  /* ---------- SPOTLIGHT CARDS ---------- */
+  /* ---------- SPOTLIGHT ---------- */
   try{
     document.querySelectorAll('.spot').forEach(function(card){
       card.addEventListener('mousemove', function(e){
@@ -332,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function(){
         card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
       });
     });
-  } catch(err){}
+  } catch(e){}
 
 });
 
