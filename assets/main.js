@@ -1,14 +1,13 @@
 /* ============================================================
-   PIYUSH TOMAR — LUXURY GOLD EDITION
-   Every feature is isolated in its own try/catch so nothing can
-   take the rest of the page down. The interactive dot grid and
-   aurora both live only inside the hero and are masked to fade
-   out at the bottom of the section — never full-page.
+   PIYUSH TOMAR — PORTFOLIO
+   Every feature isolated in its own try/catch, so a failure in
+   one never takes another down. Zero external dependencies —
+   pure vanilla JS, runs from a double-clicked file or GitHub Pages.
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function(){
 
-  /* ---------- LOADER: fade in / hold / fade out, then gone ---------- */
+  /* ---------- LOADER ---------- */
   (function loader(){
     var loaderEl = document.getElementById('loader');
     if(!loaderEl) return;
@@ -19,163 +18,92 @@ document.addEventListener('DOMContentLoaded', function(){
       loaderEl.classList.add('out');
       setTimeout(function(){ loaderEl.style.display = 'none'; }, 650);
     }
-    // One full breathing cycle (2.2s) plus a little air, then a hard
-    // fallback in case anything upstream ever stalls.
-    setTimeout(finish, 2600);
-    setTimeout(finish, 5000);
+    setTimeout(finish, 1200);
+    setTimeout(finish, 3500);
   })();
 
-  /* ---------- HERO SILK FLOW (soft flowing gold ribbons) ---------- */
+  /* ---------- HERO CANVAS: reconciliation network ----------
+     A field of nodes drifting slowly; lines connect nodes that
+     pass near each other and briefly "settle" — echoing the idea
+     of records finding their match. Mouse gently parallaxes it. */
   try{
-    var silkCanvas = document.getElementById('heroSilk');
-    var silkHero = document.querySelector('.hero');
-    if(silkCanvas && silkCanvas.getContext && silkHero){
-      var sctx = silkCanvas.getContext('2d');
-      var sw, sh, silkActive = true;
-      var sdpr = Math.min(window.devicePixelRatio || 1, 2);
-
-      function resizeSilk(){
-        sw = silkHero.offsetWidth;
-        sh = silkHero.offsetHeight;
-        silkCanvas.width = sw * sdpr;
-        silkCanvas.height = sh * sdpr;
-        silkCanvas.style.width = sw + 'px';
-        silkCanvas.style.height = sh + 'px';
-        sctx.setTransform(sdpr, 0, 0, sdpr, 0, 0);
-      }
-      resizeSilk();
-      window.addEventListener('resize', resizeSilk);
-
-      if('IntersectionObserver' in window){
-        var silkObs = new IntersectionObserver(function(entries){
-          silkActive = entries[0].isIntersecting;
-        }, {threshold:0.01});
-        silkObs.observe(silkHero);
-      }
-
-      // A handful of layered sine ribbons, each with its own speed,
-      // amplitude and vertical band — reads as soft flowing silk.
-      var ribbons = [
-        { yFrac:0.30, amp:34, freq:1.6, speed:0.16, width:2.2, alpha:0.22, hue:'212,175,55' },
-        { yFrac:0.42, amp:46, freq:1.1, speed:-0.12, width:1.6, alpha:0.16, hue:'255,215,0' },
-        { yFrac:0.55, amp:28, freq:2.0, speed:0.10, width:1.8, alpha:0.14, hue:'247,231,206' },
-        { yFrac:0.66, amp:50, freq:0.85, speed:-0.08, width:1.4, alpha:0.10, hue:'212,175,55' }
-      ];
-
-      var st = 0;
-      function drawSilk(){
-        requestAnimationFrame(drawSilk);
-        if(!silkActive) return;
-        st += 0.006;
-        sctx.clearRect(0,0,sw,sh);
-        for(var r=0;r<ribbons.length;r++){
-          var rb = ribbons[r];
-          var baseY = sh * rb.yFrac;
-          sctx.beginPath();
-          for(var x=0;x<=sw;x+=8){
-            var y = baseY + Math.sin((x*0.0022*rb.freq) + st*rb.speed*10) * rb.amp
-                          + Math.sin((x*0.0009*rb.freq) - st*rb.speed*6) * rb.amp*0.4;
-            if(x===0) sctx.moveTo(x,y); else sctx.lineTo(x,y);
-          }
-          sctx.strokeStyle = 'rgba(' + rb.hue + ',' + rb.alpha + ')';
-          sctx.lineWidth = rb.width;
-          sctx.shadowColor = 'rgba(' + rb.hue + ',0.5)';
-          sctx.shadowBlur = 14;
-          sctx.stroke();
-          sctx.shadowBlur = 0;
-        }
-      }
-      requestAnimationFrame(drawSilk);
-    }
-  } catch(err){}
-
-  /* ---------- HERO INTERACTIVE GOLD DOT GRID ---------- */
-  try{
-    var canvas = document.getElementById('heroField');
+    var canvas = document.getElementById('heroCanvas');
     var heroEl = document.querySelector('.hero');
     if(canvas && canvas.getContext && heroEl){
       var ctx = canvas.getContext('2d');
-      var w, h, dots = [];
-      var mouse = {x:-9999, y:-9999, active:false};
-      var spacing = 32;
-      var heroActive = true;
+      var w, h, nodes = [];
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var heroActive = true;
+      var mouse = {x:0, y:0};
+      var count = 46;
 
-      function buildGrid(){
-        w = heroEl.offsetWidth;
-        h = heroEl.offsetHeight;
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
-        canvas.style.width = w + 'px';
-        canvas.style.height = h + 'px';
+      function resize(){
+        w = heroEl.offsetWidth; h = heroEl.offsetHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        dots = [];
-        var cols = Math.ceil(w / spacing) + 1;
-        var rows = Math.ceil(h / spacing) + 1;
-        for(var i=0;i<cols;i++){
-          for(var j=0;j<rows;j++){
-            dots.push({ x:i*spacing, y:j*spacing, ox:i*spacing, oy:j*spacing });
-          }
+      }
+      function buildNodes(){
+        nodes = [];
+        for(var i=0;i<count;i++){
+          nodes.push({
+            x: Math.random()*w, y: Math.random()*h,
+            vx: (Math.random()-0.5)*0.18, vy: (Math.random()-0.5)*0.18,
+            r: 1 + Math.random()*1.4
+          });
         }
       }
-      buildGrid();
-      window.addEventListener('resize', buildGrid);
+      resize(); buildNodes();
+      window.addEventListener('resize', function(){ resize(); buildNodes(); });
 
       heroEl.addEventListener('mousemove', function(e){
         var rect = heroEl.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-        mouse.active = true;
+        mouse.x = (e.clientX - rect.left - w/2) / w;
+        mouse.y = (e.clientY - rect.top - h/2) / h;
       });
-      heroEl.addEventListener('mouseleave', function(){ mouse.active = false; });
 
       if('IntersectionObserver' in window){
-        var heroObs = new IntersectionObserver(function(entries){
+        var obs = new IntersectionObserver(function(entries){
           heroActive = entries[0].isIntersecting;
         }, {threshold:0.01});
-        heroObs.observe(heroEl);
+        obs.observe(heroEl);
       }
 
-      var t = 0;
-      var radius = 160;
+      var linkDist = 130;
       function draw(){
         requestAnimationFrame(draw);
         if(!heroActive) return;
-        t += 0.006;
         ctx.clearRect(0,0,w,h);
+        var ox = mouse.x * 14, oy = mouse.y * 14;
 
-        if(mouse.active){
-          var glow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 260);
-          glow.addColorStop(0, 'rgba(255,215,0,0.14)');
-          glow.addColorStop(1, 'rgba(255,215,0,0)');
-          ctx.fillStyle = glow;
-          ctx.fillRect(0,0,w,h);
+        for(var i=0;i<nodes.length;i++){
+          var n = nodes[i];
+          n.x += n.vx; n.y += n.vy;
+          if(n.x < 0 || n.x > w) n.vx *= -1;
+          if(n.y < 0 || n.y > h) n.vy *= -1;
         }
 
-        for(var i=0;i<dots.length;i++){
-          var d = dots[i];
-          var dx = mouse.active ? d.ox - mouse.x : 9999;
-          var dy = mouse.active ? d.oy - mouse.y : 9999;
-          var dist = Math.sqrt(dx*dx + dy*dy);
-          var idle = 0.28 + 0.1*Math.sin(t*1.2 + d.ox*0.02 + d.oy*0.02);
-
-          if(dist < radius){
-            var pull = (1 - dist/radius);
-            d.x = d.ox - dx*pull*0.26;
-            d.y = d.oy - dy*pull*0.26;
-            var size = 1 + pull*2.2;
-            ctx.beginPath();
-            ctx.arc(d.x, d.y, size, 0, Math.PI*2);
-            ctx.fillStyle = 'rgba(255,215,0,' + (0.3 + pull*0.6) + ')';
-            ctx.fill();
-          } else {
-            d.x += (d.ox - d.x) * 0.12;
-            d.y += (d.oy - d.y) * 0.12;
-            ctx.beginPath();
-            ctx.arc(d.x, d.y, 1, 0, Math.PI*2);
-            ctx.fillStyle = 'rgba(212,175,55,' + (idle*0.55) + ')';
-            ctx.fill();
+        for(var i=0;i<nodes.length;i++){
+          for(var j=i+1;j<nodes.length;j++){
+            var a = nodes[i], b = nodes[j];
+            var dx = a.x-b.x, dy = a.y-b.y;
+            var d = Math.sqrt(dx*dx+dy*dy);
+            if(d < linkDist){
+              ctx.beginPath();
+              ctx.moveTo(a.x+ox, a.y+oy);
+              ctx.lineTo(b.x+ox, b.y+oy);
+              ctx.strokeStyle = 'rgba(51,201,139,' + (0.16 * (1 - d/linkDist)) + ')';
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
           }
+        }
+        for(var i=0;i<nodes.length;i++){
+          var n = nodes[i];
+          ctx.beginPath();
+          ctx.arc(n.x+ox, n.y+oy, n.r, 0, Math.PI*2);
+          ctx.fillStyle = 'rgba(92,240,172,0.55)';
+          ctx.fill();
         }
       }
       requestAnimationFrame(draw);
@@ -232,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function(){
     function animCount(el){
       var target = parseInt(el.dataset.count, 10) || 0;
       var suffix = el.dataset.suffix || '';
-      var dur = 1600, start = null;
+      var dur = 1400, start = null;
       function frame(ts){
         if(!start) start = ts;
         var tt = Math.min(1, (ts-start)/dur);
@@ -311,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   } catch(err){}
 
-  /* ---------- SPOTLIGHT CARDS ---------- */
+  /* ---------- SPOTLIGHT (mouse-reactive glow on cards) ---------- */
   try{
     document.querySelectorAll('.spot').forEach(function(card){
       card.addEventListener('mousemove', function(e){
