@@ -1,4 +1,4 @@
-# Piyush Tomar — Portfolio Website ("The Ledger" edition)
+# Piyush Tomar — Portfolio Website
 
 Static HTML/CSS/JS portfolio for Piyush Tomar, a Finance & Accounting
 Specialist. No build step, no framework, no dependencies — drag the
@@ -7,20 +7,18 @@ double-clicking `index.html` directly.
 
 ## Design concept
 
-A finance-native visual language instead of a generic tech-agency
-look: deep navy-charcoal ground, a single emerald "balanced" accent,
-IBM Plex Mono for data/labels, Space Grotesk for headlines. The
-signature moment is the hero's **three-way match** — a live-look
-ledger card (PO / GRN / Invoice all reconciled to "Balanced") next to
-a canvas network of drifting, connecting nodes, echoing reconciliation
-itself. Cards throughout use hairline dividers and flat "ledger row"
-styling rather than heavy shadows, and section eyebrows use `/ 01`
-style numbering only where the content really is a sequence
-(Experience, Skills) — not decoratively.
+Warm and editorial rather than a tech-dashboard look: a deep
+espresso-charcoal ground (not pure black), one terracotta accent, a
+serif with real character (Fraunces) for headlines paired with Inter
+for body text. Mono is used sparingly, just for dates, tags, and
+labels. The hero leads with a photo and a confident headline under a
+soft warm glow — the one signature flourish is a small rotated
+"Approved" stamp near the CTA, built from the dragon-seal logo, a
+quiet nod to sign-off culture rather than a literal chart or diagram.
 
 No invented testimonials or client logos — this is a personal
-portfolio, so the "Capabilities" and "Projects" sections use Piyush's
-real skills and real work instead.
+portfolio, so "Capabilities" and "Projects" use Piyush's real skills
+and real work instead.
 
 ## Folder structure
 
@@ -39,10 +37,10 @@ real skills and real work instead.
 ## Customization
 
 - **Colors** — every color is a CSS variable at the top of
-  `assets/style.css` (`--void`, `--ledger`, `--text`, etc). Change
-  there and the whole site updates.
-- **Hero network** — `assets/main.js`, under `HERO CANVAS`: `count`
-  (node density), `linkDist` (how close nodes need to be to connect).
+  `assets/style.css` (`--void`, `--terracotta`, `--amber`, `--text`,
+  etc). Change there and the whole site updates.
+- **Stamp** — `.stamp` in `assets/style.css`, near the hero styles.
+  Rotation, size, and dash pattern are all in that one rule block.
 - **Hidden contact page password** — edit `VALID_USER` / `VALID_PASS`
   in `contact-vault.html`. Client-side only, treat as obscurity not
   real auth.
