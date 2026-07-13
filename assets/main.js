@@ -1,7 +1,7 @@
 /* ============================================================
-   PIYUSH TOMAR — PORTFOLIO v2.0
-   Premium Framer-style interactions
-   Theme system, scroll animations, magnetic buttons, text scramble
+   PIYUSH TOMAR — PORTFOLIO v3.0
+   LaunchFolio-inspired interactions
+   Theme system, scroll reveals, custom cursor, marquee, FAQ
    ============================================================ */
 
 (function() {
@@ -110,7 +110,7 @@
     revealObserver.observe(el);
   });
 
-  /* ---------- COUNT UP ANIMATION ---------- */
+  /* ---------- COUNT UP ---------- */
   function countUp(el) {
     const target = parseInt(el.dataset.count, 10) || 0;
     const suffix = el.dataset.suffix || '';
@@ -138,24 +138,9 @@
 
   document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
 
-  /* ---------- MAGNETIC BUTTONS ---------- */
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    document.querySelectorAll('.magnetic').forEach(btn => {
-      btn.addEventListener('mousemove', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
-      });
-
-      btn.addEventListener('mouseleave', () => {
-        btn.style.transform = '';
-      });
-    });
-  }
-
-  /* ---------- CUSTOM CURSOR ---------- */
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  /* ---------- CUSTOM CURSOR (dark mode only, desktop) ---------- */
+  const isTouch = window.matchMedia('(hover: none) or (pointer: coarse)').matches;
+  if (!isTouch) {
     const cursor = document.createElement('div');
     cursor.className = 'custom-cursor';
     document.body.appendChild(cursor);
@@ -177,91 +162,22 @@
       tx2 += (tx - tx2) * 0.1;
       ty2 += (ty - ty2) * 0.1;
 
-      cursor.style.transform = `translate(${cx - 4}px, ${cy - 4}px)`;
-      cursorTrail.style.transform = `translate(${tx2 - 16}px, ${ty2 - 16}px)`;
+      cursor.style.transform = 'translate(' + (cx - 4) + 'px,' + (cy - 4) + 'px)';
+      cursorTrail.style.transform = 'translate(' + (tx2 - 16) + 'px,' + (ty2 - 16) + 'px)';
 
       requestAnimationFrame(updateCursor);
     }
     updateCursor();
 
     // Hover effects
-    const hoverTargets = document.querySelectorAll('a, button, .cap-card, .proj-card, .exp-card, .faq-q');
+    const hoverTargets = document.querySelectorAll('a, button, .cap-card, .proj-card, .exp-card, .faq-q, .contact-link');
     hoverTargets.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
   }
 
-  /* ---------- TEXT SCRAMBLE EFFECT ---------- */
-  class TextScramble {
-    constructor(el) {
-      this.el = el;
-      this.chars = '!<>-_\/[]{}—=+*^?#________';
-      this.original = el.textContent;
-      this.update = this.update.bind(this);
-    }
-
-    setText(newText) {
-      const oldText = this.el.textContent;
-      const length = Math.max(oldText.length, newText.length);
-      const promise = new Promise(resolve => this.resolve = resolve);
-      this.queue = [];
-      for (let i = 0; i < length; i++) {
-        const from = oldText[i] || '';
-        const to = newText[i] || '';
-        const start = Math.floor(Math.random() * 20);
-        const end = start + Math.floor(Math.random() * 20);
-        this.queue.push({ from, to, start, end });
-      }
-      cancelAnimationFrame(this.frameRequest);
-      this.frame = 0;
-      this.update();
-      return promise;
-    }
-
-    update() {
-      let output = '';
-      let complete = 0;
-      for (let i = 0, n = this.queue.length; i < n; i++) {
-        let { from, to, start, end, char } = this.queue[i];
-        if (this.frame >= end) {
-          complete++;
-          output += to;
-        } else if (this.frame >= start) {
-          if (!char || Math.random() < 0.28) {
-            char = this.chars[Math.floor(Math.random() * this.chars.length)];
-            this.queue[i].char = char;
-          }
-          output += `<span style="color: var(--accent)">${char}</span>`;
-        } else {
-          output += from;
-        }
-      }
-      this.el.innerHTML = output;
-      if (complete === this.queue.length) {
-        this.resolve();
-      } else {
-        this.frameRequest = requestAnimationFrame(this.update);
-        this.frame++;
-      }
-    }
-  }
-
-  // Apply scramble on hover to nav links
-  document.querySelectorAll('[data-scramble]').forEach(el => {
-    const fx = new TextScramble(el);
-    const original = el.textContent;
-    let isHovering = false;
-
-    el.addEventListener('mouseenter', () => {
-      if (!isHovering) {
-        isHovering = true;
-        fx.setText(original).then(() => { isHovering = false; });
-      }
-    });
-  });
-
-  /* ---------- CAP CARD SPOTLIGHT EFFECT ---------- */
+  /* ---------- CAP CARD SPOTLIGHT ---------- */
   document.querySelectorAll('.cap-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
@@ -277,9 +193,7 @@
   document.querySelectorAll('.faq-q').forEach(btn => {
     btn.addEventListener('click', () => {
       const item = btn.closest('.faq-item');
-      if (openFaq && openFaq !== item) {
-        openFaq.classList.remove('open');
-      }
+      if (openFaq && openFaq !== item) openFaq.classList.remove('open');
       item.classList.toggle('open');
       openFaq = item.classList.contains('open') ? item : null;
     });
@@ -306,28 +220,29 @@
   /* ---------- MARQUEE SPEED ON SCROLL ---------- */
   const marqueeTrack = document.getElementById('marqueeTrack');
   if (marqueeTrack) {
-    let scrollSpeed = 1;
     let lastScrollY = window.scrollY;
+    let currentSpeed = 40;
 
     window.addEventListener('scroll', () => {
       const delta = Math.abs(window.scrollY - lastScrollY);
-      scrollSpeed = Math.min(3, 1 + delta * 0.01);
-      marqueeTrack.style.animationDuration = (40 / scrollSpeed) + 's';
+      const targetSpeed = Math.max(15, 40 - delta * 0.5);
+      currentSpeed += (targetSpeed - currentSpeed) * 0.1;
+      marqueeTrack.style.animationDuration = currentSpeed + 's';
       lastScrollY = window.scrollY;
     }, { passive: true });
   }
 
-  /* ---------- PARALLAX EFFECT ON HERO ORBS ---------- */
-  const heroOrbs = document.querySelectorAll('.hero-orb');
-  if (heroOrbs.length && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  /* ---------- PARALLAX ON HERO ORBS ---------- */
+  const heroOrbs = document.querySelectorAll('.hero-grad-1, .hero-grad-2, .hero-grad-3');
+  if (heroOrbs.length && !isTouch) {
     document.querySelector('.hero')?.addEventListener('mousemove', (e) => {
       const rect = e.currentTarget.getBoundingClientRect();
       const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
       const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
 
       heroOrbs.forEach((orb, i) => {
-        const factor = (i + 1) * 8;
-        orb.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
+        const factor = (i + 1) * 6;
+        orb.style.transform = 'translate(' + (x * factor) + 'px,' + (y * factor) + 'px)';
       });
     });
   }
