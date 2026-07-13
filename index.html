@@ -3,32 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Piyush Tomar — Finance & Accounting Specialist</title>
+<title>Piyush Tomar — Finance &amp; Accounting Specialist</title>
 <meta name="description" content="Finance & Accounting Specialist handling end-to-end P2P cycles, 3-way matching, reconciliations, and GST/TDS compliance across Oracle, NetSuite, Navision & Tally.">
 <link rel="icon" type="image/png" href="Website_logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body class="no-js">
 <script>document.body.classList.remove('no-js');</script>
 
-<svg id="grain" width="100%" height="100%" style="position:fixed;inset:0;z-index:0;pointer-events:none;">
-  <filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter>
-  <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
-</svg>
-
-<!-- LOADER: logo only, fade in / hold / fade out -->
-<div id="loader">
-  <div class="loader-mark"></div>
-</div>
+<!-- LOADER -->
+<div id="loader"><div class="loader-mark"></div></div>
 
 <!-- CUSTOM CURSOR -->
 <div id="cursor"></div>
 <div id="cursorTrail"></div>
 
-<!-- NAVIGATION: floating glass pill -->
+<!-- NAV -->
 <nav id="nav">
   <div class="nav-inner">
     <a href="#top" class="nav-brand" target="_self">
@@ -43,12 +36,9 @@
       <a href="#contact" target="_self">Contact</a>
     </div>
     <a href="#contact" class="nav-cta" target="_self">Get in touch</a>
-    <button class="nav-burger" id="burger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
-
 <div class="nav-mobile" id="navMobile">
   <a href="#about" target="_self">About</a>
   <a href="#capabilities" target="_self">Capabilities</a>
@@ -59,28 +49,38 @@
 
 <main id="top">
 
-<!-- HERO: gold aurora + interactive dot grid, centered -->
+<!-- HERO — signature: the three-way match -->
 <section class="hero">
-  <canvas id="heroSilk"></canvas>
-  <canvas id="heroField"></canvas>
+  <canvas id="heroCanvas"></canvas>
   <div class="wrap hero-inner">
-    <span class="mark-icon hero-mark"></span>
-    <div class="hero-badges">
-      <span class="badge-solid"><span class="dot"></span>Available</span>
-      <span class="badge-outline">Navi Mumbai · 2026</span>
+    <div class="hero-copy">
+      <div class="hero-badges">
+        <span class="badge-solid"><span class="dot"></span>Open to opportunities</span>
+        <span class="badge-outline">Navi Mumbai · 2026</span>
+      </div>
+      <h1 class="hero-title">Every entry has to<br><span class="grad">balance.</span></h1>
+      <p class="hero-desc">I'm the person who makes sure the PO, the invoice, and the GRN actually agree — end-to-end P2P, GST/TDS compliance, and reconciliation across Oracle, NetSuite, Navision &amp; Tally.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary magnetic" target="_self">Get in touch <span>→</span></a>
+        <a href="#experience" class="btn-secondary magnetic" target="_self">View experience</a>
+      </div>
+      <div class="hero-meta">
+        <span>2+ Years Experience</span><span class="meta-dot"></span>
+        <span>5 ERP Systems</span><span class="meta-dot"></span>
+        <span>450+ Invoices / Month</span>
+      </div>
     </div>
-    <h1 class="hero-title">Finance &amp; Accounting<br><span class="grad">Specialist.</span></h1>
-    <p class="hero-desc">The invoice that has to match the PO, the ledger that has to tie out, the filing that lands on time — that's the part I own. End-to-end P2P, GST/TDS compliance, and reconciliation across Oracle, NetSuite, Navision &amp; Tally.</p>
-    <div class="hero-actions">
-      <a href="#contact" class="btn-primary magnetic" target="_self">Get in touch <span>→</span></a>
-      <a href="#experience" class="btn-secondary magnetic" target="_self">View experience</a>
-    </div>
-    <div class="hero-meta">
-      <span>2+ Years Experience</span>
-      <span class="meta-dot"></span>
-      <span>5 ERP Systems</span>
-      <span class="meta-dot"></span>
-      <span>450+ Invoices / Month</span>
+    <div class="match-card reveal">
+      <div class="mc-label">Three-way match · Live</div>
+      <div class="match-rows">
+        <div class="match-row"><span class="mr-k">Purchase Order</span><span class="mr-v">PO-88214</span><span class="mr-status ok">✓ Matched</span></div>
+        <div class="match-row"><span class="mr-k">Goods Receipt</span><span class="mr-v">GRN-31029</span><span class="mr-status ok">✓ Matched</span></div>
+        <div class="match-row"><span class="mr-k">Vendor Invoice</span><span class="mr-v">INV-56710</span><span class="mr-status ok">✓ Matched</span></div>
+      </div>
+      <div class="match-status-final">
+        <span class="msf-label">Ledger status</span>
+        <span class="msf-badge">Balanced</span>
+      </div>
     </div>
   </div>
 </section>
@@ -112,7 +112,7 @@
 </div>
 
 <!-- ABOUT -->
-<section id="about" class="about-section">
+<section id="about">
   <div class="wrap about-inner">
     <div class="about-text reveal">
       <div class="section-eyebrow">About</div>
@@ -133,7 +133,7 @@
   </div>
 </section>
 
-<!-- CAPABILITIES (masonry feature grid) -->
+<!-- CAPABILITIES -->
 <section id="capabilities">
   <div class="wrap">
     <div class="section-header reveal">
@@ -146,26 +146,10 @@
         <h3>End-to-End Accounts Payable</h3>
         <p>Full P2P cycle ownership — invoice ingestion, 3-way matching, vendor payments, and corporate card reconciliation, across Oracle, NetSuite, Navision, and Tally.</p>
       </div>
-      <div class="cap-card spot reveal">
-        <div class="cap-icon">%</div>
-        <h3>GST &amp; TDS Compliance</h3>
-        <p>Accurate tax calculation, timely filing, and ITC reconciliation across every invoice that crosses my desk.</p>
-      </div>
-      <div class="cap-card spot reveal">
-        <div class="cap-icon">⇄</div>
-        <h3>Reconciliation</h3>
-        <p>Vendor, employee, and bank reconciliations — kept current, kept correct.</p>
-      </div>
-      <div class="cap-card spot reveal">
-        <div class="cap-icon">⌘</div>
-        <h3>Multi-ERP Fluency</h3>
-        <p>Comfortable moving between Oracle, NetSuite, Navision, Tally, and Zoho Books without missing a step.</p>
-      </div>
-      <div class="cap-card spot reveal">
-        <div class="cap-icon">✓</div>
-        <h3>Audit &amp; Compliance Support</h3>
-        <p>Statutory and internal audit support, Form 15CA/15CB for foreign remittances, and vendor KYC/MSME/LDC compliance.</p>
-      </div>
+      <div class="cap-card spot reveal"><div class="cap-icon">%</div><h3>GST &amp; TDS Compliance</h3><p>Accurate tax calculation, timely filing, and ITC reconciliation across every invoice that crosses my desk.</p></div>
+      <div class="cap-card spot reveal"><div class="cap-icon">⇄</div><h3>Reconciliation</h3><p>Vendor, employee, and bank reconciliations — kept current, kept correct.</p></div>
+      <div class="cap-card spot reveal"><div class="cap-icon">⌘</div><h3>Multi-ERP Fluency</h3><p>Comfortable moving between Oracle, NetSuite, Navision, Tally, and Zoho Books without missing a step.</p></div>
+      <div class="cap-card spot reveal"><div class="cap-icon">✓</div><h3>Audit &amp; Compliance Support</h3><p>Statutory and internal audit support, Form 15CA/15CB for foreign remittances, and vendor KYC/MSME/LDC compliance.</p></div>
     </div>
   </div>
 </section>
@@ -178,13 +162,10 @@
       <h2 class="section-title">Where I've built <span class="grad">this skillset.</span></h2>
     </div>
     <div class="exp-timeline">
-      <div class="exp-card current spot reveal">
+      <div class="exp-card current reveal">
         <span class="exp-num">/ 01</span>
         <div class="exp-head">
-          <div>
-            <h3>Finance Executive</h3>
-            <div class="exp-co">CarTrade Tech Ltd. · Vashi, Navi Mumbai</div>
-          </div>
+          <div><h3>Finance Executive</h3><div class="exp-co">CarTrade Tech Ltd. · Vashi, Navi Mumbai</div></div>
           <span class="exp-date">Apr 2025 — Present</span>
         </div>
         <ul class="exp-bullets">
@@ -198,18 +179,12 @@
           <li>Supported month-end &amp; year-end closing, statutory &amp; internal audits, and MIS/AOP reporting.</li>
           <li>Led data migration from Navision to Oracle, ensuring smooth transition and data accuracy.</li>
         </ul>
-        <div class="exp-tags">
-          <span>Oracle Financials</span><span>NetSuite</span><span>Navision</span><span>Tally</span><span>GST / TDS</span><span>15CA / 15CB</span>
-        </div>
+        <div class="exp-tags"><span>Oracle Financials</span><span>NetSuite</span><span>Navision</span><span>Tally</span><span>GST / TDS</span><span>15CA / 15CB</span></div>
       </div>
-
-      <div class="exp-card spot reveal">
+      <div class="exp-card reveal">
         <span class="exp-num">/ 02</span>
         <div class="exp-head">
-          <div>
-            <h3>GST Compliance Intern</h3>
-            <div class="exp-co">Pawar Store · Mumbai</div>
-          </div>
+          <div><h3>GST Compliance Intern</h3><div class="exp-co">Pawar Store · Mumbai</div></div>
           <span class="exp-date">Aug 2024 — Mar 2025</span>
         </div>
         <ul class="exp-bullets">
@@ -219,14 +194,10 @@
         </ul>
         <div class="exp-tags"><span>GST Returns</span><span>ITC Claims</span><span>Reconciliation</span></div>
       </div>
-
-      <div class="exp-card spot reveal">
+      <div class="exp-card reveal">
         <span class="exp-num">/ 03</span>
         <div class="exp-head">
-          <div>
-            <h3>Accounting Intern</h3>
-            <div class="exp-co">Ananta Resource Management · Mumbai</div>
-          </div>
+          <div><h3>Accounting Intern</h3><div class="exp-co">Ananta Resource Management · Mumbai</div></div>
           <span class="exp-date">Apr 2024 — Jul 2024</span>
         </div>
         <ul class="exp-bullets">
@@ -241,7 +212,7 @@
   </div>
 </section>
 
-<!-- PROJECTS (carousel) -->
+<!-- PROJECTS -->
 <section id="projects">
   <div class="wrap">
     <div class="section-header reveal">
@@ -251,11 +222,8 @@
     <div class="carousel reveal" id="projectsCarousel">
       <div class="carousel-viewport">
         <div class="carousel-track">
-          <div class="proj-card spot">
-            <div class="proj-meta">
-              <span class="proj-co">CarTrade Tech</span>
-              <span class="proj-date">Aug 2025 — Nov 2025</span>
-            </div>
+          <div class="proj-card">
+            <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Aug 2025 — Nov 2025</span></div>
             <h3>Oracle NetSuite Implementation</h3>
             <p class="proj-sub">Employee expense reimbursement module — migration &amp; UAT</p>
             <ul class="proj-bullets">
@@ -267,11 +235,8 @@
             </ul>
             <div class="proj-tags"><span>Oracle AP</span><span>UAT</span><span>Data Migration</span><span>RCA</span></div>
           </div>
-          <div class="proj-card spot">
-            <div class="proj-meta">
-              <span class="proj-co">CarTrade Tech</span>
-              <span class="proj-date">May 2025 — Mar 2026</span>
-            </div>
+          <div class="proj-card">
+            <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">May 2025 — Mar 2026</span></div>
             <h3>Employee Reimbursement Optimization</h3>
             <p class="proj-sub">Policy tightening &amp; tracking system overhaul</p>
             <ul class="proj-bullets">
@@ -282,11 +247,8 @@
             </ul>
             <div class="proj-tags"><span>Policy Design</span><span>Excel Tracker</span><span>Compliance</span></div>
           </div>
-          <div class="proj-card spot">
-            <div class="proj-meta">
-              <span class="proj-co">CarTrade Tech</span>
-              <span class="proj-date">Ongoing</span>
-            </div>
+          <div class="proj-card">
+            <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Ongoing</span></div>
             <h3>Navision → Oracle Data Migration</h3>
             <p class="proj-sub">Ledger &amp; master data transition</p>
             <ul class="proj-bullets">
@@ -315,26 +277,17 @@
       <h2 class="section-title">Finance, operations, <span class="grad">and the tools.</span></h2>
     </div>
     <div class="skill-grid">
-      <div class="skill-card spot reveal">
-        <span class="num">/ 01</span>
-        <h3>Finance &amp; Compliance</h3>
-        <div class="skill-tags">
-          <span>Accounts Payable &amp; Receivable</span><span>Audit Support &amp; Month-End</span><span>Budgeting &amp; Financial Planning</span><span>Financial Accounting &amp; Reporting</span><span>Taxation (GST, TDS) &amp; Compliance</span>
-        </div>
+      <div class="skill-card reveal">
+        <span class="num">/ 01</span><h3>Finance &amp; Compliance</h3>
+        <div class="skill-tags"><span>Accounts Payable &amp; Receivable</span><span>Audit Support &amp; Month-End</span><span>Budgeting &amp; Financial Planning</span><span>Financial Accounting &amp; Reporting</span><span>Taxation (GST, TDS) &amp; Compliance</span></div>
       </div>
-      <div class="skill-card spot reveal">
-        <span class="num">/ 02</span>
-        <h3>Operations &amp; Management</h3>
-        <div class="skill-tags">
-          <span>Business Process Optimization</span><span>Process Improvement</span><span>Strategic Planning &amp; Execution</span><span>Team Coordination</span><span>Vendor &amp; Stakeholder Management</span><span>Workflow Automation</span>
-        </div>
+      <div class="skill-card reveal">
+        <span class="num">/ 02</span><h3>Operations &amp; Management</h3>
+        <div class="skill-tags"><span>Business Process Optimization</span><span>Process Improvement</span><span>Strategic Planning &amp; Execution</span><span>Team Coordination</span><span>Vendor &amp; Stakeholder Management</span><span>Workflow Automation</span></div>
       </div>
-      <div class="skill-card spot reveal">
-        <span class="num">/ 03</span>
-        <h3>Analytical &amp; Technical</h3>
-        <div class="skill-tags">
-          <span>Advanced Excel &amp; PowerPoint</span><span>Data Analysis &amp; Forecasting</span><span>Data-Driven Decision Making</span><span>ERP (Tally, Zoho, Oracle, Navision, NetSuite)</span>
-        </div>
+      <div class="skill-card reveal">
+        <span class="num">/ 03</span><h3>Analytical &amp; Technical</h3>
+        <div class="skill-tags"><span>Advanced Excel &amp; PowerPoint</span><span>Data Analysis &amp; Forecasting</span><span>Data-Driven Decision Making</span><span>ERP (Tally, Zoho, Oracle, Navision, NetSuite)</span></div>
       </div>
     </div>
   </div>
@@ -346,16 +299,8 @@
     <div class="reveal">
       <div class="section-eyebrow">Education</div>
       <div class="edu-list">
-        <div class="edu-item">
-          <h3>Bachelor of Management Studies (BMS) — Finance</h3>
-          <div class="edu-meta">Pillai HOC College · Navi Mumbai</div>
-          <div class="edu-date">Aug 2022 — Apr 2025</div>
-        </div>
-        <div class="edu-item">
-          <h3>Grade 12 — Commerce (Maths)</h3>
-          <div class="edu-meta">Pillai HOC Jr. College · Navi Mumbai</div>
-          <div class="edu-date">Jun 2021 — Apr 2022</div>
-        </div>
+        <div class="edu-item"><h3>Bachelor of Management Studies (BMS) — Finance</h3><div class="edu-meta">Pillai HOC College · Navi Mumbai</div><div class="edu-date">Aug 2022 — Apr 2025</div></div>
+        <div class="edu-item"><h3>Grade 12 — Commerce (Maths)</h3><div class="edu-meta">Pillai HOC Jr. College · Navi Mumbai</div><div class="edu-date">Jun 2021 — Apr 2022</div></div>
       </div>
     </div>
     <div class="reveal">
@@ -375,22 +320,10 @@
 <section class="stats-section">
   <div class="wrap">
     <div class="stats-grid">
-      <div class="stat-item reveal">
-        <div class="stat-value" data-count="450" data-suffix="+">0</div>
-        <div class="stat-label">Invoices processed / month</div>
-      </div>
-      <div class="stat-item reveal">
-        <div class="stat-value" data-count="100" data-suffix="+">0</div>
-        <div class="stat-label">System issues resolved</div>
-      </div>
-      <div class="stat-item reveal">
-        <div class="stat-value" data-count="5">0</div>
-        <div class="stat-label">ERP systems worked in</div>
-      </div>
-      <div class="stat-item reveal">
-        <div class="stat-value" data-count="2" data-suffix="+">0</div>
-        <div class="stat-label">Years of hands-on experience</div>
-      </div>
+      <div class="stat-item reveal"><div class="stat-value" data-count="450" data-suffix="+">0</div><div class="stat-label">Invoices processed / month</div></div>
+      <div class="stat-item reveal"><div class="stat-value" data-count="100" data-suffix="+">0</div><div class="stat-label">System issues resolved</div></div>
+      <div class="stat-item reveal"><div class="stat-value" data-count="5">0</div><div class="stat-label">ERP systems worked in</div></div>
+      <div class="stat-item reveal"><div class="stat-value" data-count="2" data-suffix="+">0</div><div class="stat-label">Years of hands-on experience</div></div>
     </div>
   </div>
 </section>
@@ -403,39 +336,22 @@
       <h2 class="section-title">Things recruiters <span class="grad">usually ask.</span></h2>
     </div>
     <div class="faq-list reveal">
-      <div class="faq-item">
-        <button class="faq-q">Which ERP systems have you worked in hands-on?<span class="faq-icon">+</span></button>
-        <div class="faq-a"><p>Oracle Financials, Oracle NetSuite, Navision, Tally ERP, and Zoho Books — including leading a live data migration from Navision to Oracle.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q">Are you open to relocation?<span class="faq-icon">+</span></button>
-        <div class="faq-a"><p>Yes — open to relocating for the right opportunity. I'd need a standard notice period to transition out of my current role.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q">What's your notice period?<span class="faq-icon">+</span></button>
-        <div class="faq-a"><p>I'm currently employed and would need to serve a notice period before joining a new role — happy to discuss specifics directly.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q">Do you handle compliance work, or just processing?<span class="faq-icon">+</span></button>
-        <div class="faq-a"><p>Both. Day to day that's GST/TDS calculation and filing support, vendor KYC/MSME/LDC compliance, Form 15CA/15CB for foreign remittances, and audit-ready documentation.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q">What's the best way to reach you?<span class="faq-icon">+</span></button>
-        <div class="faq-a"><p>Email at piyushtomar1222@gmail.com or call +91 70583-42101 — I respond promptly to both.</p></div>
-      </div>
+      <div class="faq-item"><button class="faq-q">Which ERP systems have you worked in hands-on?<span class="faq-icon">+</span></button><div class="faq-a"><p>Oracle Financials, Oracle NetSuite, Navision, Tally ERP, and Zoho Books — including leading a live data migration from Navision to Oracle.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Are you open to relocation?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes — open to relocating for the right opportunity. I'd need a standard notice period to transition out of my current role.</p></div></div>
+      <div class="faq-item"><button class="faq-q">What's your notice period?<span class="faq-icon">+</span></button><div class="faq-a"><p>I'm currently employed and would need to serve a notice period before joining a new role — happy to discuss specifics directly.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Do you handle compliance work, or just processing?<span class="faq-icon">+</span></button><div class="faq-a"><p>Both. Day to day that's GST/TDS calculation and filing support, vendor KYC/MSME/LDC compliance, Form 15CA/15CB for foreign remittances, and audit-ready documentation.</p></div></div>
+      <div class="faq-item"><button class="faq-q">What's the best way to reach you?<span class="faq-icon">+</span></button><div class="faq-a"><p>Email at piyushtomar1222@gmail.com or call +91 70583-42101 — I respond promptly to both.</p></div></div>
     </div>
   </div>
 </section>
 
-<!-- CTA BANNER -->
+<!-- CTA -->
 <section>
   <div class="wrap">
     <div class="cta-banner reveal">
       <h2 class="section-title">Ready to add a details<br>person to your <span class="grad">finance team?</span></h2>
       <p>Open to finance, AP, and compliance roles — I respond directly and promptly to every message.</p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn-primary magnetic" target="_self">Get in touch <span>→</span></a>
-      </div>
+      <div class="hero-actions"><a href="#contact" class="btn-primary magnetic" target="_self">Get in touch <span>→</span></a></div>
     </div>
   </div>
 </section>
@@ -456,7 +372,7 @@
           <span class="contact-row"><span class="cr-k">Location</span><span class="cr-v">Navi Mumbai, Maharashtra</span></span>
         </div>
       </div>
-      <form class="contact-form spot reveal" id="cfForm" onsubmit="return submitForm(event)">
+      <form class="contact-form reveal" id="cfForm" onsubmit="return submitForm(event)">
         <div class="cf-title">Send a message</div>
         <div class="cf-row">
           <div class="cf-field"><label for="cfName">Name</label><input id="cfName" type="text" placeholder="Your name" required></div>
@@ -473,13 +389,9 @@
 
 </main>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="wrap foot-inner">
-    <div class="foot-brand">
-      <span class="mark-icon foot-mark"></span>
-      <span>Piyush Tomar</span>
-    </div>
+    <div class="foot-brand"><span class="mark-icon foot-mark"></span><span>Piyush Tomar</span></div>
     <span class="foot-copy">© 2026</span>
     <a href="#top" class="foot-back" target="_self">Back to top ↑</a>
   </div>

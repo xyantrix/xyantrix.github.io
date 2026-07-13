@@ -8,14 +8,14 @@
 <link rel="icon" type="image/png" href="Website_logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --void:#050505; --surface:rgba(212,175,55,0.045); --text:#F7F3E9; --text-dim:#A69C87; --text-faint:#5E5747;
-  --border:rgba(212,175,55,0.14); --border-hi:rgba(212,175,55,0.32);
-  --gold:#D4AF37; --gold-bright:#FFD700; --champagne:#F7E7CE; --red:#F87171;
-  --grad:linear-gradient(135deg, var(--gold), var(--gold-bright), var(--champagne));
-  --serif:'Manrope',sans-serif; --sans:'Inter',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --void:#0A0D11; --surface:rgba(51,201,139,0.045); --text:#EAF0F3; --text-dim:#8E9CA6; --text-faint:#4C5860;
+  --border:rgba(51,201,139,0.14); --border-hi:rgba(51,201,139,0.32);
+  --ledger:#33C98B; --ledger-bright:#5CF0AC; --red:#E5686B;
+  --grad:linear-gradient(120deg, var(--ledger), var(--ledger-bright));
+  --display:'Space Grotesk',sans-serif; --sans:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
@@ -25,8 +25,7 @@ body{
 }
 body::before{
   content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:radial-gradient(560px circle at 50% 20%, rgba(212,175,55,0.12), transparent 60%),
-             radial-gradient(460px circle at 100% 100%, rgba(255,215,0,0.06), transparent 60%);
+  background:radial-gradient(560px circle at 50% 20%, rgba(51,201,139,0.10), transparent 60%);
 }
 .gate{
   width:100%; max-width:420px; padding:46px; background:var(--surface);
@@ -38,22 +37,22 @@ body::before{
   width:44px; height:44px; margin:0 auto 26px; display:inline-block;
   background:var(--grad);
   -webkit-mask:url('dragon-seal.svg') center/contain no-repeat; mask:url('dragon-seal.svg') center/contain no-repeat;
-  transition:transform 0.4s; filter:drop-shadow(0 0 14px rgba(212,175,55,0.3));
+  transition:transform 0.4s; filter:drop-shadow(0 0 14px rgba(51,201,139,0.3));
 }
 .gate:hover .mark-icon{ transform:rotate(-8deg) scale(1.08); }
-.gate h1{font-family:var(--serif);font-size:23px;font-weight:700;margin-bottom:12px}
+.gate h1{font-family:var(--display);font-size:23px;font-weight:700;margin-bottom:12px}
 .gate p{font-size:13.5px;color:var(--text-dim);margin-bottom:34px;line-height:1.6}
 .gate input{
   width:100%; background:var(--void); border:1px solid var(--border); border-radius:12px;
   padding:15px 17px; font-size:14.5px; color:var(--text); font-family:var(--sans);
   margin-bottom:13px; transition:all 0.2s;
 }
-.gate input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,0.14)}
+.gate input:focus{outline:none;border-color:var(--ledger);box-shadow:0 0 0 3px rgba(51,201,139,0.14)}
 .gate-btn{
   width:100%; background:var(--grad); color:var(--void); font-weight:700; font-size:14.5px;
   padding:15px; border-radius:12px; transition:all 0.2s; cursor:pointer; font-family:var(--sans);
 }
-.gate-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(212,175,55,0.32); }
+.gate-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(51,201,139,0.32); }
 .gate-error{color:var(--red);font-size:12.5px;margin-top:15px;display:none;font-weight:500}
 .gate-error.show{display:block}
 .vault-content{display:none;width:100%;max-width:580px;position:relative;z-index:1;animation:fadeUp 0.8s ease}
@@ -61,7 +60,7 @@ body::before{
 .vault-card{
   background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:42px;
 }
-.vault-card h2{font-family:var(--serif);font-size:25px;font-weight:700;margin-bottom:10px}
+.vault-card h2{font-family:var(--display);font-size:25px;font-weight:700;margin-bottom:10px}
 .vault-card .sub{font-size:13.5px;color:var(--text-dim);margin-bottom:34px}
 .vault-row{
   display:flex; justify-content:space-between; align-items:center;
@@ -74,7 +73,7 @@ body::before{
   display:inline-flex; align-items:center; gap:8px; margin-top:30px;
   font-size:13.5px; color:var(--text-dim); font-weight:500; transition:all 0.2s;
 }
-.vault-back:hover{color:var(--gold-bright);transform:translateX(-4px)}
+.vault-back:hover{color:var(--ledger-bright);transform:translateX(-4px)}
 </style>
 <base target="_blank">
 </head>
