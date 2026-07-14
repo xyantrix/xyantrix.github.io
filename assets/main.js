@@ -108,6 +108,18 @@ document.addEventListener('DOMContentLoaded', function(){
     }, 1250);
   } catch(err){}
 
+  /* ---------- STAGGERED REVEAL GROUPS ---------- */
+  try{
+    var parentCounts = new Map();
+    document.querySelectorAll('.reveal').forEach(function(el){
+      var parent = el.parentElement;
+      if(!parent) return;
+      var count = parentCounts.get(parent) || 0;
+      if(count > 0){ el.style.transitionDelay = (Math.min(count, 6) * 0.09) + 's'; }
+      parentCounts.set(parent, count + 1);
+    });
+  } catch(err){}
+
   /* ---------- REVEAL ON SCROLL ---------- */
   try{
     var reveals = document.querySelectorAll('.reveal');
@@ -309,12 +321,14 @@ document.addEventListener('DOMContentLoaded', function(){
       var nextBtn = root.querySelector('.carousel-arrow.next');
       var perView = window.innerWidth <= 980 ? 1 : 2;
       var index = 0;
+      var autoplayMs = 5200;
+      var autoplayTimer = null;
 
       slides.forEach(function(_, i){
         if(i % perView === 0){
           var dot = document.createElement('span');
           dot.className = 'carousel-dot';
-          dot.addEventListener('click', function(){ goTo(i); });
+          dot.addEventListener('click', function(){ goTo(i); restartAutoplay(); });
           dotsWrap.appendChild(dot);
         }
       });
@@ -326,14 +340,36 @@ document.addEventListener('DOMContentLoaded', function(){
         var dots = Array.prototype.slice.call(dotsWrap.children);
         dots.forEach(function(d,i){ d.classList.toggle('active', i === Math.floor(index/perView)); });
       }
-      function goTo(i){ index = Math.max(0, Math.min(maxIndex(), i)); update(); }
-      if(prevBtn) prevBtn.addEventListener('click', function(){ goTo(index - perView); });
-      if(nextBtn) nextBtn.addEventListener('click', function(){ goTo(index + perView); });
+      /* loops around instead of stopping dead at the first/last slide */
+      function goTo(i){
+        var mi = maxIndex();
+        if(i < 0) i = mi;
+        else if(i > mi) i = 0;
+        index = i;
+        update();
+      }
+      function next(){ goTo(index + perView); }
+      function prev(){ goTo(index - perView); }
+      function startAutoplay(){
+        stopAutoplay();
+        autoplayTimer = setInterval(next, autoplayMs);
+      }
+      function stopAutoplay(){ if(autoplayTimer){ clearInterval(autoplayTimer); autoplayTimer = null; } }
+      function restartAutoplay(){ startAutoplay(); }
+
+      if(prevBtn) prevBtn.addEventListener('click', function(){ prev(); restartAutoplay(); });
+      if(nextBtn) nextBtn.addEventListener('click', function(){ next(); restartAutoplay(); });
+      root.addEventListener('mouseenter', stopAutoplay);
+      root.addEventListener('mouseleave', startAutoplay);
+      document.addEventListener('visibilitychange', function(){
+        if(document.hidden) stopAutoplay(); else startAutoplay();
+      });
 
       var startX = 0, startIndex = 0, dragging = false, delta = 0;
       function slideWidthPx(){ return slides[0].getBoundingClientRect().width + 20; }
       track.addEventListener('pointerdown', function(e){
         dragging = true; startX = e.clientX; startIndex = index;
+        stopAutoplay();
         try{ track.setPointerCapture(e.pointerId); }catch(_e){}
       });
       track.addEventListener('pointermove', function(e){
@@ -353,6 +389,7 @@ document.addEventListener('DOMContentLoaded', function(){
           update();
         }
         delta = 0;
+        restartAutoplay();
       }
       track.addEventListener('pointerup', endDrag);
       track.addEventListener('pointerleave', endDrag);
@@ -364,6 +401,7 @@ document.addEventListener('DOMContentLoaded', function(){
       });
 
       update();
+      if(slides.length > perView) startAutoplay();
     }
     document.querySelectorAll('.carousel').forEach(initCarousel);
   } catch(err){}
