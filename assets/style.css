@@ -178,8 +178,19 @@ section{padding:112px 0;position:relative}
 }
 .btn-secondary:hover{border-color:var(--indigo);color:var(--indigo);transform:translateY(-2px)}
 
+/* ---------- TEXT REVEAL (word-by-word curtain animation) ---------- */
+.split-ready{display:inline}
+.word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:0.14em;margin-bottom:-0.14em}
+.word-inner{display:inline-block;transform:translateY(112%);opacity:0;filter:blur(7px);transition:transform 0.85s var(--ease), opacity 0.6s ease, filter 0.6s ease}
+.split-ready.visible .word-inner{transform:translateY(0);opacity:1;filter:blur(0)}
+
 /* ---------- HERO ---------- */
 .hero{padding:172px 0 88px;position:relative;overflow:hidden}
+.hero-badges,.hero-desc,.hero-actions,.hero-meta{opacity:0;transform:translateY(16px);transition:opacity 0.7s var(--ease), transform 0.7s var(--ease)}
+.hero-copy.hero-in .hero-badges{opacity:1;transform:translateY(0);transition-delay:0s}
+.hero-copy.hero-in .hero-desc{opacity:1;transform:translateY(0);transition-delay:0.62s}
+.hero-copy.hero-in .hero-actions{opacity:1;transform:translateY(0);transition-delay:0.74s}
+.hero-copy.hero-in .hero-meta{opacity:1;transform:translateY(0);transition-delay:0.86s}
 .hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none}
 .hero-orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:0.5}
 .hero-orb.a{width:440px;height:440px;background:var(--indigo);top:-160px;left:-120px;opacity:0.22}
