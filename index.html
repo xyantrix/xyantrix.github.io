@@ -19,7 +19,7 @@
 <script>document.body.classList.remove('no-js');</script>
 
 <div id="loader">
-  <div class="loader-mark"></div>
+  <div class="loader-logo"></div>
   <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
   <div class="loader-pct" id="loaderPct">0%</div>
 </div>
@@ -55,63 +55,36 @@
 
 <main id="top">
 
-<!-- HERO -->
+<!-- HERO — centered, small quote + typing animation -->
 <section class="hero">
-  <div class="wrap hero-inner">
-    <div class="hero-left">
-      <a href="#contact" class="hero-badge magnetic" target="_self">
-        <span class="badge-dot"></span> Open to opportunities <span class="badge-arrow">→</span>
-      </a>
-      <h1 class="hero-title">
-        <span class="line"><span class="w">Finance</span> <span class="w">&amp;</span> <span class="w">Accounting,</span></span>
-        <span class="line"><span class="w accent">done</span> <span class="w accent">properly.</span></span>
-      </h1>
-      <p class="hero-desc">I handle the invoice that has to match the PO, the books that have to tie out, and the filing that lands on time. End-to-end P2P, GST/TDS compliance, and reconciliation across Oracle, NetSuite, Navision &amp; Tally.</p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn-primary magnetic" target="_self">Get in touch <span>→</span></a>
-        <a href="#work" class="btn-ghost magnetic" target="_self">View experience</a>
-      </div>
-    </div>
-    <div class="hero-right">
-      <div class="hero-card">
-        <div class="hero-card-img">
-          <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar" loading="lazy">
-        </div>
-        <div class="hero-card-meta">
-          <div><span class="hc-label">Role</span><span class="hc-value">Finance Executive</span></div>
-          <div><span class="hc-label">Company</span><span class="hc-value">CarTrade Tech</span></div>
-          <div><span class="hc-label">Location</span><span class="hc-value">Navi Mumbai</span></div>
-        </div>
-      </div>
-    </div>
+  <div class="hero-bg" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
   </div>
-  <div class="hero-marquee">
-    <div class="marquee-track">
-      <span>Oracle Financials</span><span class="dot">•</span>
-      <span>NetSuite</span><span class="dot">•</span>
-      <span>Navision</span><span class="dot">•</span>
-      <span>Tally Prime</span><span class="dot">•</span>
-      <span>Zoho Books</span><span class="dot">•</span>
-      <span>GST &amp; TDS</span><span class="dot">•</span>
-      <span>3-Way Matching</span><span class="dot">•</span>
-      <span>Advanced Excel</span><span class="dot">•</span>
-      <span>Vendor Reconciliation</span><span class="dot">•</span>
-      <span>Form 15CA / 15CB</span><span class="dot">•</span>
-      <span>Oracle Financials</span><span class="dot">•</span>
-      <span>NetSuite</span><span class="dot">•</span>
-      <span>Navision</span><span class="dot">•</span>
-      <span>Tally Prime</span><span class="dot">•</span>
-      <span>Zoho Books</span><span class="dot">•</span>
-      <span>GST &amp; TDS</span><span class="dot">•</span>
-      <span>3-Way Matching</span><span class="dot">•</span>
-      <span>Advanced Excel</span><span class="dot">•</span>
-      <span>Vendor Reconciliation</span><span class="dot">•</span>
-      <span>Form 15CA / 15CB</span><span class="dot">•</span>
+  <div class="wrap hero-inner">
+    <div class="hero-logo-big"></div>
+    <a href="#contact" class="hero-badge magnetic" target="_self">
+      <span class="badge-dot"></span> Open to opportunities <span class="badge-arrow">→</span>
+    </a>
+    <h1 class="hero-quote">
+      <span class="quote-mark">"</span>
+      <span id="typewriter"></span><span class="caret">|</span>
+      <span class="quote-mark">"</span>
+    </h1>
+    <p class="hero-sub">Finance &amp; Accounting Specialist — Navi Mumbai, IN</p>
+    <div class="hero-actions">
+      <a href="#about" class="btn-primary magnetic" target="_self">About me <span>→</span></a>
+      <a href="#contact" class="btn-ghost magnetic" target="_self">Get in touch</a>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="cue-text">Scroll</span>
+      <span class="cue-line"></span>
     </div>
   </div>
 </section>
 
-<!-- ABOUT -->
+<!-- ABOUT — photo + bio, properly responsive -->
 <section id="about">
   <div class="wrap">
     <div class="section-head reveal">
@@ -119,17 +92,32 @@
       <h2 class="big-title">The numbers person <span class="accent">behind the scenes.</span></h2>
     </div>
     <div class="about-grid">
+      <div class="about-photo-wrap reveal">
+        <div class="about-photo">
+          <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar" loading="lazy">
+        </div>
+        <div class="about-photo-photo">
+          <div class="pp-row"><span class="pp-k">Role</span><span class="pp-v">Finance Executive</span></div>
+          <div class="pp-row"><span class="pp-k">Company</span><span class="pp-v">CarTrade Tech</span></div>
+          <div class="pp-row"><span class="pp-k">Location</span><span class="pp-v">Navi Mumbai</span></div>
+        </div>
+      </div>
       <div class="about-text reveal">
         <p>Currently a Finance Executive at CarTrade Tech (CarWale, BikeWale &amp; OLX), I manage the full Accounts Payable cycle — from invoice ingestion to payment disbursement — across Oracle, NetSuite, Navision, and Tally.</p>
         <p>My day revolves around 3-way matching, vendor reconciliations, GST/TDS compliance, and keeping the books audit-ready. I led the data migration from Navision to Oracle and resolved 100+ system issues during our NetSuite implementation.</p>
         <p>I hold a BMS in Finance from Pillai HOC College and certifications from IBM SkillBuild in Corporate Finance, Data Analysis, and SAP Basics.</p>
+        <div class="about-facts">
+          <div><span class="af-label">Location</span><span class="af-value">Navi Mumbai, IN</span></div>
+          <div><span class="af-label">Experience</span><span class="af-value">2+ Years</span></div>
+          <div><span class="af-label">Education</span><span class="af-value">BMS — Finance</span></div>
+        </div>
       </div>
-      <div class="about-stats reveal">
-        <div class="stat-block"><span class="stat-num" data-count="2" data-suffix="+">0</span><span class="stat-lbl">Years experience</span></div>
-        <div class="stat-block"><span class="stat-num" data-count="5">0</span><span class="stat-lbl">ERP systems</span></div>
-        <div class="stat-block"><span class="stat-num" data-count="450" data-suffix="+">0</span><span class="stat-lbl">Invoices / month</span></div>
-        <div class="stat-block"><span class="stat-num" data-count="100" data-suffix="+">0</span><span class="stat-lbl">Issues resolved</span></div>
-      </div>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-block"><span class="stat-num" data-count="2" data-suffix="+">0</span><span class="stat-lbl">Years experience</span></div>
+      <div class="stat-block"><span class="stat-num" data-count="5">0</span><span class="stat-lbl">ERP systems</span></div>
+      <div class="stat-block"><span class="stat-num" data-count="450" data-suffix="+">0</span><span class="stat-lbl">Invoices / month</span></div>
+      <div class="stat-block"><span class="stat-num" data-count="100" data-suffix="+">0</span><span class="stat-lbl">Issues resolved</span></div>
     </div>
   </div>
 </section>
@@ -146,7 +134,7 @@
         <div class="work-top">
           <div class="work-role">
             <h3>Finance Executive</h3>
-            <span class="work-co">CarTrade Tech Ltd.</span>
+            <span class="work-co">CarTrade Tech Ltd. · Vashi, Navi Mumbai</span>
           </div>
           <span class="work-date">Apr 2025 — Present</span>
         </div>
@@ -167,7 +155,7 @@
         <div class="work-top">
           <div class="work-role">
             <h3>GST Compliance Intern</h3>
-            <span class="work-co">Pawar Store</span>
+            <span class="work-co">Pawar Store · Mumbai</span>
           </div>
           <span class="work-date">Aug 2024 — Mar 2025</span>
         </div>
@@ -182,7 +170,7 @@
         <div class="work-top">
           <div class="work-role">
             <h3>Accounting Intern</h3>
-            <span class="work-co">Ananta Resource Management</span>
+            <span class="work-co">Ananta Resource Management · Mumbai</span>
           </div>
           <span class="work-date">Apr 2024 — Jul 2024</span>
         </div>
@@ -220,7 +208,7 @@
 </section>
 
 <!-- PROJECTS -->
-<section id="projects">
+<section id="projects" class="projects-section">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">Projects</span>
@@ -291,7 +279,7 @@
 </section>
 
 <!-- EDUCATION -->
-<section id="education">
+<section id="education" class="edu-section">
   <div class="wrap edu-grid">
     <div class="reveal">
       <div class="section-head"><span class="eyebrow">Education</span></div>
@@ -314,7 +302,7 @@
 </section>
 
 <!-- FAQ -->
-<section id="faq">
+<section id="faq" class="faq-section">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">FAQ</span>

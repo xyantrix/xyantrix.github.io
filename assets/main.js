@@ -1,7 +1,8 @@
 /* ============================================================
    PIYUSH TOMAR — PORTFOLIO
-   LaunchNow-inspired interactions. Every feature isolated in
-   its own try/catch. Zero dependencies — pure vanilla JS.
+   LaunchNow-inspired interactions v2. Typing/backspace hero
+   animation, count-up stats, FAQ accordion, magnetic buttons,
+   custom cursor, spotlight cards. Pure vanilla JS.
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!loaderEl) return;
     var finished = false, progress = 0;
     var tick = setInterval(function(){
-      progress += Math.random() * 18;
+      progress += Math.random() * 16;
       if(progress > 92) progress = 92;
       if(bar) bar.style.width = progress + '%';
       if(pct) pct.textContent = Math.floor(progress) + '%';
@@ -30,8 +31,52 @@ document.addEventListener('DOMContentLoaded', function(){
         setTimeout(function(){ loaderEl.style.display = 'none'; }, 600);
       }, 180);
     }
-    setTimeout(finish, 1200);
+    setTimeout(finish, 1300);
     setTimeout(finish, 3000);
+  })();
+
+  /* TYPEWRITER — typing + backspace cycling */
+  (function typewriter(){
+    var el = document.getElementById('typewriter');
+    if(!el) return;
+    var phrases = [
+      'Finance & Accounting, done properly.',
+      'Books that tie out. Filing that lands on time.',
+      'End-to-end P2P across 5 ERP systems.',
+      'GST, TDS, and audit-ready compliance.'
+    ];
+    var pi = 0, ci = 0, deleting = false, started = false;
+
+    function tick(){
+      var phrase = phrases[pi];
+      if(!deleting){
+        ci++;
+        el.textContent = phrase.slice(0, ci);
+        if(ci === phrase.length){
+          deleting = true;
+          setTimeout(tick, 2200);
+          return;
+        }
+        setTimeout(tick, 45 + Math.random() * 50);
+      } else {
+        ci--;
+        el.textContent = phrase.slice(0, ci);
+        if(ci === 0){
+          deleting = false;
+          pi = (pi + 1) % phrases.length;
+          setTimeout(tick, 400);
+          return;
+        }
+        setTimeout(tick, 22);
+      }
+    }
+
+    function start(){
+      if(started) return;
+      started = true;
+      tick();
+    }
+    setTimeout(start, 1600);
   })();
 
   /* NAV SCROLL STATE */
@@ -88,16 +133,6 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   } catch(err){}
 
-  /* HERO TITLE REVEAL */
-  try{
-    var heroTitle = document.querySelector('.hero-title');
-    var heroCard = document.querySelector('.hero-card');
-    setTimeout(function(){
-      if(heroTitle) heroTitle.classList.add('visible');
-      if(heroCard) heroCard.classList.add('visible');
-    }, 1100);
-  } catch(err){}
-
   /* STAGGERED REVEAL DELAYS */
   try{
     var parentCounts = new Map();
@@ -105,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function(){
       var parent = el.parentElement;
       if(!parent) return;
       var count = parentCounts.get(parent) || 0;
-      if(count > 0){ el.style.transitionDelay = (Math.min(count, 6) * 0.09) + 's'; }
+      if(count > 0){ el.style.transitionDelay = (Math.min(count, 6) * 0.1) + 's'; }
       parentCounts.set(parent, count + 1);
     });
   } catch(err){}
@@ -121,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function(){
             revObs.unobserve(e.target);
           }
         });
-      }, {threshold:0.08, rootMargin:'0px 0px -40px 0px'});
+      }, {threshold:0.08, rootMargin:'0px 0px -50px 0px'});
       reveals.forEach(function(el){ revObs.observe(el); });
     } else {
       reveals.forEach(function(el){ el.classList.add('visible'); });
@@ -135,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function(){
     function animCount(el){
       var target = parseInt(el.dataset.count, 10) || 0;
       var suffix = el.dataset.suffix || '';
-      var dur = 1400, start = null;
+      var dur = 1600, start = null;
       function frame(ts){
         if(!start) start = ts;
         var tt = Math.min(1, (ts-start)/dur);
