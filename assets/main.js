@@ -319,9 +319,9 @@ document.addEventListener('DOMContentLoaded', function(){
       var t = 0;
 
       var ribbons = [
-        {amp:46, freq:0.0032, speed:0.006, yRatio:0.30, width:2.4, colorA:'124,58,237', colorB:'6,182,212', alpha:0.5},
-        {amp:60, freq:0.0021, speed:-0.004, yRatio:0.48, width:1.8, colorA:'6,182,212', colorB:'124,58,237', alpha:0.35},
-        {amp:34, freq:0.0045, speed:0.008, yRatio:0.66, width:1.4, colorA:'167,139,250', colorB:'34,211,238', alpha:0.28}
+        {amp:46, freq:0.0032, speed:0.006, yRatio:0.30, width:2.4, colorA:'255,255,255', colorB:'160,160,160', alpha:0.18},
+        {amp:60, freq:0.0021, speed:-0.004, yRatio:0.48, width:1.8, colorA:'160,160,160', colorB:'255,255,255', alpha:0.12},
+        {amp:34, freq:0.0045, speed:0.008, yRatio:0.66, width:1.4, colorA:'200,200,200', colorB:'255,255,255', alpha:0.10}
       ];
 
       function sResize(){
@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
       function getColor(){
         var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-        return dark ? 'rgba(167,139,250,ALPHA)' : 'rgba(15,13,31,ALPHA)';
+        return dark ? 'rgba(255,255,255,ALPHA)' : 'rgba(10,10,10,ALPHA)';
       }
 
       function resize(){
