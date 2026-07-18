@@ -25,6 +25,7 @@
   --violet:#6D28D9; --cyan:#0891B2; --red:#DC2626;
   --grad:linear-gradient(120deg, var(--violet), var(--cyan));
   --ring:rgba(109,40,217,0.18);
+  --glass-blur:blur(20px) saturate(1.6);
   --display:'Space Grotesk',sans-serif; --sans:'Inter',sans-serif;
 }
 [data-theme="dark"]{
@@ -47,7 +48,7 @@ body::before{
   width:100%; max-width:420px; padding:46px; background:var(--surface);
   border:1px solid var(--border); border-radius:24px; text-align:center;
   position:relative; z-index:1; animation:fadeUp 0.8s ease;
-  backdrop-filter:blur(20px) saturate(1.6); -webkit-backdrop-filter:blur(20px) saturate(1.6);
+  backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur);
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .mark-icon{
@@ -76,7 +77,7 @@ body::before{
 .vault-content.show{display:block}
 .vault-card{
   background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:42px;
-  backdrop-filter:blur(20px) saturate(1.6); -webkit-backdrop-filter:blur(20px) saturate(1.6);
+  backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur);
 }
 .vault-card h2{font-family:var(--display);font-size:25px;font-weight:600;margin-bottom:10px}
 .vault-card .sub{font-size:13.5px;color:var(--ink-dim);margin-bottom:34px}
