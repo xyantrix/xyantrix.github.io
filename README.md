@@ -7,26 +7,32 @@ double-clicking `index.html` directly.
 
 ## Design concept
 
-A premium, Framer-style SaaS look inspired by product sites like
-Launchfolio, with React Bits–style interactive touches. Krub carries
-the display type (headlines, eyebrows, numerals) with real character;
-Inter handles body copy and UI. The palette is a fresh indigo
-(`#5B4FE8`) paired with a warm coral (`#FF6A4D`) accent, on a near-white
-paper ground in light mode and a near-black ground in dark mode — full
-light/dark theming with a floating pill navbar and a smooth toggle
-that remembers the visitor's choice.
+A premium, dark-luxury SaaS look — deep navy (`#050816`) grounds a
+violet-to-cyan accent system (`#7C3AED` → `#06B6D4`, amber `#F59E0B`
+used sparingly), with glassmorphism cards, an animated silk-ribbon
+canvas behind an interactive dot grid, and a subtle noise overlay to
+keep flat gradients from banding. Space Grotesk carries the display
+type (headlines, eyebrows, numerals) with a geometric, fintech-grade
+character; Inter handles body copy and UI. Full light/dark theming
+is preserved — dark is the default experience, with a refined violet-
+tinted light mode as the alternate.
 
-The hero pairs a mouse-reactive dot grid with soft gradient orbs
-behind the headline — a quiet, ambient signature rather than a busy
-one. The small rotated "Approved" stamp built from the dragon-seal
-logo returns as a nod to sign-off culture. The old dashboard-style
-stats grid has been replaced with a single clean, centered stat line
-that sits quietly between sections instead of demanding attention.
+The hero pairs the mouse-reactive dot grid with two flowing gradient
+"silk" ribbons drawn on canvas — an ambient, premium signature rather
+than static gradient orbs. A single glass-framed portrait card
+replaces the previous circular-avatar-plus-banner layout (no more
+duplicate photo). The small rotated "Approved" stamp built from the
+dragon-seal logo returns as a nod to sign-off culture.
 
 Cards use a soft mouse-tracked spotlight on hover, sections reveal on
-scroll, buttons have subtle magnetic pull, and every interactive
-piece degrades gracefully (motion is skipped for
+scroll, buttons have subtle magnetic pull and gradient glow, and every
+interactive piece degrades gracefully (motion is skipped for
 `prefers-reduced-motion`, and touch devices skip hover-only effects).
+The Projects section is a bento-style showcase (one featured card,
+two supporting cards) instead of a carousel. The full-screen loader
+shows a genuine progress percentage before revealing the page, the
+mobile nav is now a full-screen animated overlay, and the navbar
+tracks the active section as you scroll.
 
 No invented testimonials or client logos — this is a personal
 portfolio, so "Capabilities" and "Projects" use Piyush's real skills
@@ -52,11 +58,15 @@ and real work instead.
   `assets/style.css`, defined once for light mode (`:root`) and once
   for dark mode (`[data-theme="dark"]`). Change the tokens and the
   whole site — including the vault page — updates.
-- **Fonts** — Krub (display) and Inter (body), loaded from Google
-  Fonts in the `<head>` of both `index.html` and `contact-vault.html`.
+- **Fonts** — Space Grotesk (display) and Inter (body), loaded from
+  Google Fonts in the `<head>` of both `index.html` and
+  `contact-vault.html`.
 - **Theme** — the toggle in the navbar flips `data-theme` on `<html>`
-  and remembers the choice in `localStorage` under `pt-theme`; it
-  otherwise falls back to the visitor's OS preference.
+  and remembers the choice in `localStorage` under `pt-theme`;
+  first-time visitors see dark mode by default.
+- **Silk canvas** — the flowing background ribbons live in the "SILK
+  WAVE CANVAS" block of `assets/main.js`; the `ribbons` array controls
+  count, amplitude, speed, and color per ribbon.
 - **Stamp** — `.stamp` in `assets/style.css`, near the hero styles.
   Rotation, size, and dash pattern are all in that one rule block.
 - **Hidden contact page password** — edit `VALID_USER` / `VALID_PASS`
