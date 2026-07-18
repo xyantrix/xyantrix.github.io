@@ -8,27 +8,37 @@
 <meta property="og:title" content="Piyush Tomar — Finance & Accounting Specialist">
 <meta property="og:description" content="End-to-end Accounts Payable, GST/TDS compliance, and reconciliation across Oracle, NetSuite, Navision & Tally.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#FAFAF8">
+<meta name="theme-color" content="#050816">
 <link rel="icon" type="image/png" href="Website_logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Krub:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <script>
-/* Set theme before paint to avoid flash */
+/* Set theme before paint to avoid flash — defaults to dark unless the visitor chose light */
 (function(){
   try{
     var saved = localStorage.getItem('pt-theme');
-    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var theme = saved || 'dark';
     document.documentElement.setAttribute('data-theme', theme);
-  }catch(e){ document.documentElement.setAttribute('data-theme','light'); }
+  }catch(e){ document.documentElement.setAttribute('data-theme','dark'); }
 })();
 </script>
 </head>
 <body class="no-js">
 <script>document.body.classList.remove('no-js');</script>
 
-<div id="loader"><div class="loader-mark"></div></div>
+<div id="scrollProgress"></div>
+
+<div class="noise" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
+</div>
+
+<div id="loader">
+  <div class="loader-mark-wrap"><span class="loader-ring"></span><span class="loader-mark"></span></div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+  <div class="loader-pct" id="loaderPct">0%</div>
+</div>
 <div id="cursor"></div>
 <div id="cursorTrail"></div>
 
@@ -68,13 +78,11 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg">
-    <span class="hero-orb a"></span>
-    <span class="hero-orb b"></span>
+    <canvas id="silkCanvas"></canvas>
     <canvas id="dotGrid"></canvas>
   </div>
   <div class="wrap hero-inner">
     <div class="hero-copy">
-      <img class="hero-avatar" src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar">
       <div class="hero-badges">
         <span class="badge-solid"><span class="dot"></span>Open to opportunities</span>
         <span class="badge-outline">Welcome to my page · Navi Mumbai 2026</span>
@@ -95,8 +103,10 @@
         <span>450+ Invoices / Month</span>
       </div>
     </div>
-    <div class="hero-photo reveal">
-      <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar">
+    <div class="hero-photo">
+      <div class="hero-photo-inner">
+        <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar">
+      </div>
     </div>
   </div>
 </section>
@@ -142,9 +152,8 @@
         <div><span class="af-label">Education</span><span class="af-value">BMS — Finance</span></div>
       </div>
     </div>
-    <div class="about-photo reveal">
+    <div class="about-photo reveal" title="Click for a closer look">
       <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar">
-      <div class="photo-frame"></div>
     </div>
   </div>
 </section>
@@ -235,51 +244,43 @@
       <div class="section-eyebrow">Projects</div>
       <h2 class="section-title">Beyond day-to-day <span class="grad">operations.</span></h2>
     </div>
-    <div class="carousel reveal" id="projectsCarousel">
-      <div class="carousel-viewport">
-        <div class="carousel-track">
-          <div class="proj-card reveal">
-            <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Aug 2025 — Nov 2025</span></div>
-            <h3>Oracle NetSuite Implementation</h3>
-            <p class="proj-sub">Employee expense reimbursement module — migration &amp; UAT</p>
-            <ul class="proj-bullets">
-              <li>Supported Oracle AP implementation for the employee expense reimbursement module.</li>
-              <li>Managed opening balance setup for employee advances during migration.</li>
-              <li>Identified and resolved 100+ system and process issues.</li>
-              <li>Performed root cause analysis and implemented fixes for reimbursement mismatches.</li>
-              <li>Supported UAT and ensured a smooth go-live transition.</li>
-            </ul>
-            <div class="proj-tags"><span>Oracle AP</span><span>UAT</span><span>Data Migration</span><span>RCA</span></div>
-          </div>
-          <div class="proj-card reveal">
-            <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">May 2025 — Mar 2026</span></div>
-            <h3>Employee Reimbursement Optimization</h3>
-            <p class="proj-sub">Policy tightening &amp; tracking system overhaul</p>
-            <ul class="proj-bullets">
-              <li>Implemented a strict reimbursement policy requiring mandatory bill submission.</li>
-              <li>Managed deviation cases with proper approvals and deduction rules.</li>
-              <li>Developed an Excel tracker with formulas for aging, status, and payment summaries.</li>
-              <li>Improved reimbursement processing efficiency and reporting accuracy.</li>
-            </ul>
-            <div class="proj-tags"><span>Policy Design</span><span>Excel Tracker</span><span>Compliance</span></div>
-          </div>
-          <div class="proj-card reveal">
-            <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Ongoing</span></div>
-            <h3>Navision → Oracle Data Migration</h3>
-            <p class="proj-sub">Ledger &amp; master data transition</p>
-            <ul class="proj-bullets">
-              <li>Led the migration of vendor, GL, and transaction data from Navision to Oracle.</li>
-              <li>Validated opening balances and reconciled discrepancies pre and post go-live.</li>
-              <li>Coordinated with cross-functional teams to ensure zero data loss.</li>
-            </ul>
-            <div class="proj-tags"><span>Data Migration</span><span>Reconciliation</span><span>Oracle</span></div>
-          </div>
-        </div>
+    <div class="proj-bento">
+      <div class="proj-card featured spot reveal">
+        <span class="proj-tag-featured">Current</span>
+        <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Aug 2025 — Nov 2025</span></div>
+        <h3>Oracle NetSuite Implementation</h3>
+        <p class="proj-sub">Employee expense reimbursement module — migration &amp; UAT</p>
+        <ul class="proj-bullets">
+          <li>Supported Oracle AP implementation for the employee expense reimbursement module.</li>
+          <li>Managed opening balance setup for employee advances during migration.</li>
+          <li>Identified and resolved 100+ system and process issues.</li>
+          <li>Performed root cause analysis and implemented fixes for reimbursement mismatches.</li>
+          <li>Supported UAT and ensured a smooth go-live transition.</li>
+        </ul>
+        <div class="proj-tags"><span>Oracle AP</span><span>UAT</span><span>Data Migration</span><span>RCA</span></div>
       </div>
-      <div class="carousel-controls">
-        <button class="carousel-arrow prev" aria-label="Previous">←</button>
-        <div class="carousel-dots"></div>
-        <button class="carousel-arrow next" aria-label="Next">→</button>
+      <div class="proj-secondary-col">
+        <div class="proj-card spot reveal">
+          <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">May 2025 — Mar 2026</span></div>
+          <h3>Employee Reimbursement Optimization</h3>
+          <p class="proj-sub">Policy tightening &amp; tracking system overhaul</p>
+          <ul class="proj-bullets">
+            <li>Implemented a strict reimbursement policy requiring mandatory bill submission.</li>
+            <li>Managed deviation cases with proper approvals and deduction rules.</li>
+            <li>Developed an Excel tracker with formulas for aging, status, and payment summaries.</li>
+          </ul>
+          <div class="proj-tags"><span>Policy Design</span><span>Excel Tracker</span><span>Compliance</span></div>
+        </div>
+        <div class="proj-card spot reveal">
+          <div class="proj-meta"><span class="proj-co">CarTrade Tech</span><span class="proj-date">Ongoing</span></div>
+          <h3>Navision → Oracle Data Migration</h3>
+          <p class="proj-sub">Ledger &amp; master data transition</p>
+          <ul class="proj-bullets">
+            <li>Led the migration of vendor, GL, and transaction data from Navision to Oracle.</li>
+            <li>Validated opening balances and reconciled discrepancies pre and post go-live.</li>
+          </ul>
+          <div class="proj-tags"><span>Data Migration</span><span>Reconciliation</span><span>Oracle</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -294,15 +295,15 @@
     </div>
     <div class="skill-grid">
       <div class="skill-card reveal">
-        <span class="num">/ 01</span><h3>Finance &amp; Compliance</h3>
+        <div class="skill-card-head"><span class="skill-icon">FIN</span><h3>Finance &amp; Compliance</h3></div>
         <div class="skill-tags"><span>Accounts Payable &amp; Receivable</span><span>Audit Support &amp; Month-End</span><span>Budgeting &amp; Financial Planning</span><span>Financial Accounting &amp; Reporting</span><span>Taxation (GST, TDS) &amp; Compliance</span></div>
       </div>
       <div class="skill-card reveal">
-        <span class="num">/ 02</span><h3>Operations &amp; Management</h3>
+        <div class="skill-card-head"><span class="skill-icon">OPS</span><h3>Operations &amp; Management</h3></div>
         <div class="skill-tags"><span>Business Process Optimization</span><span>Process Improvement</span><span>Strategic Planning &amp; Execution</span><span>Team Coordination</span><span>Vendor &amp; Stakeholder Management</span><span>Workflow Automation</span></div>
       </div>
       <div class="skill-card reveal">
-        <span class="num">/ 03</span><h3>Analytical &amp; Technical</h3>
+        <div class="skill-card-head"><span class="skill-icon">DATA</span><h3>Analytical &amp; Technical</h3></div>
         <div class="skill-tags"><span>Advanced Excel &amp; PowerPoint</span><span>Data Analysis &amp; Forecasting</span><span>Data-Driven Decision Making</span><span>ERP (Tally, Zoho, Oracle, Navision, NetSuite)</span></div>
       </div>
     </div>
@@ -332,7 +333,7 @@
   </div>
 </section>
 
-<!-- STAT STRIP (clean, centered — replaces the old dashboard-style ledger section) -->
+<!-- STAT STRIP -->
 <section class="stat-strip">
   <div class="wrap">
     <div class="stat-strip-inner reveal">
@@ -400,7 +401,7 @@
         <div class="cf-field"><label for="cfSubject">Subject</label><input id="cfSubject" type="text" placeholder="Job opportunity / Collaboration"></div>
         <div class="cf-field"><label for="cfMsg">Message</label><textarea id="cfMsg" placeholder="Tell me about the role…" required></textarea></div>
         <button class="cf-btn magnetic" type="submit">Send message <span>→</span></button>
-        <div class="cf-success" id="cfSuccess">Message sent — I'll be in touch within 24 hours.</div>
+        <div class="cf-success" id="cfSuccess"><span class="cf-check">✓</span>Message sent — I'll be in touch within 24 hours.</div>
       </form>
     </div>
   </div>
@@ -412,7 +413,7 @@
   <div class="wrap foot-inner">
     <div class="foot-brand"><span class="mark-icon foot-mark"></span><span>Piyush Tomar</span></div>
     <span class="foot-copy">© 2026</span>
-    <a href="#top" class="foot-back" target="_self">Back to top ↑</a>
+    <a href="#top" class="foot-back" target="_self">Back to top <span>↑</span></a>
   </div>
 </footer>
 
