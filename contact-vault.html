@@ -13,18 +13,18 @@
 (function(){
   try{
     var saved = localStorage.getItem('pt-theme');
-    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var theme = saved || 'dark';
     document.documentElement.setAttribute('data-theme', theme);
   }catch(e){ document.documentElement.setAttribute('data-theme','light'); }
 })();
 </script>
 <style>
-:root{
-  --paper:#0B0B0D; --surface:#141417; --ink:#F7F6F2; --ink-dim:#A6A4AC; --ink-faint:#726F78;
-  --border:rgba(247,246,242,0.08); --border-hi:rgba(247,246,242,0.16);
-  --indigo:#FF5A1F; --coral:#FFB27A; --red:#E5484D;
+:root,[data-theme="light"]{
+  --paper:#FAF9F6; --surface:#FFFFFF; --ink:#15130F; --ink-dim:#5C584E; --ink-faint:#948E80;
+  --border:rgba(21,19,15,0.09); --border-hi:rgba(21,19,15,0.17);
+  --indigo:#FF5A1F; --coral:#E2490F; --red:#E5484D;
   --grad:linear-gradient(120deg, var(--indigo), var(--coral));
-  --ring:rgba(255,90,31,0.30);
+  --ring:rgba(255,90,31,0.22);
   --display:'Krub',sans-serif; --sans:'Inter',sans-serif;
 }
 [data-theme="dark"]{
