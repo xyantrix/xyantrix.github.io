@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <!-- X -->
+  <path class="logo-stroke" d="M8 8 L28 52 M28 8 L8 52" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Y -->
+  <path class="logo-stroke" d="M38 8 L52 30 L52 52 M52 30 L66 8" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- A -->
+  <path class="logo-stroke" d="M76 52 L86 8 L96 52 M80 35 L92 35" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- N -->
+  <path class="logo-stroke" d="M106 52 L106 8 L126 52 L126 8" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- T -->
+  <path class="logo-stroke" d="M136 8 L156 8 M146 8 L146 52" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- R -->
+  <path class="logo-stroke" d="M166 52 L166 8 L182 8 Q190 8 190 18 Q190 28 182 28 L166 28 M178 28 L190 52" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- I -->
+  <path class="logo-stroke" d="M200 8 L200 52" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- X (second) -->
+  <path class="logo-stroke" d="M210 8 L230 52 M230 8 L210 52" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
