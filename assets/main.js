@@ -8,9 +8,11 @@
 document.addEventListener('DOMContentLoaded', function(){
 
   /* ---------- LOADER (cinematic sketch-draw sequence) ----------
-     black screen -> orange stroke sketches the mark -> glow bloom
-     -> morphs into a solid white fill -> loader fades, site reveals.
-     Reduced-motion visitors skip straight to the reveal. */
+     black screen -> orange stroke sketches the mark, path by path,
+     using each path's REAL measured length (getTotalLength) so every
+     stroke fully completes -> glow bloom -> morphs into a solid white
+     fill -> loader fades, site reveals. Reduced-motion visitors skip
+     straight to the reveal. */
   (function loader(){
     var loaderEl = document.getElementById('loader');
     if(!loaderEl) return;
@@ -25,11 +27,36 @@ document.addEventListener('DOMContentLoaded', function(){
       setTimeout(function(){ loaderEl.style.display = 'none'; }, 950);
     }
     if(reduceMotion){ finish(); return; }
-    requestAnimationFrame(function(){ loaderEl.classList.add('draw'); });
-    setTimeout(function(){ loaderEl.classList.add('stage-glow'); }, 1900);
-    setTimeout(function(){ loaderEl.classList.add('stage-morph'); }, 2500);
-    setTimeout(finish, 3150);
-    setTimeout(finish, 4500); /* safety fallback */
+
+    var strokes = loaderEl.querySelectorAll('.loader-stroke');
+    var delays = [0, 0.05, 0.1, 0.15, 0.2, 0.9, 1.0, 0.35];
+    var maxFinishAt = 0;
+    strokes.forEach(function(p, i){
+      try{
+        var len = p.getTotalLength();
+        var delay = delays[i % delays.length];
+        var dur = Math.max(0.9, Math.min(1.8, len / 4000));
+        p.style.strokeDasharray = len;
+        p.style.strokeDashoffset = len;
+        p.style.transitionDelay = delay + 's';
+        p.style.transitionDuration = dur + 's';
+        maxFinishAt = Math.max(maxFinishAt, delay + dur);
+      } catch(e){}
+    });
+    // two rAFs to guarantee the browser has painted the dasharray/offset
+    // before we flip dashoffset to 0 — otherwise the transition can get
+    // skipped and the stroke just appears instead of drawing.
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        strokes.forEach(function(p){ p.style.strokeDashoffset = '0'; });
+      });
+    });
+
+    var drawDoneMs = (maxFinishAt || 2) * 1000;
+    setTimeout(function(){ loaderEl.classList.add('stage-glow'); }, drawDoneMs + 250);
+    setTimeout(function(){ loaderEl.classList.add('stage-morph'); }, drawDoneMs + 850);
+    setTimeout(finish, drawDoneMs + 1450);
+    setTimeout(finish, drawDoneMs + 3000); /* safety fallback */
   })();
 
   /* ---------- THEME TOGGLE ---------- */
@@ -113,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var heroCopy = document.querySelector('.hero-copy');
     var heroTitle = document.querySelector('.hero-title');
     var reduceMotionHero = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var heroDelay = reduceMotionHero ? 100 : 3050;
+    var heroDelay = reduceMotionHero ? 100 : 3600;
     setTimeout(function(){
       if(heroTitle) heroTitle.classList.add('visible');
       if(heroCopy) heroCopy.classList.add('hero-in');
@@ -366,6 +393,9 @@ document.addEventListener('DOMContentLoaded', function(){
         track.style.transform = 'translateX(-' + (index * slideWidth) + 'px)';
         var dots = Array.prototype.slice.call(dotsWrap.children);
         dots.forEach(function(d,i){ d.classList.toggle('active', i === Math.floor(index/perView)); });
+        slides.forEach(function(s,i){
+          s.classList.toggle('is-active', i >= index && i < index + perView);
+        });
       }
       /* loops around instead of stopping dead at the first/last slide */
       function goTo(i){

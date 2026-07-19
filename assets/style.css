@@ -5,29 +5,31 @@
    ============================================================ */
 
 /* ---------- TOKENS ----------
-   Dark + orange system. Both toggle states stay dark by design (the
-   brief asked for a dark theme throughout) — the toggle now swaps
-   between a deep charcoal variant and true black, rather than
-   light/dark, so the feature still works but never goes light. */
-:root{
-  --paper:#0B0B0D;
-  --surface:#141417;
-  --surface-2:#1C1C20;
-  --ink:#F7F6F2;
-  --ink-dim:#A6A4AC;
-  --ink-faint:#726F78;
-  --border:rgba(247,246,242,0.08);
-  --border-hi:rgba(247,246,242,0.16);
+   Two real, distinct themes — light (warm white, orange accent, dark
+   ink — the LaunchNow-style look) and dark (true black, orange accent,
+   white ink). The toggle switches between them properly; the site
+   simply *defaults* to dark on first visit (see the inline script in
+   <head>) unless the visitor has already chosen light. */
+:root,[data-theme="light"]{
+  --paper:#FAF9F6;
+  --surface:#FFFFFF;
+  --surface-2:#F3F1EA;
+  --ink:#15130F;
+  --ink-dim:#5C584E;
+  --ink-faint:#948E80;
+  --border:rgba(21,19,15,0.09);
+  --border-hi:rgba(21,19,15,0.17);
   --indigo:#FF5A1F;
   --indigo-soft:#FF8A50;
-  --coral:#FFB27A;
-  --coral-soft:#FFCDA3;
-  --grad:linear-gradient(120deg, var(--indigo), var(--indigo-soft));
-  --grad-soft:linear-gradient(135deg, rgba(255,90,31,0.20), rgba(255,178,122,0.10));
-  --ring:rgba(255,90,31,0.30);
-  --shadow-sm:0 1px 2px rgba(0,0,0,0.35);
-  --shadow-md:0 10px 28px rgba(0,0,0,0.45);
-  --shadow-lg:0 30px 80px rgba(0,0,0,0.6);
+  --coral:#E2490F;
+  --coral-soft:#FF9A5C;
+  --grad:linear-gradient(120deg, var(--indigo), var(--coral));
+  --grad-soft:linear-gradient(135deg, rgba(255,90,31,0.16), rgba(226,73,15,0.08));
+  --ring:rgba(255,90,31,0.22);
+  --card-bg:rgba(255,255,255,0.94);
+  --shadow-sm:0 1px 2px rgba(21,19,15,0.05), 0 1px 1px rgba(21,19,15,0.04);
+  --shadow-md:0 10px 26px rgba(21,19,15,0.08);
+  --shadow-lg:0 30px 70px rgba(21,19,15,0.14);
   --radius-sm:10px;
   --radius-md:18px;
   --radius-lg:28px;
@@ -52,6 +54,7 @@
   --grad:linear-gradient(120deg, var(--indigo), var(--indigo-soft));
   --grad-soft:linear-gradient(135deg, rgba(255,106,44,0.22), rgba(255,194,153,0.10));
   --ring:rgba(255,106,44,0.34);
+  --card-bg:rgba(12,12,14,0.6);
   --shadow-sm:0 1px 2px rgba(0,0,0,0.5);
   --shadow-md:0 10px 28px rgba(0,0,0,0.55);
   --shadow-lg:0 30px 90px rgba(0,0,0,0.7);
@@ -78,7 +81,8 @@ button,input,textarea{font-family:inherit;font-size:inherit;color:inherit;border
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--indigo);outline-offset:3px;border-radius:4px}
 .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
-.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad{color:var(--indigo);background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+@supports not (-webkit-background-clip:text){ .grad{ -webkit-text-fill-color:unset; color:var(--indigo); background:none; } }
 
 /* ---------- LOADER ----------
    Stages, driven by classes toggled from main.js:
@@ -96,15 +100,12 @@ button{cursor:pointer}
 .loader-mark-wrap{position:relative;width:96px;height:96px}
 .loader-mark-wrap svg{width:100%;height:100%;overflow:visible}
 .loader-stroke{
-  fill:none;stroke:var(--indigo);stroke-width:60;stroke-linecap:round;stroke-linejoin:round;
-  stroke-dasharray:9000;stroke-dashoffset:9000;
-  transition:filter 0.7s ease;
+  fill:none;stroke:var(--indigo);stroke-width:55;stroke-linecap:round;stroke-linejoin:round;
+  transition:stroke-dashoffset 1.6s var(--ease), filter 0.7s ease;
+  /* stroke-dasharray / stroke-dashoffset are set precisely in JS via
+     getTotalLength() for each path — a fixed guess here can't work
+     since the paths vary enormously in actual length */
 }
-#loader.draw .loader-stroke{
-  animation:sketchDraw 1.8s var(--ease) forwards;
-  animation-delay:var(--d, 0s);
-}
-@keyframes sketchDraw{to{stroke-dashoffset:0}}
 #loader.stage-glow .loader-stroke{
   filter:drop-shadow(0 0 10px var(--indigo)) drop-shadow(0 0 26px rgba(255,90,31,0.7));
 }
@@ -122,7 +123,7 @@ button{cursor:pointer}
 }
 #loader.stage-glow .loader-label,#loader.stage-morph .loader-label{opacity:1}
 @media (prefers-reduced-motion:reduce){
-  .loader-stroke{animation:none !important;stroke-dashoffset:0}
+  .loader-stroke{transition:none !important;stroke-dashoffset:0 !important}
   .loader-fill{opacity:1;transform:scale(1)}
 }
 
@@ -263,7 +264,7 @@ section{padding:112px 0;position:relative}
   opacity:0;transform:translateY(16px);transition:opacity 0.7s var(--ease), transform 0.7s var(--ease);
 }
 .hero-copy.hero-in .hero-avatar{opacity:1;transform:translateY(0);transition-delay:0s}
-.hero-badges,.hero-desc,.hero-actions,.stamp,.hero-meta{opacity:0;transform:translateY(16px);transition:opacity 0.7s var(--ease), transform 0.7s var(--ease)}
+.hero-badges,.hero-desc,.hero-actions,.hero-meta{opacity:0;transform:translateY(16px);transition:opacity 0.7s var(--ease), transform 0.7s var(--ease)}
 .hero-copy.hero-in .hero-badges{opacity:1;transform:translateY(0);transition-delay:0.08s}
 .hero-copy.hero-in .hero-desc{opacity:1;transform:translateY(0);transition-delay:0.64s}
 .hero-copy.hero-in .hero-actions{opacity:1;transform:translateY(0);transition-delay:0.76s}
@@ -302,7 +303,7 @@ section{padding:112px 0;position:relative}
 
 /* ---------- ABOUT ---------- */
 .about-inner{display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:center}
-.about-photo{position:relative;order:2;overflow:hidden;border-radius:var(--radius-lg)}
+.about-photo{position:relative;order:2}
 .about-photo img{border-radius:var(--radius-lg);aspect-ratio:1/1;object-fit:cover;box-shadow:var(--shadow-md);border:1px solid var(--border);transition:transform 0.7s var(--ease)}
 .about-photo:hover img{transform:scale(1.045)}
 .photo-frame{position:absolute;inset:18px -18px -18px 18px;border:1.5px solid var(--border-hi);border-radius:var(--radius-lg);z-index:-1}
@@ -316,7 +317,7 @@ section{padding:112px 0;position:relative}
 /* ---------- CAPABILITIES ---------- */
 .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .cap-card{
-  background:color-mix(in srgb, var(--surface) 78%, transparent);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid var(--border);border-radius:var(--radius-md);padding:30px;
+  background:var(--card-bg);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:var(--shadow-sm);border:1px solid var(--border);border-radius:var(--radius-md);padding:30px;
   position:relative;overflow:hidden;transition:all 0.35s var(--ease);
 }
 .cap-card::before{
@@ -336,7 +337,7 @@ section{padding:112px 0;position:relative}
 
 /* ---------- EXPERIENCE ---------- */
 .exp-timeline{display:flex;flex-direction:column;gap:14px}
-.exp-card{background:color-mix(in srgb, var(--surface) 78%, transparent);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid var(--border);border-radius:var(--radius-md);padding:32px;transition:all 0.3s var(--ease)}
+.exp-card{background:var(--card-bg);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:var(--shadow-sm);border:1px solid var(--border);border-radius:var(--radius-md);padding:32px;transition:all 0.3s var(--ease)}
 .exp-card:hover{border-color:var(--border-hi);box-shadow:var(--shadow-sm)}
 .exp-card.current{border-color:var(--ring);box-shadow:0 0 0 1px var(--ring)}
 .exp-num{font-family:var(--display);font-size:12.5px;color:var(--ink-faint);font-weight:600;letter-spacing:0.05em}
@@ -355,9 +356,13 @@ section{padding:112px 0;position:relative}
 .carousel-viewport{overflow:hidden}
 .carousel-track{display:flex;gap:20px;transition:transform 0.5s var(--ease)}
 .proj-card{
-  flex:0 0 calc(50% - 10px);background:color-mix(in srgb, var(--surface) 78%, transparent);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid var(--border);border-radius:var(--radius-md);
+  flex:0 0 calc(50% - 10px);background:var(--card-bg);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:var(--shadow-sm);border:1px solid var(--border);border-radius:var(--radius-md);
   padding:30px;display:flex;flex-direction:column;
+  opacity:.45;transform:scale(.92);filter:blur(1.5px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease), filter .5s var(--ease), border-color .3s ease, box-shadow .3s ease;
 }
+.proj-card.is-active{opacity:1;transform:scale(1);filter:blur(0)}
+.proj-card.is-active:hover{border-color:var(--border-hi);box-shadow:var(--shadow-md);transform:scale(1.015) translateY(-3px)}
 .proj-meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-faint);margin-bottom:14px;font-weight:500}
 .proj-co{color:var(--indigo);font-weight:600}
 .proj-card h3{font-family:var(--display);font-weight:600;font-size:18px;margin-bottom:6px}
@@ -376,7 +381,7 @@ section{padding:112px 0;position:relative}
 
 /* ---------- SKILLS ---------- */
 .skill-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.skill-card{background:color-mix(in srgb, var(--surface) 78%, transparent);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px;transition:all 0.3s var(--ease)}
+.skill-card{background:var(--card-bg);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:var(--shadow-sm);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px;transition:all 0.3s var(--ease)}
 .skill-card:hover{border-color:var(--border-hi);transform:translateY(-3px)}
 .skill-card .num{font-family:var(--display);font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:0.06em}
 .skill-card h3{font-family:var(--display);font-weight:600;font-size:17px;margin:12px 0 18px}
@@ -406,9 +411,9 @@ section{padding:112px 0;position:relative}
 .faq-item{border-bottom:1px solid var(--border)}
 .faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;padding:24px 4px;text-align:left;font-family:var(--display);font-weight:500;font-size:16px}
 .faq-icon{width:26px;height:26px;border-radius:50%;border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:14px;flex:none;transition:all 0.3s var(--ease);color:var(--ink-dim)}
-.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s var(--ease)}
-.faq-item.open .faq-a{max-height:200px}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--indigo);color:#170b04;border-color:var(--indigo);box-shadow:0 0 14px var(--ring)}
+.faq-a{max-height:0;overflow:hidden;opacity:0;transform:translateY(-8px);transition:max-height 0.45s var(--ease), opacity 0.4s ease, transform 0.4s var(--ease)}
+.faq-item.open .faq-a{max-height:220px;opacity:1;transform:translateY(0)}
 .faq-a p{padding:0 4px 24px;color:var(--ink-dim);font-size:14.5px;line-height:1.7;max-width:600px}
 
 /* ---------- CTA BANNER ---------- */
@@ -431,7 +436,7 @@ section{padding:112px 0;position:relative}
 a.contact-row:hover{color:var(--indigo)}
 .cr-k{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.07em}
 .cr-v{font-size:14.5px;font-weight:600}
-.contact-form{background:color-mix(in srgb, var(--surface) 78%, transparent);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid var(--border);border-radius:var(--radius-md);padding:34px}
+.contact-form{background:var(--card-bg);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:var(--shadow-sm);border:1px solid var(--border);border-radius:var(--radius-md);padding:34px}
 .cf-title{font-family:var(--display);font-weight:600;font-size:18px;margin-bottom:22px}
 .cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .cf-field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
