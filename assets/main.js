@@ -1,8 +1,8 @@
 /* ============================================================
-   XYANTRIX — PREMIUM DIGITAL STUDIO
+   PIYUSH TOMAR — XYANTRIX RESUME
    Loader logo draw, blur-to-sharp reveals, magnetic 3D CTA,
-   custom cursor, count-up stats, testimonial marquee, FAQ,
-   spotlight cards. Pure vanilla JS, zero dependencies.
+   custom cursor, count-up stats, FAQ accordion, spotlight cards.
+   Pure vanilla JS, zero dependencies.
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       requestAnimationFrame(frame);
     }
-    var stats = document.querySelectorAll('.stat-num, .hm-num');
+    var stats = document.querySelectorAll('.hm-num');
     if('IntersectionObserver' in window){
       var cntObs = new IntersectionObserver(function(entries){
         entries.forEach(function(e){
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function(){
         requestAnimationFrame(updateCursor);
       }
       updateCursor();
-      document.querySelectorAll('a, button, .magnetic, .svc-card, .work-card').forEach(function(el){
+      document.querySelectorAll('a, button, .magnetic, .cap-card, .proj-card, .faq-q').forEach(function(el){
         el.addEventListener('mouseenter', function(){ trail.classList.add('hover'); });
         el.addEventListener('mouseleave', function(){ trail.classList.remove('hover'); });
       });
@@ -211,6 +211,19 @@ document.addEventListener('DOMContentLoaded', function(){
         var rect = card.getBoundingClientRect();
         card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
         card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+      });
+    });
+  } catch(err){}
+
+  /* FAQ ACCORDION */
+  try{
+    var openFaq = null;
+    document.querySelectorAll('.faq-q').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var item = btn.closest('.faq-item');
+        if(openFaq && openFaq !== item) openFaq.classList.remove('open');
+        item.classList.toggle('open');
+        openFaq = item.classList.contains('open') ? item : null;
       });
     });
   } catch(err){}
@@ -248,8 +261,10 @@ function submitForm(e){
       else wrap.classList.remove('invalid');
     });
     if(!ok) return false;
+    var subject = document.getElementById('cfSubject').value.trim() || 'Portfolio enquiry';
+    var body = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + msg;
     document.getElementById('cfSuccess').classList.add('show');
-    document.getElementById('cfForm').reset();
+    window.location.href = 'mailto:piyushtomar1222@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   } catch(err){}
   return false;
 }
