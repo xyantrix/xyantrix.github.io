@@ -100,7 +100,7 @@ button{cursor:pointer}
 .loader-mark-wrap{position:relative;width:96px;height:96px}
 .loader-mark-wrap svg{width:100%;height:100%;overflow:visible}
 .loader-stroke{
-  fill:none;stroke:var(--indigo);stroke-width:55;stroke-linecap:round;stroke-linejoin:round;
+  fill:none;stroke:var(--indigo);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;
   transition:stroke-dashoffset 1.6s var(--ease), filter 0.7s ease;
   /* stroke-dasharray / stroke-dashoffset are set precisely in JS via
      getTotalLength() for each path — a fixed guess here can't work
@@ -145,8 +145,9 @@ button{cursor:pointer}
 }
 #nav.scrolled .nav-inner{box-shadow:var(--shadow-md);border-color:var(--border-hi)}
 .nav-brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-0.01em}
-.mark-icon{display:inline-block;background:var(--grad);-webkit-mask:url('../dragon-seal.svg') center/contain no-repeat;mask:url('../dragon-seal.svg') center/contain no-repeat}
+.mark-svg{fill:none;stroke:var(--indigo);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .nav-mark{width:22px;height:22px}
+.foot-mark{width:18px;height:18px}
 .nav-links{display:flex;align-items:center;gap:28px;margin:0 auto}
 .nav-links a{position:relative;font-size:14px;font-weight:500;color:var(--ink-dim);transition:color 0.25s ease;padding-bottom:2px}
 .nav-links a::after{content:'';position:absolute;left:0;bottom:-3px;width:0;height:1.5px;background:var(--indigo);box-shadow:0 0 8px var(--indigo);transition:width 0.3s var(--ease)}
@@ -258,12 +259,6 @@ section{padding:112px 0;position:relative}
 #dotGrid{position:absolute;inset:0;opacity:0.55}
 .hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
 .hero-copy{display:flex;flex-direction:column;align-items:center;text-align:center;max-width:700px;margin:0 auto}
-.hero-avatar{
-  width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--surface);
-  box-shadow:0 0 0 1px var(--border-hi), var(--shadow-sm);margin-bottom:22px;
-  opacity:0;transform:translateY(16px);transition:opacity 0.7s var(--ease), transform 0.7s var(--ease);
-}
-.hero-copy.hero-in .hero-avatar{opacity:1;transform:translateY(0);transition-delay:0s}
 .hero-badges,.hero-desc,.hero-actions,.hero-meta{opacity:0;transform:translateY(16px);transition:opacity 0.7s var(--ease), transform 0.7s var(--ease)}
 .hero-copy.hero-in .hero-badges{opacity:1;transform:translateY(0);transition-delay:0.08s}
 .hero-copy.hero-in .hero-desc{opacity:1;transform:translateY(0);transition-delay:0.64s}
@@ -281,7 +276,7 @@ section{padding:112px 0;position:relative}
 .hero-desc{font-size:17px;color:var(--ink-dim);max-width:520px;margin:0 auto 34px;line-height:1.7}
 .hero-actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:16px;margin-bottom:30px}
 .stamp{display:inline-flex;align-items:center;gap:9px;padding:9px 6px;border:1.5px dashed var(--border-hi);border-radius:100px;transform:rotate(-3deg);margin-bottom:34px}
-.stamp-icon{width:20px;height:20px;margin-left:6px;background:var(--grad);-webkit-mask:url('../dragon-seal.svg') center/contain no-repeat;mask:url('../dragon-seal.svg') center/contain no-repeat}
+
 .stamp-text{font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-dim);padding-right:12px}
 .hero-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;font-size:13px;color:var(--ink-faint);font-weight:500;margin-bottom:56px}
 .meta-dot{width:3px;height:3px;border-radius:50%;background:var(--ink-faint)}
@@ -302,12 +297,7 @@ section{padding:112px 0;position:relative}
 .marquee-item .dot{width:5px;height:5px;border-radius:50%;background:var(--coral)}
 
 /* ---------- ABOUT ---------- */
-.about-inner{display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:center}
-.about-photo{position:relative;order:2}
-.about-photo img{border-radius:var(--radius-lg);aspect-ratio:1/1;object-fit:cover;box-shadow:var(--shadow-md);border:1px solid var(--border);transition:transform 0.7s var(--ease)}
-.about-photo:hover img{transform:scale(1.045)}
-.photo-frame{position:absolute;inset:18px -18px -18px 18px;border:1.5px solid var(--border-hi);border-radius:var(--radius-lg);z-index:-1}
-.about-text{order:1}
+.about-inner{display:grid;grid-template-columns:1fr;gap:64px;align-items:center;max-width:760px}
 .about-text p{color:var(--ink-dim);margin-bottom:16px;font-size:15.5px;line-height:1.75;max-width:520px}
 .about-facts{display:flex;gap:36px;margin-top:32px;flex-wrap:wrap}
 .about-facts div{display:flex;flex-direction:column;gap:4px}
@@ -456,7 +446,6 @@ a.contact-row:hover{color:var(--indigo)}
 .footer{padding:40px 0;border-top:1px solid var(--border)}
 .foot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
 .foot-brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:600;font-size:14.5px}
-.foot-mark{width:19px;height:19px}
 .foot-copy{font-size:13px;color:var(--ink-faint)}
 .foot-back{font-size:13px;color:var(--ink-dim);font-weight:500;transition:color 0.2s}
 .foot-back:hover{color:var(--indigo)}
@@ -470,8 +459,6 @@ a.contact-row:hover{color:var(--indigo)}
   .nav-burger{display:flex}
   .hero-photo{aspect-ratio:4/5;max-width:420px}
   .about-inner{grid-template-columns:1fr}
-  .about-photo{order:1;max-width:360px;margin:0 auto}
-  .about-text{order:2}
   .cap-grid{grid-template-columns:1fr 1fr}
   .cap-card.large{grid-column:span 2}
   .skill-grid{grid-template-columns:1fr}

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Restricted — Piyush Tomar</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" type="image/png" href="Website_logo.png">
+<link rel="icon" type="image/svg+xml" href="xyantrix-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Krub:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -48,13 +48,12 @@ body::before{
   position:relative; z-index:1; animation:fadeUp 0.8s ease;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.mark-icon{
-  width:44px; height:44px; margin:0 auto 26px; display:inline-block;
-  background:var(--grad);
-  -webkit-mask:url('dragon-seal.svg') center/contain no-repeat; mask:url('dragon-seal.svg') center/contain no-repeat;
+.mark-svg{
+  width:44px; height:44px; margin:0 auto 26px; display:block;
+  fill:none; stroke:var(--grad); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;
   transition:transform 0.4s;
 }
-.gate:hover .mark-icon{ transform:rotate(-8deg) scale(1.08); }
+.gate:hover .mark-svg{ transform:rotate(-8deg) scale(1.08); }
 .gate h1{font-family:var(--display);font-size:23px;font-weight:600;margin-bottom:12px}
 .gate p{font-size:13.5px;color:var(--ink-dim);margin-bottom:34px;line-height:1.6}
 .gate input{
@@ -95,7 +94,7 @@ body::before{
 <body>
 
 <div class="gate" id="gate">
-  <span class="mark-icon"></span>
+  <svg class="mark-svg" viewBox="0 0 40 40" fill="none"><path d="M8 6 L20 20 L20 34 M20 20 L32 6 M14 24 L26 24"/></svg>
   <h1>Restricted area</h1>
   <p>This page is not linked anywhere on the site. Enter the access code to continue.</p>
   <input type="email" id="gateUser" placeholder="Email" autocomplete="off">

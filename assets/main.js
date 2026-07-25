@@ -29,13 +29,12 @@ document.addEventListener('DOMContentLoaded', function(){
     if(reduceMotion){ finish(); return; }
 
     var strokes = loaderEl.querySelectorAll('.loader-stroke');
-    var delays = [0, 0.05, 0.1, 0.15, 0.2, 0.9, 1.0, 0.35];
     var maxFinishAt = 0;
     strokes.forEach(function(p, i){
       try{
         var len = p.getTotalLength();
-        var delay = delays[i % delays.length];
-        var dur = Math.max(0.9, Math.min(1.8, len / 4000));
+        var delay = i * 0.12;
+        var dur = Math.max(0.5, Math.min(1.0, len / 120));
         p.style.strokeDasharray = len;
         p.style.strokeDashoffset = len;
         p.style.transitionDelay = delay + 's';
@@ -52,11 +51,9 @@ document.addEventListener('DOMContentLoaded', function(){
       });
     });
 
-    var drawDoneMs = (maxFinishAt || 2) * 1000;
-    setTimeout(function(){ loaderEl.classList.add('stage-glow'); }, drawDoneMs + 250);
-    setTimeout(function(){ loaderEl.classList.add('stage-morph'); }, drawDoneMs + 850);
-    setTimeout(finish, drawDoneMs + 1450);
-    setTimeout(finish, drawDoneMs + 3000); /* safety fallback */
+    var drawDoneMs = (maxFinishAt || 1.2) * 1000;
+    setTimeout(finish, drawDoneMs + 600);
+    setTimeout(finish, drawDoneMs + 2500); /* safety fallback */
   })();
 
   /* ---------- THEME TOGGLE ---------- */
@@ -123,7 +120,9 @@ document.addEventListener('DOMContentLoaded', function(){
             frag.appendChild(outer);
           });
           node.replaceChild(frag, child);
-        } else if(child.nodeType === 1 && child.tagName !== 'BR'){
+        } else if(child.nodeType === 1 && child.tagName !== 'BR' && !child.classList.contains('grad')){
+          /* skip .grad: splitting it breaks background-clip:text masking,
+             leaving the gradient words invisible in both themes */
           splitWords(child);
         }
       });
@@ -140,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var heroCopy = document.querySelector('.hero-copy');
     var heroTitle = document.querySelector('.hero-title');
     var reduceMotionHero = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var heroDelay = reduceMotionHero ? 100 : 3600;
+    var heroDelay = reduceMotionHero ? 100 : 2200;
     setTimeout(function(){
       if(heroTitle) heroTitle.classList.add('visible');
       if(heroCopy) heroCopy.classList.add('hero-in');
