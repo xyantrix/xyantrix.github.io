@@ -1,36 +1,43 @@
 # Piyush Tomar — Portfolio Website
 
 Static HTML/CSS/JS portfolio for Piyush Tomar, a Finance & Accounting
-Specialist. No build step, no framework, no dependencies — drag the
+Executive. No build step, no framework, no dependencies — drag the
 folder into a GitHub repo, enable Pages, done. Also works by
 double-clicking `index.html` directly.
 
-## Design concept
+## Design concept — "The Private Ledger"
 
-A premium, Framer-style SaaS look inspired by product sites like
-Launchfolio, with React Bits–style interactive touches. Krub carries
-the display type (headlines, eyebrows, numerals) with real character;
-Inter handles body copy and UI. The palette is a fresh indigo
-(`#5B4FE8`) paired with a warm coral (`#FF6A4D`) accent, on a near-white
-paper ground in light mode and a near-black ground in dark mode — full
-light/dark theming with a floating pill navbar and a smooth toggle
-that remembers the visitor's choice.
+A vault-and-ledger aesthetic built specifically for a finance
+professional, not a generic dark-mode template. The ground is a
+near-black ink (`#0A0B0A`); type is a warm ivory. One sharp accent —
+a ledger-green emerald (`#19BD82`) — carries every CTA, link and
+highlight. A muted brass (`#BE9A5C`) plays a strictly secondary role:
+hairlines, numerals, tags — the metal fittings on a vault, never the
+headline color.
 
-The hero pairs a mouse-reactive dot grid with soft gradient orbs
-behind the headline — a quiet, ambient signature rather than a busy
-one. The small rotated "Approved" stamp built from the dragon-seal
-logo returns as a nod to sign-off culture. The old dashboard-style
-stats grid has been replaced with a single clean, centered stat line
-that sits quietly between sections instead of demanding attention.
+**Type.** Fraunces (an expressive serif with real character) carries
+headlines and numerals; Manrope is the quiet, confident body voice;
+IBM Plex Mono plays the "ledger register" — section labels, dates,
+tags, stamped-looking micro-copy.
 
-Cards use a soft mouse-tracked spotlight on hover, sections reveal on
-scroll, buttons have subtle magnetic pull, and every interactive
-piece degrades gracefully (motion is skipped for
-`prefers-reduced-motion`, and touch devices skip hover-only effects).
+**Signature element.** A brass-and-emerald *seal medallion* —
+built from the dragon-seal mark, a slow-turning tick dial, and a
+circular line of certifying micro-copy — opens the site as a stamp
+impression in the loader, then anchors the hero as a quiet,
+parallax-drifting emblem. It's the one deliberately bold move; every
+other surface stays disciplined around it.
+
+**Motion.** Page-load seal-stamp sequence, blur+fade word-by-word
+headline reveals, staggered scroll reveals throughout, an animated
+gradient on key headline words, mouse-tracked spotlight on cards,
+magnetic buttons, a cursor-parallax hero medallion, and an infinite
+trust marquee. Everything respects `prefers-reduced-motion`, and
+hover-only effects are skipped on touch devices.
 
 No invented testimonials or client logos — this is a personal
-portfolio, so "Capabilities" and "Projects" use Piyush's real skills
-and real work instead.
+portfolio, so the "Credentials" section proves credibility with real
+numbers (invoices/month, systems, experience), real IBM SkillBuild
+certifications, and real education instead.
 
 ## Folder structure
 
@@ -42,23 +49,23 @@ and real work instead.
 ├── Website_logo.png      # Favicon source
 ├── README.md
 └── assets/
-    ├── style.css          # Full design system — tokens (light + dark) at the top of :root
+    ├── style.css          # Full design system — tokens at the top of :root
     └── main.js            # All behaviour, each feature in its own try/catch
 ```
 
 ## Customization
 
 - **Colors** — every color is a CSS variable at the top of
-  `assets/style.css`, defined once for light mode (`:root`) and once
-  for dark mode (`[data-theme="dark"]`). Change the tokens and the
-  whole site — including the vault page — updates.
-- **Fonts** — Krub (display) and Inter (body), loaded from Google
-  Fonts in the `<head>` of both `index.html` and `contact-vault.html`.
-- **Theme** — the toggle in the navbar flips `data-theme` on `<html>`
-  and remembers the choice in `localStorage` under `pt-theme`; it
-  otherwise falls back to the visitor's OS preference.
-- **Stamp** — `.stamp` in `assets/style.css`, near the hero styles.
-  Rotation, size, and dash pattern are all in that one rule block.
+  `assets/style.css` (`:root`). Change the tokens and the whole
+  site — including the vault page — updates. The one rule to keep:
+  `--emerald` stays the *only* saturated accent; `--brass` stays
+  secondary/structural.
+- **Fonts** — Fraunces (display), Manrope (body), IBM Plex Mono
+  (labels/data), loaded from Google Fonts in the `<head>` of both
+  `index.html` and `contact-vault.html`.
+- **Seal medallion** — `.seal-medallion` and its children in
+  `assets/style.css`, near the hero styles. The ring text is set in
+  the inline SVG in `index.html` (`<textPath>`).
 - **Hidden contact page password** — edit `VALID_USER` / `VALID_PASS`
   in `contact-vault.html`. Client-side only, treat as obscurity not
   real auth.

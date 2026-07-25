@@ -8,87 +8,74 @@
 <link rel="icon" type="image/svg+xml" href="dragon-seal.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Krub:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script>
-(function(){
-  try{
-    var saved = localStorage.getItem('pt-theme');
-    var theme = saved || 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-  }catch(e){ document.documentElement.setAttribute('data-theme','light'); }
-})();
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root,[data-theme="light"]{
-  --paper:#FAF9F6; --surface:#FFFFFF; --ink:#15130F; --ink-dim:#5C584E; --ink-faint:#948E80;
-  --border:rgba(21,19,15,0.09); --border-hi:rgba(21,19,15,0.17);
-  --indigo:#FF5A1F; --coral:#E2490F; --red:#E5484D;
-  --grad:linear-gradient(120deg, var(--indigo), var(--coral));
-  --ring:rgba(255,90,31,0.22);
-  --display:'Krub',sans-serif; --sans:'Inter',sans-serif;
-}
-[data-theme="dark"]{
-  --paper:#000000; --surface:#0C0C0E; --ink:#FFFFFF; --ink-dim:#A3A1A9; --ink-faint:#68666F;
-  --border:rgba(255,255,255,0.08); --border-hi:rgba(255,255,255,0.17);
-  --indigo:#FF6A2C; --coral:#FFC299; --ring:rgba(255,106,44,0.34);
+:root{
+  --ink:#0A0B0A; --panel:#131511; --text:#F2EFE4; --text-dim:#A6A296; --text-faint:#6C6960;
+  --border:rgba(242,239,228,0.09); --border-hi:rgba(242,239,228,0.19);
+  --emerald:#19BD82; --emerald-soft:#62DDAB; --emerald-dim:rgba(25,189,130,0.14);
+  --brass:#BE9A5C; --brass-soft:#E4CE9D;
+  --red:#E5686D;
+  --grad:linear-gradient(120deg, var(--brass), var(--emerald-soft));
+  --display:'Fraunces',serif; --sans:'Manrope',sans-serif; --mono:'IBM Plex Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
-  background:var(--paper); color:var(--ink); font-family:var(--sans);
+  background:var(--ink); color:var(--text); font-family:var(--sans);
   min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
-  overflow:hidden; transition:background 0.4s, color 0.4s;
+  overflow:hidden;
 }
 body::before{
   content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:radial-gradient(560px circle at 50% 20%, var(--ring), transparent 60%);
+  background:radial-gradient(560px circle at 50% 20%, var(--emerald-dim), transparent 60%);
 }
 .gate{
-  width:100%; max-width:420px; padding:46px; background:var(--surface);
+  width:100%; max-width:420px; padding:46px; background:var(--panel);
   border:1px solid var(--border); border-radius:24px; text-align:center;
   position:relative; z-index:1; animation:fadeUp 0.8s ease;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .mark-icon{
-  width:44px; height:44px; margin:0 auto 26px; display:block; background:var(--indigo);
+  width:44px; height:44px; margin:0 auto 26px; display:block; background:var(--emerald-soft);
   -webkit-mask:url('dragon-seal.svg') center/contain no-repeat;
   mask:url('dragon-seal.svg') center/contain no-repeat;
   transition:transform 0.4s;
 }
 .gate:hover .mark-icon{ transform:rotate(-8deg) scale(1.08); }
 .gate h1{font-family:var(--display);font-size:23px;font-weight:600;margin-bottom:12px}
-.gate p{font-size:13.5px;color:var(--ink-dim);margin-bottom:34px;line-height:1.6}
+.gate p{font-size:13.5px;color:var(--text-dim);margin-bottom:34px;line-height:1.6}
 .gate input{
-  width:100%; background:var(--paper); border:1px solid var(--border); border-radius:12px;
-  padding:15px 17px; font-size:14.5px; color:var(--ink); font-family:var(--sans);
+  width:100%; background:var(--ink); border:1px solid var(--border); border-radius:12px;
+  padding:15px 17px; font-size:14.5px; color:var(--text); font-family:var(--sans);
   margin-bottom:13px; transition:all 0.2s;
 }
-.gate input:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--ring)}
+.gate input:focus{outline:none;border-color:var(--emerald);box-shadow:0 0 0 3px var(--emerald-dim)}
 .gate-btn{
-  width:100%; background:var(--grad); color:#fff; font-weight:600; font-size:14.5px;
+  width:100%; background:var(--grad); color:#07160F; font-weight:700; font-size:14.5px;
   padding:15px; border-radius:12px; transition:all 0.2s; cursor:pointer; font-family:var(--sans);
 }
-.gate-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px var(--ring); }
+.gate-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px var(--emerald-dim); }
 .gate-error{color:var(--red);font-size:12.5px;margin-top:15px;display:none;font-weight:500}
 .gate-error.show{display:block}
 .vault-content{display:none;width:100%;max-width:580px;position:relative;z-index:1;animation:fadeUp 0.8s ease}
 .vault-content.show{display:block}
 .vault-card{
-  background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:42px;
+  background:var(--panel); border:1px solid var(--border); border-radius:24px; padding:42px;
 }
 .vault-card h2{font-family:var(--display);font-size:25px;font-weight:600;margin-bottom:10px}
-.vault-card .sub{font-size:13.5px;color:var(--ink-dim);margin-bottom:34px}
+.vault-card .sub{font-size:13.5px;color:var(--text-dim);margin-bottom:34px}
 .vault-row{
   display:flex; justify-content:space-between; align-items:center;
   padding:19px 0; border-top:1px solid var(--border);
 }
 .vault-row:last-child{border-bottom:1px solid var(--border)}
-.vault-row .k{font-size:10.5px;color:var(--ink-faint);font-family:var(--sans);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+.vault-row .k{font-size:10.5px;color:var(--text-faint);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
 .vault-row .v{font-size:14.5px;font-weight:500}
 .vault-back{
   display:inline-flex; align-items:center; gap:8px; margin-top:30px;
-  font-size:13.5px; color:var(--ink-dim); font-weight:500; transition:all 0.2s;
+  font-size:13.5px; color:var(--text-dim); font-weight:500; transition:all 0.2s;
 }
-.vault-back:hover{color:var(--indigo);transform:translateX(-4px)}
+.vault-back:hover{color:var(--emerald-soft);transform:translateX(-4px)}
 </style>
 <base target="_blank">
 </head>
