@@ -23,7 +23,7 @@
   --indigo-soft:#FF8A50;
   --coral:#E2490F;
   --coral-soft:#FF9A5C;
-  --grad:linear-gradient(120deg, var(--indigo), var(--coral));
+  --grad:linear-gradient(120deg, #FF5A1F, #FF9A5C, #E2490F, #FF5A1F);
   --grad-soft:linear-gradient(135deg, rgba(255,90,31,0.16), rgba(226,73,15,0.08));
   --ring:rgba(255,90,31,0.22);
   --card-bg:rgba(255,255,255,0.94);
@@ -51,7 +51,7 @@
   --indigo-soft:#FF9A5C;
   --coral:#FFC299;
   --coral-soft:#FFDAB8;
-  --grad:linear-gradient(120deg, var(--indigo), var(--indigo-soft));
+  --grad:linear-gradient(120deg, #FF6A2C, #FFC299, #FF9A2C, #FF6A2C);
   --grad-soft:linear-gradient(135deg, rgba(255,106,44,0.22), rgba(255,194,153,0.10));
   --ring:rgba(255,106,44,0.34);
   --card-bg:rgba(12,12,14,0.6);
@@ -81,8 +81,18 @@ button,input,textarea{font-family:inherit;font-size:inherit;color:inherit;border
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--indigo);outline-offset:3px;border-radius:4px}
 .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
-.grad{color:var(--indigo);background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-@supports not (-webkit-background-clip:text){ .grad{ -webkit-text-fill-color:unset; color:var(--indigo); background:none; } }
+.grad{
+  color:var(--indigo);background:var(--grad);background-size:300% auto;background-position:0% 50%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  display:inline-block;animation:gradFlow 7s ease-in-out infinite;
+}
+@keyframes gradFlow{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@media (prefers-reduced-motion:reduce){ .grad{animation:none;background-position:35% 50%} }
+@supports not (-webkit-background-clip:text){ .grad{ -webkit-text-fill-color:unset; color:var(--indigo); background:none; animation:none; } }
 
 /* ---------- LOADER ----------
    Stages, driven by classes toggled from main.js:
@@ -97,10 +107,10 @@ button{cursor:pointer}
   transition:opacity 0.9s var(--ease), visibility 0.9s var(--ease);
 }
 #loader.out{opacity:0;visibility:hidden;pointer-events:none}
-.loader-mark-wrap{position:relative;width:96px;height:96px}
+.loader-mark-wrap{position:relative;width:132px;height:132px}
 .loader-mark-wrap svg{width:100%;height:100%;overflow:visible}
 .loader-stroke{
-  fill:none;stroke:var(--indigo);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;
+  fill:none;stroke:var(--indigo);stroke-width:14;stroke-linecap:round;stroke-linejoin:round;
   transition:stroke-dashoffset 1.6s var(--ease), filter 0.7s ease;
   /* stroke-dasharray / stroke-dashoffset are set precisely in JS via
      getTotalLength() for each path — a fixed guess here can't work
@@ -145,9 +155,15 @@ button{cursor:pointer}
 }
 #nav.scrolled .nav-inner{box-shadow:var(--shadow-md);border-color:var(--border-hi)}
 .nav-brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-0.01em}
-.mark-svg{fill:none;stroke:var(--indigo);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.nav-mark{width:22px;height:22px}
-.foot-mark{width:18px;height:18px}
+.mark-icon{
+  display:inline-block;background:var(--indigo);flex:none;
+  -webkit-mask:url('../dragon-seal.svg') center/contain no-repeat;
+  mask:url('../dragon-seal.svg') center/contain no-repeat;
+  transition:background 0.3s ease;
+}
+.nav-mark{width:24px;height:24px}
+.foot-mark{width:19px;height:19px}
+.nav-brand:hover .nav-mark{background:var(--ink)}
 .nav-links{display:flex;align-items:center;gap:28px;margin:0 auto}
 .nav-links a{position:relative;font-size:14px;font-weight:500;color:var(--ink-dim);transition:color 0.25s ease;padding-bottom:2px}
 .nav-links a::after{content:'';position:absolute;left:0;bottom:-3px;width:0;height:1.5px;background:var(--indigo);box-shadow:0 0 8px var(--indigo);transition:width 0.3s var(--ease)}
@@ -278,12 +294,9 @@ section{padding:112px 0;position:relative}
 .stamp{display:inline-flex;align-items:center;gap:9px;padding:9px 6px;border:1.5px dashed var(--border-hi);border-radius:100px;transform:rotate(-3deg);margin-bottom:34px}
 
 .stamp-text{font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-dim);padding-right:12px}
-.hero-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;font-size:13px;color:var(--ink-faint);font-weight:500;margin-bottom:56px}
+.hero-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;font-size:13px;color:var(--ink-faint);font-weight:500;margin-bottom:12px}
 .meta-dot{width:3px;height:3px;border-radius:50%;background:var(--ink-faint)}
-.hero-photo{position:relative;width:100%;max-width:980px;border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:16/8;box-shadow:var(--shadow-lg);border:1px solid var(--border);margin:0 auto;margin-bottom:64px}
-.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform 0.8s var(--ease)}
-.hero-photo:hover img{transform:scale(1.035)}
-.hero-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.32));pointer-events:none}
+.hero{padding-bottom:72px}
 
 /* ---------- MARQUEE ---------- */
 .marquee-wrap{overflow:hidden;padding:26px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);position:relative}
@@ -297,12 +310,28 @@ section{padding:112px 0;position:relative}
 .marquee-item .dot{width:5px;height:5px;border-radius:50%;background:var(--coral)}
 
 /* ---------- ABOUT ---------- */
-.about-inner{display:grid;grid-template-columns:1fr;gap:64px;align-items:center;max-width:760px}
+.about-inner{display:grid;grid-template-columns:0.92fr 1.08fr;gap:64px;align-items:center;max-width:1000px}
 .about-text p{color:var(--ink-dim);margin-bottom:16px;font-size:15.5px;line-height:1.75;max-width:520px}
 .about-facts{display:flex;gap:36px;margin-top:32px;flex-wrap:wrap}
 .about-facts div{display:flex;flex-direction:column;gap:4px}
 .af-label{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.08em}
 .af-value{font-family:var(--display);font-weight:600;font-size:16px}
+.about-photo{position:relative;order:-1}
+.about-photo-frame{
+  position:relative;width:100%;max-width:400px;aspect-ratio:4/5;margin:0 auto;
+  border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border-hi);
+  box-shadow:var(--shadow-lg);
+}
+.about-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform 0.7s var(--ease)}
+.about-photo-frame:hover img{transform:scale(1.045)}
+.about-photo-frame::after{content:'';position:absolute;inset:0;background:linear-gradient(200deg, transparent 60%, rgba(0,0,0,0.35));pointer-events:none}
+.about-photo-frame::before{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;z-index:2;
+  background:var(--grad);background-size:300% auto;animation:gradFlow 7s ease-in-out infinite;
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:0.55;
+}
+@media (prefers-reduced-motion:reduce){ .about-photo-frame::before{animation:none} }
 
 /* ---------- CAPABILITIES ---------- */
 .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -365,9 +394,17 @@ section{padding:112px 0;position:relative}
 .carousel-controls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:28px}
 .carousel-arrow{width:42px;height:42px;border-radius:50%;border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;transition:all 0.25s}
 .carousel-arrow:hover{background:var(--ink);color:var(--paper);transform:scale(1.06)}
+.carousel-arrow:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
 .carousel-dots{display:flex;gap:7px}
-.carousel-dot{width:7px;height:7px;border-radius:50%;background:var(--border-hi);transition:all 0.25s;cursor:pointer}
-.carousel-dot.active{background:var(--indigo);width:20px;border-radius:4px}
+.carousel-dot{position:relative;width:7px;height:7px;border-radius:50%;background:var(--border-hi);transition:width 0.25s var(--ease), border-radius 0.25s var(--ease);cursor:pointer;overflow:hidden}
+.carousel-dot.active{background:var(--border-hi);width:34px;border-radius:4px}
+.carousel-dot.active::after{
+  content:'';position:absolute;inset:0;background:var(--indigo);border-radius:inherit;
+  transform-origin:left center;transform:scaleX(0);animation:dotFill var(--autoplay-ms,5200ms) linear forwards;
+}
+.carousel.paused .carousel-dot.active::after{animation-play-state:paused}
+@keyframes dotFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.carousel-track:focus-visible{outline:2px solid var(--indigo);outline-offset:4px;border-radius:var(--radius-md)}
 
 /* ---------- SKILLS ---------- */
 .skill-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -408,14 +445,17 @@ section{padding:112px 0;position:relative}
 
 /* ---------- CTA BANNER ---------- */
 .cta-banner{
-  background:var(--ink);color:var(--paper);border-radius:var(--radius-lg);padding:72px 48px;text-align:center;
-  position:relative;overflow:hidden;
+  /* fixed near-black bg + fixed light text, on purpose — this card must stay
+     legible whether the site is in light or dark mode, so it never derives
+     from --ink (which flips to white in dark mode and broke contrast here) */
+  background:#0A0906;color:#FFFFFF;border-radius:var(--radius-lg);padding:72px 48px;text-align:center;
+  position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);
 }
-.cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(560px circle at 50% 0%, rgba(139,127,255,0.35), transparent 65%)}
-.cta-banner .section-title{color:var(--paper);position:relative}
-.cta-banner p{color:rgba(245,244,248,0.66);margin:16px 0 30px;position:relative;max-width:440px;margin-left:auto;margin-right:auto}
+.cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(560px circle at 50% 0%, rgba(255,138,80,0.28), transparent 65%)}
+.cta-banner .section-title{color:#FFFFFF;position:relative}
+.cta-banner p{color:rgba(255,255,255,0.72);margin:16px 0 30px;position:relative;max-width:440px;margin-left:auto;margin-right:auto;font-size:15.5px}
 .cta-banner .hero-actions{justify-content:center;position:relative;margin-bottom:0}
-.cta-banner .btn-primary{background:var(--paper);color:var(--ink)}
+.cta-banner .btn-primary{background:#FFFFFF;color:#15130F}
 .cta-banner .btn-primary:hover{background:var(--grad);color:#fff}
 
 /* ---------- CONTACT ---------- */
@@ -457,8 +497,8 @@ a.contact-row:hover{color:var(--indigo)}
 @media (max-width:980px){
   .nav-links{display:none}
   .nav-burger{display:flex}
-  .hero-photo{aspect-ratio:4/5;max-width:420px}
   .about-inner{grid-template-columns:1fr}
+  .about-photo-frame{max-width:320px}
   .cap-grid{grid-template-columns:1fr 1fr}
   .cap-card.large{grid-column:span 2}
   .skill-grid{grid-template-columns:1fr}

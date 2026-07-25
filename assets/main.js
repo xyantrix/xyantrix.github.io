@@ -376,6 +376,12 @@ document.addEventListener('DOMContentLoaded', function(){
       var index = 0;
       var autoplayMs = 5200;
       var autoplayTimer = null;
+      root.style.setProperty('--autoplay-ms', autoplayMs + 'ms');
+      root.setAttribute('tabindex', '0');
+      root.addEventListener('keydown', function(e){
+        if(e.key === 'ArrowRight'){ next(); restartAutoplay(); }
+        else if(e.key === 'ArrowLeft'){ prev(); restartAutoplay(); }
+      });
 
       slides.forEach(function(_, i){
         if(i % perView === 0){
@@ -406,17 +412,28 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       function next(){ goTo(index + perView); }
       function prev(){ goTo(index - perView); }
+      function retriggerDotFill(){
+        var activeDot = dotsWrap.querySelector('.carousel-dot.active');
+        if(!activeDot) return;
+        activeDot.style.animation = 'none';
+        void activeDot.offsetWidth; /* force reflow so the animation restarts cleanly */
+        activeDot.style.animation = '';
+      }
       function startAutoplay(){
         stopAutoplay();
+        root.classList.remove('paused');
+        retriggerDotFill();
         autoplayTimer = setInterval(next, autoplayMs);
       }
-      function stopAutoplay(){ if(autoplayTimer){ clearInterval(autoplayTimer); autoplayTimer = null; } }
+      function stopAutoplay(){ if(autoplayTimer){ clearInterval(autoplayTimer); autoplayTimer = null; } root.classList.add('paused'); }
       function restartAutoplay(){ startAutoplay(); }
 
       if(prevBtn) prevBtn.addEventListener('click', function(){ prev(); restartAutoplay(); });
       if(nextBtn) nextBtn.addEventListener('click', function(){ next(); restartAutoplay(); });
       root.addEventListener('mouseenter', stopAutoplay);
       root.addEventListener('mouseleave', startAutoplay);
+      root.addEventListener('focusin', stopAutoplay);
+      root.addEventListener('focusout', startAutoplay);
       document.addEventListener('visibilitychange', function(){
         if(document.hidden) stopAutoplay(); else startAutoplay();
       });
