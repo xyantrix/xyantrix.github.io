@@ -8,26 +8,25 @@
 <link rel="icon" type="image/svg+xml" href="dragon-seal.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0A0B0A; --panel:#131511; --text:#F2EFE4; --text-dim:#A6A296; --text-faint:#6C6960;
-  --border:rgba(242,239,228,0.09); --border-hi:rgba(242,239,228,0.19);
-  --emerald:#19BD82; --emerald-soft:#62DDAB; --emerald-dim:rgba(25,189,130,0.14);
-  --brass:#BE9A5C; --brass-soft:#E4CE9D;
+  --bg:#07080B; --panel:#0F1015; --text:#F5F6FA; --text-dim:#9CA0B4; --text-faint:#5B5E70;
+  --border:rgba(245,246,250,0.08); --border-hi:rgba(245,246,250,0.16);
+  --accent:#6E7BFF; --accent-soft:#9CA6FF; --accent-dim:rgba(110,123,255,0.14);
   --red:#E5686D;
-  --grad:linear-gradient(120deg, var(--brass), var(--emerald-soft));
-  --display:'Fraunces',serif; --sans:'Manrope',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --grad:linear-gradient(120deg, var(--accent), var(--accent-soft));
+  --sans:'Manrope',sans-serif; --mono:'IBM Plex Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
-  background:var(--ink); color:var(--text); font-family:var(--sans);
+  background:var(--bg); color:var(--text); font-family:var(--sans);
   min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
   overflow:hidden;
 }
 body::before{
   content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:radial-gradient(560px circle at 50% 20%, var(--emerald-dim), transparent 60%);
+  background:radial-gradient(560px circle at 50% 20%, var(--accent-dim), transparent 60%);
 }
 .gate{
   width:100%; max-width:420px; padding:46px; background:var(--panel);
@@ -36,25 +35,25 @@ body::before{
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .mark-icon{
-  width:44px; height:44px; margin:0 auto 26px; display:block; background:var(--emerald-soft);
+  width:44px; height:44px; margin:0 auto 26px; display:block; background:var(--accent-soft);
   -webkit-mask:url('dragon-seal.svg') center/contain no-repeat;
   mask:url('dragon-seal.svg') center/contain no-repeat;
   transition:transform 0.4s;
 }
 .gate:hover .mark-icon{ transform:rotate(-8deg) scale(1.08); }
-.gate h1{font-family:var(--display);font-size:23px;font-weight:600;margin-bottom:12px}
+.gate h1{font-family:var(--sans);font-size:23px;font-weight:700;margin-bottom:12px}
 .gate p{font-size:13.5px;color:var(--text-dim);margin-bottom:34px;line-height:1.6}
 .gate input{
-  width:100%; background:var(--ink); border:1px solid var(--border); border-radius:12px;
+  width:100%; background:var(--bg); border:1px solid var(--border); border-radius:12px;
   padding:15px 17px; font-size:14.5px; color:var(--text); font-family:var(--sans);
   margin-bottom:13px; transition:all 0.2s;
 }
-.gate input:focus{outline:none;border-color:var(--emerald);box-shadow:0 0 0 3px var(--emerald-dim)}
+.gate input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
 .gate-btn{
-  width:100%; background:var(--grad); color:#07160F; font-weight:700; font-size:14.5px;
+  width:100%; background:var(--grad); color:#080916; font-weight:700; font-size:14.5px;
   padding:15px; border-radius:12px; transition:all 0.2s; cursor:pointer; font-family:var(--sans);
 }
-.gate-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px var(--emerald-dim); }
+.gate-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px var(--accent-dim); }
 .gate-error{color:var(--red);font-size:12.5px;margin-top:15px;display:none;font-weight:500}
 .gate-error.show{display:block}
 .vault-content{display:none;width:100%;max-width:580px;position:relative;z-index:1;animation:fadeUp 0.8s ease}
@@ -62,7 +61,7 @@ body::before{
 .vault-card{
   background:var(--panel); border:1px solid var(--border); border-radius:24px; padding:42px;
 }
-.vault-card h2{font-family:var(--display);font-size:25px;font-weight:600;margin-bottom:10px}
+.vault-card h2{font-family:var(--sans);font-size:25px;font-weight:700;margin-bottom:10px}
 .vault-card .sub{font-size:13.5px;color:var(--text-dim);margin-bottom:34px}
 .vault-row{
   display:flex; justify-content:space-between; align-items:center;
@@ -70,12 +69,12 @@ body::before{
 }
 .vault-row:last-child{border-bottom:1px solid var(--border)}
 .vault-row .k{font-size:10.5px;color:var(--text-faint);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
-.vault-row .v{font-size:14.5px;font-weight:500}
+.vault-row .v{font-size:14.5px;font-weight:600}
 .vault-back{
   display:inline-flex; align-items:center; gap:8px; margin-top:30px;
   font-size:13.5px; color:var(--text-dim); font-weight:500; transition:all 0.2s;
 }
-.vault-back:hover{color:var(--emerald-soft);transform:translateX(-4px)}
+.vault-back:hover{color:var(--accent-soft);transform:translateX(-4px)}
 </style>
 <base target="_blank">
 </head>

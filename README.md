@@ -5,34 +5,29 @@ Executive. No build step, no framework, no dependencies — drag the
 folder into a GitHub repo, enable Pages, done. Also works by
 double-clicking `index.html` directly.
 
-## Design concept — "The Private Ledger"
+## Design concept
 
-A vault-and-ledger aesthetic built specifically for a finance
-professional, not a generic dark-mode template. The ground is a
-near-black ink (`#0A0B0A`); type is a warm ivory. One sharp accent —
-a ledger-green emerald (`#19BD82`) — carries every CTA, link and
-highlight. A muted brass (`#BE9A5C`) plays a strictly secondary role:
-hairlines, numerals, tags — the metal fittings on a vault, never the
-headline color.
+A dark, cinematic SaaS-style layout — near-black ground, a soft
+indigo glow behind the hero, glass navigation, bold sans headlines,
+and one sharp accent color (indigo-blue) carried through badges,
+gradients and CTAs. Manrope carries every weight of type; IBM Plex
+Mono plays a small supporting role in labels, tags and the loader.
 
-**Type.** Fraunces (an expressive serif with real character) carries
-headlines and numerals; Manrope is the quiet, confident body voice;
-IBM Plex Mono plays the "ledger register" — section labels, dates,
-tags, stamped-looking micro-copy.
+**Structure** follows a cinematic-SaaS rhythm: announcement pill →
+hero with a glass "product" mockup panel (a stylised AP queue, built
+from real workflow details, not a stock screenshot) → layered
+trust marquee (two rows, opposite directions) → About → Experience
+→ Projects → Capabilities → a numbered 3-step "How I work" process
+→ a comparison table ("the usual way" vs. how Piyush runs it) → a
+tools grid → big centered stat row + certifications/education →
+FAQ → closing CTA → Contact → a full multi-column footer.
 
-**Signature element.** A brass-and-emerald *seal medallion* —
-built from the dragon-seal mark, a slow-turning tick dial, and a
-circular line of certifying micro-copy — opens the site as a stamp
-impression in the loader, then anchors the hero as a quiet,
-parallax-drifting emblem. It's the one deliberately bold move; every
-other surface stays disciplined around it.
-
-**Motion.** Page-load seal-stamp sequence, blur+fade word-by-word
-headline reveals, staggered scroll reveals throughout, an animated
-gradient on key headline words, mouse-tracked spotlight on cards,
-magnetic buttons, a cursor-parallax hero medallion, and an infinite
-trust marquee. Everything respects `prefers-reduced-motion`, and
-hover-only effects are skipped on touch devices.
+**The loader** is the signature move: the logo fades in, then
+"Welcome" cycles rapidly through a randomized draw from 100
+languages — a different sequence every visit — decelerating into
+English "Welcome" with a small confirm-pulse on the logo before the
+site reveals. Respects `prefers-reduced-motion` (skips straight to
+the site).
 
 No invented testimonials or client logos — this is a personal
 portfolio, so the "Credentials" section proves credibility with real
@@ -57,15 +52,16 @@ certifications, and real education instead.
 
 - **Colors** — every color is a CSS variable at the top of
   `assets/style.css` (`:root`). Change the tokens and the whole
-  site — including the vault page — updates. The one rule to keep:
-  `--emerald` stays the *only* saturated accent; `--brass` stays
-  secondary/structural.
-- **Fonts** — Fraunces (display), Manrope (body), IBM Plex Mono
-  (labels/data), loaded from Google Fonts in the `<head>` of both
+  site — including the vault page — updates. `--accent` stays the
+  *only* saturated color in the system.
+- **Fonts** — Manrope (everything) and IBM Plex Mono (labels/tags/
+  loader), loaded from Google Fonts in the `<head>` of both
   `index.html` and `contact-vault.html`.
-- **Seal medallion** — `.seal-medallion` and its children in
-  `assets/style.css`, near the hero styles. The ring text is set in
-  the inline SVG in `index.html` (`<textPath>`).
+- **Loader languages** — the "Welcome" word list lives in
+  `assets/main.js` inside the `WELCOMES` array. Add, remove, or
+  reorder entries freely; English always resolves the sequence.
+- **Hero mockup panel** — `.hero-mock` markup in `index.html`, styled
+  in `assets/style.css` near the hero rules.
 - **Hidden contact page password** — edit `VALID_USER` / `VALID_PASS`
   in `contact-vault.html`. Client-side only, treat as obscurity not
   real auth.

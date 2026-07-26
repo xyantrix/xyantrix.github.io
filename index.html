@@ -12,18 +12,22 @@
 <link rel="icon" type="image/svg+xml" href="dragon-seal.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
 <div id="loader">
-  <div class="loader-medallion">
+  <div class="loader-mark-wrap">
     <div class="loader-bleed"></div>
     <div class="loader-ring"></div>
-    <div class="loader-seal" aria-hidden="true"></div>
+    <span class="loader-mark mark-icon" aria-hidden="true"></span>
   </div>
-  <div class="loader-label">Piyush Tomar — Finance &amp; Accounting</div>
+  <div class="loader-lang">
+    <div class="loader-word" id="loaderWord">Welcome</div>
+    <div class="loader-langname" id="loaderLangName">Piyush Tomar</div>
+  </div>
+  <div class="loader-progress"></div>
 </div>
 <div id="cursor"></div>
 <div id="cursorTrail"></div>
@@ -59,33 +63,50 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="wrap hero-inner">
-    <div class="hero-copy">
-      <div class="hero-badges">
-        <span class="badge-solid"><span class="dot"></span>Available for new roles</span>
-        <span class="badge-outline">Navi Mumbai · 2026</span>
-      </div>
-      <h1 class="hero-title">Finance, kept<br><span class="grad">precisely in order.</span></h1>
-      <p class="hero-desc">I close the gap between the invoice and the ledger — 3-way matching, vendor reconciliations, and GST/TDS compliance, run across Oracle, NetSuite, Navision &amp; Tally without a line out of place.</p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn-primary magnetic">Get in touch <span>→</span></a>
-        <a href="#experience" class="btn-secondary magnetic">View experience</a>
-      </div>
-      <div class="hero-meta">
-        <span>2+ years experience</span><span class="meta-dot"></span>
-        <span>5 ERP systems</span><span class="meta-dot"></span>
-        <span>450+ invoices processed / month</span>
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="hero-badges">
+          <a href="#contact" class="badge-solid"><span class="dot"></span>Open to Finance &amp; AP roles — available immediately</a>
+        </div>
+        <h1 class="hero-title">Finance, kept<br><span class="grad">precisely in order.</span></h1>
+        <p class="hero-desc">I close the gap between the invoice and the ledger — 3-way matching, vendor reconciliations, and GST/TDS compliance, run across Oracle, NetSuite, Navision &amp; Tally without a line out of place.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary magnetic">Get in touch <span>→</span></a>
+          <a href="#experience" class="btn-secondary magnetic">View experience</a>
+        </div>
+        <div class="hero-meta">
+          <span>2+ years experience</span><span class="meta-dot"></span>
+          <span>5 ERP systems</span><span class="meta-dot"></span>
+          <span>450+ invoices processed / month</span>
+        </div>
       </div>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <div class="seal-medallion">
-        <div class="seal-dial"></div>
-        <svg class="seal-text" viewBox="0 0 200 200">
-          <defs><path id="sealPath1" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs>
-          <text><textPath href="#sealPath1" startOffset="0%">CERTIFIED · ACCOUNTS PAYABLE · GST &amp; TDS COMPLIANT · </textPath></text>
-        </svg>
-        <div class="seal-ring"></div>
-        <div class="seal-core"><span class="mark-icon"></span></div>
+    <div class="hero-mock-wrap">
+      <div class="hero-mock" id="heroMock" aria-hidden="true">
+        <div class="mock-bar">
+          <span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span>
+          <span class="mock-title">ap-queue — this week</span>
+        </div>
+        <div class="mock-body">
+          <div class="mock-list">
+            <div class="mock-row"><div><div class="mock-vendor">Bansal Freight Pvt Ltd</div><div class="mock-sub">INV-88231 · 3-way match</div></div><div style="text-align:right"><div class="mock-amt">₹1,84,200</div><span class="mock-status matched">Matched</span></div></div>
+            <div class="mock-row"><div><div class="mock-vendor">Orion Cloud Services</div><div class="mock-sub">INV-88240 · GST verified</div></div><div style="text-align:right"><div class="mock-amt">₹62,900</div><span class="mock-status matched">Matched</span></div></div>
+            <div class="mock-row"><div><div class="mock-vendor">Reliable Packaging Co.</div><div class="mock-sub">INV-88255 · awaiting GRN</div></div><div style="text-align:right"><div class="mock-amt">₹28,450</div><span class="mock-status pending">Pending</span></div></div>
+            <div class="mock-row"><div><div class="mock-vendor">Vertex Consulting LLP</div><div class="mock-sub">INV-88261 · TDS applied</div></div><div style="text-align:right"><div class="mock-amt">₹1,10,000</div><span class="mock-status matched">Matched</span></div></div>
+          </div>
+          <div class="mock-side">
+            <div>
+              <div class="mock-stat-lbl">Processed this week</div>
+              <div class="mock-stat-val">112</div>
+              <div class="mock-bars"><span style="height:40%"></span><span style="height:65%"></span><span style="height:50%"></span><span style="height:80%"></span><span style="height:60%"></span><span style="height:95%"></span><span style="height:70%"></span></div>
+            </div>
+            <div>
+              <div class="mock-stat-lbl">Match rate</div>
+              <div class="mock-stat-val">98.4%</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -114,6 +135,24 @@
     <span class="marquee-item"><span class="dot"></span>Advanced Excel</span>
     <span class="marquee-item"><span class="dot"></span>Vendor Reconciliation</span>
     <span class="marquee-item"><span class="dot"></span>Form 15CA / 15CB</span>
+  </div>
+  <div class="marquee-track rev">
+    <span class="marquee-item"><span class="dot"></span>Corporate Card Reconciliation</span>
+    <span class="marquee-item"><span class="dot"></span>Vendor KYC &amp; MSME</span>
+    <span class="marquee-item"><span class="dot"></span>Month-End Close</span>
+    <span class="marquee-item"><span class="dot"></span>Statutory Audit Support</span>
+    <span class="marquee-item"><span class="dot"></span>MIS &amp; AOP Reporting</span>
+    <span class="marquee-item"><span class="dot"></span>Payroll Validation</span>
+    <span class="marquee-item"><span class="dot"></span>Bank Reconciliation</span>
+    <span class="marquee-item"><span class="dot"></span>Data Migration</span>
+    <span class="marquee-item"><span class="dot"></span>Corporate Card Reconciliation</span>
+    <span class="marquee-item"><span class="dot"></span>Vendor KYC &amp; MSME</span>
+    <span class="marquee-item"><span class="dot"></span>Month-End Close</span>
+    <span class="marquee-item"><span class="dot"></span>Statutory Audit Support</span>
+    <span class="marquee-item"><span class="dot"></span>MIS &amp; AOP Reporting</span>
+    <span class="marquee-item"><span class="dot"></span>Payroll Validation</span>
+    <span class="marquee-item"><span class="dot"></span>Bank Reconciliation</span>
+    <span class="marquee-item"><span class="dot"></span>Data Migration</span>
   </div>
 </div>
 
@@ -268,6 +307,79 @@
   </div>
 </section>
 
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow">How I work</div>
+      <h2 class="section-title">From invoice to <span class="grad">close, in three moves.</span></h2>
+    </div>
+    <div class="process-grid">
+      <div class="process-card reveal">
+        <div class="process-num">Step 01</div>
+        <h3>Catch it at intake</h3>
+        <p>Every invoice is logged, coded, and checked against PO &amp; GRN before it goes anywhere near a payment run.</p>
+      </div>
+      <div class="process-card reveal">
+        <div class="process-num">Step 02</div>
+        <h3>Match, tax, reconcile</h3>
+        <p>3-way matching, GST/TDS calculation, and vendor reconciliation happen in the same pass — not as an afterthought.</p>
+      </div>
+      <div class="process-card reveal">
+        <div class="process-num">Step 03</div>
+        <h3>Close it clean</h3>
+        <p>Books stay audit-ready year-round, so month-end close and statutory audits move fast, with no scramble.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="compare">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow">Why it's different</div>
+      <h2 class="section-title">The usual way, <span class="grad">vs. how I run it.</span></h2>
+    </div>
+    <div class="compare-grid reveal">
+      <div class="compare-col other">
+        <div class="compare-head"><span class="tag">Common approach</span></div>
+        <div class="compare-row"><span class="compare-icon">–</span>Invoices queued and matched in batches, days after receipt</div>
+        <div class="compare-row"><span class="compare-icon">–</span>GST/TDS checked separately from the payment cycle</div>
+        <div class="compare-row"><span class="compare-icon">–</span>Reconciliations done at month-end, under pressure</div>
+        <div class="compare-row"><span class="compare-icon">–</span>One ERP at a time, re-learning each system's quirks</div>
+        <div class="compare-row"><span class="compare-icon">–</span>Audit prep starts when the audit is announced</div>
+      </div>
+      <div class="compare-col mine">
+        <div class="compare-head"><span class="tag">How I run it</span></div>
+        <div class="compare-row"><span class="compare-icon">✓</span>Invoices logged and 3-way matched the day they land</div>
+        <div class="compare-row"><span class="compare-icon">✓</span>GST/TDS calculated in the same pass as processing</div>
+        <div class="compare-row"><span class="compare-icon">✓</span>Vendor &amp; bank reconciliations kept current, weekly</div>
+        <div class="compare-row"><span class="compare-icon">✓</span>Fluent across Oracle, NetSuite, Navision, Tally &amp; Zoho</div>
+        <div class="compare-row"><span class="compare-icon">✓</span>Books stay audit-ready every single day of the year</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow">Tools</div>
+      <h2 class="section-title">Fluent across <span class="grad">the whole stack.</span></h2>
+    </div>
+    <div class="tools-grid reveal">
+      <div class="tool-tile"><span class="tool-glyph">O</span><span>Oracle Financials</span></div>
+      <div class="tool-tile"><span class="tool-glyph">NS</span><span>NetSuite</span></div>
+      <div class="tool-tile"><span class="tool-glyph">N</span><span>Navision</span></div>
+      <div class="tool-tile"><span class="tool-glyph">T</span><span>Tally Prime</span></div>
+      <div class="tool-tile"><span class="tool-glyph">Z</span><span>Zoho Books</span></div>
+      <div class="tool-tile"><span class="tool-glyph">X</span><span>Advanced Excel</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- CREDIBILITY -->
 <section id="credibility" class="cred-section">
   <div class="wrap">
@@ -275,13 +387,13 @@
       <div class="eyebrow">Credentials</div>
       <h2 class="section-title">The record, <span class="grad">by the numbers.</span></h2>
     </div>
+    <div class="stats-row reveal">
+      <div class="stat-chip"><span class="stat-value" data-count="450" data-suffix="+">0</span><span class="stat-label">Invoices / month</span></div>
+      <div class="stat-chip"><span class="stat-value" data-count="100" data-suffix="+">0</span><span class="stat-label">Issues resolved</span></div>
+      <div class="stat-chip"><span class="stat-value" data-count="5">0</span><span class="stat-label">ERP systems</span></div>
+      <div class="stat-chip"><span class="stat-value" data-count="2" data-suffix="+">0</span><span class="stat-label">Years experience</span></div>
+    </div>
     <div class="cred-grid">
-      <div class="stat-panel reveal">
-        <div class="stat-chip"><span class="stat-value" data-count="450" data-suffix="+">0</span><span class="stat-label">Invoices / month</span></div>
-        <div class="stat-chip"><span class="stat-value" data-count="100" data-suffix="+">0</span><span class="stat-label">Issues resolved</span></div>
-        <div class="stat-chip"><span class="stat-value" data-count="5">0</span><span class="stat-label">ERP systems</span></div>
-        <div class="stat-chip"><span class="stat-value" data-count="2" data-suffix="+">0</span><span class="stat-label">Years experience</span></div>
-      </div>
       <div class="cred-panel reveal">
         <h3>Certifications — IBM SkillBuild</h3>
         <div class="cert-list">
@@ -292,9 +404,7 @@
           <div class="cert-item"><span>Customer Engagement &amp; Design Thinking</span><span class="cert-check">✓</span></div>
         </div>
       </div>
-    </div>
-    <div class="reveal" style="margin-top:22px;">
-      <div class="cred-panel" style="padding:40px;">
+      <div class="cred-panel reveal">
         <h3>Education</h3>
         <div class="edu-list">
           <div class="edu-item"><h3>Bachelor of Management Studies (BMS) — Finance</h3><div class="edu-meta">Pillai HOC College · Navi Mumbai</div><div class="edu-date">Aug 2022 — Apr 2025</div></div>
@@ -367,10 +477,36 @@
 </main>
 
 <footer class="footer">
-  <div class="wrap foot-inner">
-    <div class="foot-brand"><span class="foot-mark mark-icon" aria-hidden="true"></span><span>Piyush Tomar</span></div>
-    <span class="foot-copy">© 2026</span>
-    <a href="#top" class="foot-back">Back to top ↑</a>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand"><span class="foot-mark mark-icon" aria-hidden="true"></span><span>Piyush Tomar</span></div>
+        <p class="foot-blurb">Finance &amp; Accounting Executive — Accounts Payable, GST/TDS compliance, and reconciliation, run clean across every ERP.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Navigation</h4>
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#capabilities">Capabilities</a>
+      </div>
+      <div class="foot-col">
+        <h4>Information</h4>
+        <a href="#faq">FAQ</a>
+        <a href="#credibility">Credentials</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Reach me</h4>
+        <a href="mailto:piyushtomar1222@gmail.com">Email</a>
+        <a href="tel:+917058342101">Phone</a>
+        <a href="https://linkedin.com/in/tomarpiyush">LinkedIn</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="foot-copy">© 2026 Piyush Tomar</span>
+      <a href="#top" class="foot-back">Back to top ↑</a>
+    </div>
   </div>
 </footer>
 
