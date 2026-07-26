@@ -13,26 +13,34 @@ and one sharp accent color (indigo-blue) carried through badges,
 gradients and CTAs. Manrope carries every weight of type; IBM Plex
 Mono plays a small supporting role in labels, tags and the loader.
 
-**Structure** follows a cinematic-SaaS rhythm: announcement pill →
-hero with a glass "product" mockup panel (a stylised AP queue, built
-from real workflow details, not a stock screenshot) → layered
-trust marquee (two rows, opposite directions) → About → Experience
-→ Projects → Capabilities → a numbered 3-step "How I work" process
-→ a comparison table ("the usual way" vs. how Piyush runs it) → a
-tools grid → big centered stat row + certifications/education →
-FAQ → closing CTA → Contact → a full multi-column footer.
+**Structure**: announcement pill → hero with a glass "product"
+mockup panel → layered trust marquee (two text rows, opposite
+directions) → About → Experience → Projects → Capabilities (6-card
+grid with a soft gradient glow behind it) → a numbered 3-step "How I
+work" process → a comparison table → a scrolling logo marquee of the
+real ERP/tools logos → big centered stat row + certifications/
+education → FAQ → closing CTA → Contact → a full multi-column
+footer.
 
-**The loader** is the signature move: the logo fades in, then
-"Welcome" cycles rapidly through a randomized draw from 100
-languages — a different sequence every visit — decelerating into
-English "Welcome" with a small confirm-pulse on the logo before the
-site reveals. Respects `prefers-reduced-motion` (skips straight to
-the site).
+**The loader** fades the logo in large, then "Welcome" cycles
+rapidly through a randomized draw from 100 languages — a different
+sequence every visit — decelerating into English "Welcome" with a
+small confirm-pulse on the logo before the site reveals. The language
+name sits underneath the word throughout, including at rest.
+Respects `prefers-reduced-motion` (skips straight to the site).
+
+**Custom cursor**: two gradient blobs (a small solid dot + a soft
+blurred trail) move together with slightly different easing, using
+`mix-blend-mode: screen` so they glow against the dark background.
+Both grow on hover over any interactive element. Automatically
+disabled on touch devices.
 
 No invented testimonials or client logos — this is a personal
 portfolio, so the "Credentials" section proves credibility with real
 numbers (invoices/month, systems, experience), real IBM SkillBuild
-certifications, and real education instead.
+certifications, and real education instead. The ERP/tools logos in
+the marquee are the real software Piyush works in daily, used only
+to indicate proficiency (not an endorsement claim).
 
 ## Folder structure
 
@@ -45,7 +53,12 @@ certifications, and real education instead.
 ├── README.md
 └── assets/
     ├── style.css          # Full design system — tokens at the top of :root
-    └── main.js            # All behaviour, each feature in its own try/catch
+    ├── main.js            # All behaviour, each feature in its own try/catch
+    ├── oracle-fusion.png  # Oracle Cloud ERP logo
+    ├── netsuite.png       # Oracle NetSuite logo
+    ├── navision.png       # Microsoft Dynamics 365 logo
+    ├── tally.png          # Tally Prime logo
+    └── zohobooks.png      # Zoho Books logo
 ```
 
 ## Customization
@@ -60,8 +73,12 @@ certifications, and real education instead.
 - **Loader languages** — the "Welcome" word list lives in
   `assets/main.js` inside the `WELCOMES` array. Add, remove, or
   reorder entries freely; English always resolves the sequence.
-- **Hero mockup panel** — `.hero-mock` markup in `index.html`, styled
-  in `assets/style.css` near the hero rules.
+- **Logo size** — `.nav-mark`, `.foot-mark`, and `.loader-mark` /
+  `.loader-mark-wrap` in `assets/style.css`.
+- **Tools logo marquee** — `.logo-marquee-track` in `index.html`;
+  add or swap logo files in `assets/` and reference them the same
+  way. The list is duplicated once in the markup for a seamless
+  infinite loop — keep both copies in sync if you edit it.
 - **Hidden contact page password** — edit `VALID_USER` / `VALID_PASS`
   in `contact-vault.html`. Client-side only, treat as obscurity not
   real auth.
