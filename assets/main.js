@@ -81,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function(){
         langEl.textContent = pair[0];
         if(k === n - 1){
           wordEl.classList.add('final');
-          langEl.textContent = 'Piyush Tomar';
           loaderEl.classList.add('confirm');
         }
       }, at);
@@ -255,21 +254,27 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   } catch(err){}
 
-  /* ---------- CUSTOM CURSOR ---------- */
+  /* ---------- CUSTOM CURSOR — two gradient blobs moving together ---------- */
   try{
     var cursor = document.getElementById('cursor');
     var trail = document.getElementById('cursorTrail');
     if(cursor && trail && window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+      document.body.classList.add('cursor-ready');
       var cx=0, cy=0, tx=0, ty=0, tx2=0, ty2=0;
       window.addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; });
       function updateCursor(){
-        cx += (tx - cx) * 0.16; cy += (ty - cy) * 0.16;
-        tx2 += (tx - tx2) * 0.09; ty2 += (ty - ty2) * 0.09;
-        cursor.style.transform = 'translate(' + (cx-3) + 'px,' + (cy-3) + 'px)';
-        trail.style.transform = 'translate(' + (tx2-14) + 'px,' + (ty2-14) + 'px)';
+        cx += (tx - cx) * 0.2; cy += (ty - cy) * 0.2;
+        tx2 += (tx - tx2) * 0.1; ty2 += (ty - ty2) * 0.1;
+        cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+        trail.style.transform = 'translate(' + tx2 + 'px,' + ty2 + 'px)';
         requestAnimationFrame(updateCursor);
       }
       updateCursor();
+      var hoverables = document.querySelectorAll('a, button, input, textarea, .magnetic, .spot, .faq-q, .logo-chip');
+      hoverables.forEach(function(el){
+        el.addEventListener('mouseenter', function(){ document.body.classList.add('cursor-hover'); });
+        el.addEventListener('mouseleave', function(){ document.body.classList.remove('cursor-hover'); });
+      });
     }
   } catch(err){}
 
