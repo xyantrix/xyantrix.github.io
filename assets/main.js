@@ -9,20 +9,89 @@ document.addEventListener('DOMContentLoaded', function(){
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- LOADER (brass/emerald seal-stamp) ---------- */
+  /* ---------- LOADER — logo + 100-language "Welcome" cycle ---------- */
+  var loaderTotalMs = 2000; /* language-cycle duration, used to time the hero reveal below */
   (function loader(){
     var loaderEl = document.getElementById('loader');
+    var wordEl = document.getElementById('loaderWord');
+    var langEl = document.getElementById('loaderLangName');
     if(!loaderEl) return;
-    if(reduceMotion){ loaderEl.style.display = 'none'; return; }
+
+    /* "Welcome" in 100 languages. English always lands last so the
+       cycle resolves on the word every visitor will read instantly. */
+    var WELCOMES = [
+      ['English','Welcome'],['Spanish','Bienvenido'],['French','Bienvenue'],['German','Willkommen'],
+      ['Italian','Benvenuto'],['Portuguese','Bem-vindo'],['Dutch','Welkom'],['Swedish','Välkommen'],
+      ['Norwegian','Velkommen'],['Danish','Velkommen'],['Finnish','Tervetuloa'],['Icelandic','Velkomin'],
+      ['Polish','Witamy'],['Czech','Vítejte'],['Slovak','Vitajte'],['Hungarian','Üdvözöljük'],
+      ['Romanian','Bine ați venit'],['Bulgarian','Добре дошли'],['Greek','Καλώς ήρθατε'],['Russian','Добро пожаловать'],
+      ['Ukrainian','Ласкаво просимо'],['Turkish','Hoş geldiniz'],['Arabic','أهلاً وسهلاً'],['Hebrew','ברוכים הבאים'],
+      ['Persian','خوش آمدید'],['Urdu','خوش آمدید'],['Hindi','स्वागत है'],['Bengali','স্বাগতম'],
+      ['Punjabi','ਜੀ ਆਇਆਂ ਨੂੰ'],['Gujarati','સ્વાગત છે'],['Marathi','स्वागत आहे'],['Tamil','வரவேற்கிறோம்'],
+      ['Telugu','స్వాగతం'],['Kannada','ಸ್ವಾಗತ'],['Malayalam','സ്വാഗതം'],['Sinhala','ආයුබෝවන්'],
+      ['Nepali','स्वागत छ'],['Thai','ยินดีต้อนรับ'],['Lao','ຍິນດີຕ້ອນຮັບ'],['Khmer','សូមស្វាគមន៍'],
+      ['Vietnamese','Chào mừng'],['Indonesian','Selamat datang'],['Malay','Selamat datang'],['Filipino','Maligayang pagdating'],
+      ['Japanese','ようこそ'],['Korean','환영합니다'],['Mandarin','欢迎'],['Cantonese','歡迎'],
+      ['Mongolian','Тавтай морил'],['Kazakh','Қош келдіңіз'],['Uzbek','Xush kelibsiz'],['Georgian','კეთილი იყოს თქვენი მობრძანება'],
+      ['Armenian','Բարի գալուստ'],['Azerbaijani','Xoş gəldiniz'],['Swahili','Karibu'],['Zulu','Wamukelekile'],
+      ['Xhosa','Wamkelekile'],['Amharic','እንኳን ደህና መጡ'],['Somali','Soo dhawoow'],['Hausa','Barka da zuwa'],
+      ['Yoruba','Kaabo'],['Igbo','Nnọọ'],['Afrikaans','Welkom'],['Croatian','Dobrodošli'],
+      ['Serbian','Добродошли'],['Bosnian','Dobrodošli'],['Slovenian','Dobrodošli'],['Macedonian','Добредојдовте'],
+      ['Albanian','Mirë se vini'],['Lithuanian','Sveiki atvykę'],['Latvian','Laipni lūdzam'],['Estonian','Tere tulemast'],
+      ['Maltese','Merħba'],['Irish','Fáilte'],['Welsh','Croeso'],['Scots Gaelic','Fàilte'],
+      ['Basque','Ongi etorri'],['Catalan','Benvingut'],['Galician','Benvido'],['Luxembourgish','Wëllkomm'],
+      ['Yiddish','ברוכים הבאים'],['Esperanto','Bonvenon'],['Haitian Creole','Byenveni'],['Samoan','Talofa'],
+      ['Maori','Nau mai'],['Hawaiian','E komo mai'],['Fijian','Ni sa bula'],['Tongan','Talitali fiefia'],
+      ['Malagasy','Tongasoa'],['Burmese','ကြိုဆိုပါတယ်'],['Tibetan','བཀྲ་ཤིས་བདེ་ལེགས'],['Punjabi (Shahmukhi)','خوش آمدید'],
+      ['Sindhi','ڀليڪار'],['Pashto','ښه راغلاست'],['Kurdish','Bi xêr hatî'],['Tatar','Рәхим итегез'],
+      ['Chechen','Марша догIийла'],['Corsican','Benvenuti'],['Sardinian','Beni benius'],['Breton','Degemer mat'],
+      ['Faroese','Vælkomin'],['Greenlandic','Tikilluarit'],['Quechua','Allin hamusqayki'],['Guarani','Tereg̃uahẽ porã'],
+      ['Aymara','Aski jutawi'],['Zulu (formal)','Siyakwamukela'],['Chichewa','Takulandirani'],['Sesotho','Rea o amohela']
+    ];
+
+    if(reduceMotion){
+      loaderEl.style.display = 'none';
+      loaderTotalMs = 0;
+      return;
+    }
+
     document.body.classList.add('loading');
+
+    /* pick a fresh, randomized subset every load so it never repeats
+       the same sequence twice — English "Welcome" always resolves it */
+    var pool = WELCOMES.slice(1); // exclude English, added back at the end
+    for(var i = pool.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i+1));
+      var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+    }
+    var sequence = pool.slice(0, 21).concat([WELCOMES[0]]); // 21 random + English
+    var n = sequence.length;
+    var duration = loaderTotalMs; // ms — matches heroDelay timing below
+
     requestAnimationFrame(function(){
-      requestAnimationFrame(function(){ loaderEl.classList.add('stamping'); });
+      requestAnimationFrame(function(){ loaderEl.classList.add('progressing'); });
     });
+
+    sequence.forEach(function(pair, k){
+      var t = k / (n - 1);
+      var eased = 1 - Math.pow(1 - t, 3); // ease-out cubic: fast start, slow finish
+      var at = Math.round(duration * eased);
+      setTimeout(function(){
+        wordEl.textContent = pair[1];
+        langEl.textContent = pair[0];
+        if(k === n - 1){
+          wordEl.classList.add('final');
+          langEl.textContent = 'Piyush Tomar';
+          loaderEl.classList.add('confirm');
+        }
+      }, at);
+    });
+
     setTimeout(function(){
       loaderEl.classList.add('out');
       document.body.classList.remove('loading');
       setTimeout(function(){ loaderEl.style.display = 'none'; }, 750);
-    }, 1350);
+    }, duration + 650);
   })();
 
   /* ---------- NAV SCROLL STATE ---------- */
@@ -91,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function(){
   try{
     var heroCopy = document.querySelector('.hero-copy');
     var heroTitle = document.querySelector('.hero-title');
-    var heroDelay = reduceMotion ? 60 : 1450;
+    var heroDelay = reduceMotion ? 60 : (loaderTotalMs + 550);
     setTimeout(function(){
       if(heroTitle) heroTitle.classList.add('visible');
       if(heroCopy) heroCopy.classList.add('hero-in');
@@ -227,26 +296,22 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   } catch(err){}
 
-  /* ---------- HERO PARALLAX (seal medallion drifts with cursor + scroll) ---------- */
+  /* ---------- HERO MOCKUP ENTRANCE + PARALLAX ---------- */
   try{
-    var visual = document.querySelector('.hero-visual');
+    var mock = document.getElementById('heroMock');
     var heroSection = document.querySelector('.hero');
-    if(visual && heroSection && window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reduceMotion){
+    if(mock){
+      setTimeout(function(){ mock.classList.add('mock-in'); }, reduceMotion ? 60 : (loaderTotalMs + 780));
+    }
+    if(mock && heroSection && window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reduceMotion){
       heroSection.addEventListener('mousemove', function(e){
+        if(!mock.classList.contains('mock-in')) return;
         var rect = heroSection.getBoundingClientRect();
         var px = (e.clientX - rect.left)/rect.width - 0.5;
         var py = (e.clientY - rect.top)/rect.height - 0.5;
-        visual.style.transform = 'translate(' + (px*18) + 'px,' + (py*18) + 'px)';
+        mock.style.transform = 'translate(' + (px*10) + 'px,' + (py*10) + 'px)';
       });
-      heroSection.addEventListener('mouseleave', function(){ visual.style.transform = ''; });
-    }
-    if(visual && !reduceMotion){
-      window.addEventListener('scroll', function(){
-        var y = window.scrollY;
-        if(y < window.innerHeight){
-          visual.style.opacity = String(Math.max(0, 1 - y/700));
-        }
-      }, {passive:true});
+      heroSection.addEventListener('mouseleave', function(){ mock.style.transform = ''; });
     }
   } catch(err){}
 
