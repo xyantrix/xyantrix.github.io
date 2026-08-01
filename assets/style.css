@@ -82,71 +82,67 @@ body::after{
 
 /* ============ SECTION AMBIENT GLOWS ============
    Subtle, slow-moving glows so the page never reads flat on large
-   screens. Each section gets its own position/size/motion so the
-   rhythm changes as you scroll, instead of one repeated effect. */
-@keyframes glowDriftA{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(3%,2%) scale(1.08); } }
-@keyframes glowDriftB{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-4%,3%) scale(1.06); } }
-@keyframes glowDriftC{ 0%,100%{ transform:translate(-2%,-2%) scale(1); opacity:.65; } 50%{ transform:translate(2%,2%) scale(1.12); opacity:1; } }
-@keyframes glowSpin{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+   screens. Animated via background-position (safe, artifact-free)
+   rather than transform+overflow clipping. Each section varies in
+   size/position/duration so the rhythm changes as you scroll. */
+@keyframes glowMoveA{ 0%,100%{ background-position: 15% 10%; } 50%{ background-position: 30% 22%; } }
+@keyframes glowMoveB{ 0%,100%{ background-position: 85% 12%; } 50%{ background-position: 68% 26%; } }
+@keyframes glowMoveC{ 0%,100%{ background-position: 40% 85%; } 50%{ background-position: 58% 68%; } }
+@keyframes glowMoveD{ 0%,100%{ background-position: 20% 80%; } 50%{ background-position: 38% 62%; } }
 
-#about, #experience, #projects, #capabilities, #process, #compare, #tools, #credibility, #faq{ overflow:hidden; }
-
-#about::before{
-  content:''; position:absolute; top:-8%; left:-12%; width:56%; height:75%; z-index:0; pointer-events:none;
-  background:radial-gradient(520px 420px at 30% 25%, var(--accent-dim), transparent 72%);
-  animation:glowDriftA 36s ease-in-out infinite;
+#about{
+  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-size: 900px 700px; background-repeat: no-repeat;
+  animation: glowMoveA 42s ease-in-out infinite;
 }
-#experience::before{
-  content:''; position:absolute; top:-10%; right:-14%; width:52%; height:65%; z-index:0; pointer-events:none;
-  background:radial-gradient(560px 380px at 75% 20%, rgba(110,123,255,0.11), transparent 70%);
-  animation:glowDriftB 32s ease-in-out infinite;
+#experience{
+  background-image: radial-gradient(circle, rgba(110,123,255,0.11), transparent 70%);
+  background-size: 800px 640px; background-repeat: no-repeat;
+  animation: glowMoveB 38s ease-in-out infinite;
 }
-#projects::before{
-  content:''; position:absolute; top:-12%; left:20%; width:60%; height:55%; z-index:0; pointer-events:none;
-  background:radial-gradient(680px 360px at 50% 10%, var(--accent-dim), transparent 68%);
-  animation:glowDriftC 40s ease-in-out infinite;
+#projects{
+  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-size: 950px 620px; background-repeat: no-repeat;
+  animation: glowMoveB 46s ease-in-out infinite;
 }
-#capabilities::before{
-  content:''; position:absolute; bottom:-14%; left:-10%; width:55%; height:60%; z-index:0; pointer-events:none;
-  background:radial-gradient(560px 400px at 25% 80%, var(--accent-dim), transparent 70%);
-  animation:glowDriftA 34s ease-in-out infinite reverse;
+#capabilities{
+  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-size: 820px 680px; background-repeat: no-repeat;
+  animation: glowMoveD 40s ease-in-out infinite;
 }
-#process::before{
-  content:''; position:absolute; top:-10%; right:-10%; width:44%; height:60%; z-index:0; pointer-events:none;
-  background:radial-gradient(460px 340px at 78% 22%, rgba(110,123,255,0.1), transparent 70%);
-  animation:glowDriftB 28s ease-in-out infinite;
+#process{
+  background-image: radial-gradient(circle, rgba(110,123,255,0.1), transparent 70%);
+  background-size: 700px 560px; background-repeat: no-repeat;
+  animation: glowMoveB 34s ease-in-out infinite;
 }
-#compare::before{
-  content:''; position:absolute; bottom:-12%; right:15%; width:56%; height:58%; z-index:0; pointer-events:none;
-  background:radial-gradient(600px 360px at 65% 78%, var(--accent-dim), transparent 70%);
-  animation:glowDriftC 38s ease-in-out infinite;
+#compare{
+  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-size: 880px 620px; background-repeat: no-repeat;
+  animation: glowMoveC 44s ease-in-out infinite;
 }
-#tools::before{
-  content:''; position:absolute; top:50%; left:50%; width:900px; height:900px; margin:-450px 0 0 -450px; z-index:0; pointer-events:none;
-  background:conic-gradient(from 0deg, transparent 0 60%, var(--accent-dim) 75%, transparent 90%);
-  animation:glowSpin 50s linear infinite;
-  opacity:.5;
+#tools{
+  background-image: radial-gradient(circle, var(--accent-dim), transparent 72%);
+  background-size: 1000px 700px; background-repeat: no-repeat;
+  animation: glowMoveA 48s ease-in-out infinite;
 }
-#credibility::before{
-  content:''; position:absolute; top:-10%; left:8%; width:58%; height:55%; z-index:0; pointer-events:none;
-  background:radial-gradient(620px 380px at 35% 20%, var(--accent-dim), transparent 70%);
-  animation:glowDriftA 33s ease-in-out infinite;
+#credibility{
+  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-size: 860px 660px; background-repeat: no-repeat;
+  animation: glowMoveA 39s ease-in-out infinite;
 }
-#faq::before{
-  content:''; position:absolute; top:-12%; left:30%; width:50%; height:60%; z-index:0; pointer-events:none;
-  background:radial-gradient(540px 380px at 50% 20%, rgba(110,123,255,0.1), transparent 72%);
-  animation:glowDriftB 30s ease-in-out infinite;
+#faq{
+  background-image: radial-gradient(circle, rgba(110,123,255,0.1), transparent 70%);
+  background-size: 760px 600px; background-repeat: no-repeat;
+  animation: glowMoveD 36s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce){
-  #about::before, #experience::before, #projects::before, #capabilities::before,
-  #process::before, #compare::before, #tools::before, #credibility::before, #faq::before{
+  #about, #experience, #projects, #capabilities, #process, #compare, #tools, #credibility, #faq{
     animation:none;
   }
 }
 @media (max-width:900px){
-  #about::before, #experience::before, #projects::before, #capabilities::before,
-  #process::before, #compare::before, #tools::before, #credibility::before, #faq::before{
-    opacity:.6;
+  #about, #experience, #projects, #capabilities, #process, #compare, #tools, #credibility, #faq{
+    background-size: 500px 420px;
   }
 }
 
