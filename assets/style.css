@@ -91,47 +91,47 @@ body::after{
 @keyframes glowMoveD{ 0%,100%{ background-position: 20% 80%; } 50%{ background-position: 38% 62%; } }
 
 #about{
-  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-image: radial-gradient(320px 260px at center, var(--accent-dim), transparent 100%);
   background-size: 900px 700px; background-repeat: no-repeat;
   animation: glowMoveA 42s ease-in-out infinite;
 }
 #experience{
-  background-image: radial-gradient(circle, rgba(110,123,255,0.11), transparent 70%);
+  background-image: radial-gradient(280px 230px at center, rgba(110,123,255,0.11), transparent 100%);
   background-size: 800px 640px; background-repeat: no-repeat;
   animation: glowMoveB 38s ease-in-out infinite;
 }
 #projects{
-  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-image: radial-gradient(320px 220px at center, var(--accent-dim), transparent 100%);
   background-size: 950px 620px; background-repeat: no-repeat;
   animation: glowMoveB 46s ease-in-out infinite;
 }
 #capabilities{
-  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-image: radial-gradient(290px 250px at center, var(--accent-dim), transparent 100%);
   background-size: 820px 680px; background-repeat: no-repeat;
   animation: glowMoveD 40s ease-in-out infinite;
 }
 #process{
-  background-image: radial-gradient(circle, rgba(110,123,255,0.1), transparent 70%);
+  background-image: radial-gradient(250px 200px at center, rgba(110,123,255,0.1), transparent 100%);
   background-size: 700px 560px; background-repeat: no-repeat;
   animation: glowMoveB 34s ease-in-out infinite;
 }
 #compare{
-  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-image: radial-gradient(310px 220px at center, var(--accent-dim), transparent 100%);
   background-size: 880px 620px; background-repeat: no-repeat;
   animation: glowMoveC 44s ease-in-out infinite;
 }
 #tools{
-  background-image: radial-gradient(circle, var(--accent-dim), transparent 72%);
+  background-image: radial-gradient(340px 240px at center, var(--accent-dim), transparent 100%);
   background-size: 1000px 700px; background-repeat: no-repeat;
   animation: glowMoveA 48s ease-in-out infinite;
 }
 #credibility{
-  background-image: radial-gradient(circle, var(--accent-dim), transparent 70%);
+  background-image: radial-gradient(300px 240px at center, var(--accent-dim), transparent 100%);
   background-size: 860px 660px; background-repeat: no-repeat;
   animation: glowMoveA 39s ease-in-out infinite;
 }
 #faq{
-  background-image: radial-gradient(circle, rgba(110,123,255,0.1), transparent 70%);
+  background-image: radial-gradient(270px 210px at center, rgba(110,123,255,0.1), transparent 100%);
   background-size: 760px 600px; background-repeat: no-repeat;
   animation: glowMoveD 36s ease-in-out infinite;
 }
@@ -213,18 +213,30 @@ h1,h2,h3{ font-family:var(--display); font-weight:700; letter-spacing:-0.02em; c
   .reveal, .word-inner{ transition:none !important; opacity:1 !important; transform:none !important; filter:none !important; }
 }
 
-/* ============ LOADER — logo + multi-language "Welcome" cycle ============ */
+/* ============ LOADER — white start, eclipse wipe into site colors ============ */
 #loader{
-  position:fixed; inset:0; z-index:999; background:var(--bg);
+  position:fixed; inset:0; z-index:999; background:#F5F6FA;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px;
-  transition:opacity .7s var(--ease), visibility .7s;
+  transition:opacity .7s var(--ease) .15s, visibility .85s;
+  overflow:hidden;
 }
 #loader.out{ opacity:0; visibility:hidden; }
 body.loading{ overflow:hidden; }
 
-.loader-mark-wrap{ position:relative; width:92px; height:92px; display:grid; place-items:center; opacity:0; transform:translateY(8px); animation:loaderMarkIn .7s var(--ease) .1s forwards; }
+.loader-eclipse{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:var(--bg);
+  clip-path:circle(0% at 50% 47%);
+}
+#loader.confirm .loader-eclipse{
+  animation:eclipseExpand 1s cubic-bezier(.62,0,.32,1) .05s forwards;
+}
+@keyframes eclipseExpand{ to{ clip-path:circle(145% at 50% 47%); } }
+
+.loader-mark-wrap{ position:relative; z-index:2; width:92px; height:92px; display:grid; place-items:center; opacity:0; transform:translateY(8px); animation:loaderMarkIn .7s var(--ease) .1s forwards; }
 @keyframes loaderMarkIn{ to{ opacity:1; transform:translateY(0); } }
-.loader-mark{ width:50px; height:50px; background:var(--text); z-index:2; }
+.loader-mark{ width:50px; height:50px; background:#0A0B0A; z-index:2; transition:background-color .35s ease .3s; }
+#loader.confirm .loader-mark{ background:var(--text); }
 .loader-ring{
   position:absolute; inset:0; border-radius:50%; border:1px solid var(--border-hi);
   opacity:0; transform:scale(.8);
@@ -241,18 +253,22 @@ body.loading{ overflow:hidden; }
 @keyframes bleed{ 0%{ transform:scale(0); opacity:.9; } 100%{ transform:scale(3.4); opacity:0; } }
 @keyframes ring{ 0%{ opacity:0; transform:scale(.8); } 40%{ opacity:1; } 100%{ opacity:0; transform:scale(1.9); } }
 
-.loader-lang{ text-align:center; min-height:74px; }
+.loader-lang{ position:relative; z-index:2; text-align:center; min-height:74px; }
 .loader-word{
   font-family:var(--display); font-weight:700; letter-spacing:-0.01em;
-  font-size:clamp(30px, 4.2vw, 46px); color:var(--text-dim);
-  transition:color .3s ease;
+  font-size:clamp(30px, 4.2vw, 46px); color:rgba(10,11,10,0.62);
+  transition:color .35s ease .3s;
 }
-.loader-word.final{ color:var(--text); }
+.loader-word.final{ color:#0A0B0A; }
+#loader.confirm .loader-word{ color:var(--text-dim); }
+#loader.confirm .loader-word.final{ color:var(--text); }
 .loader-langname{
   margin-top:10px; font-family:var(--mono); font-size:10.5px; letter-spacing:0.24em; text-transform:uppercase;
-  color:var(--text-faint);
+  color:rgba(10,11,10,0.4); transition:color .35s ease .3s;
 }
-.loader-progress{ width:150px; height:1px; background:var(--border); position:relative; overflow:hidden; border-radius:2px; }
+#loader.confirm .loader-langname{ color:var(--text-faint); }
+.loader-progress{ position:relative; z-index:2; width:150px; height:1px; background:rgba(10,11,10,0.14); position:relative; overflow:hidden; border-radius:2px; transition:background-color .35s ease .3s; }
+#loader.confirm .loader-progress{ background:var(--border); }
 .loader-progress::after{
   content:''; position:absolute; left:0; top:0; bottom:0; width:0%;
   background:var(--grad);
@@ -260,6 +276,7 @@ body.loading{ overflow:hidden; }
 #loader.progressing .loader-progress::after{ animation:loaderProgress 2.7s var(--ease-soft) forwards; }
 @keyframes loaderProgress{ to{ width:100%; } }
 @media (prefers-reduced-motion: reduce){
+
   .loader-mark-wrap{ animation:none; opacity:1; transform:none; }
   .loader-progress{ display:none; }
 }
@@ -552,13 +569,13 @@ body.loading{ overflow:hidden; }
 .logo-marquee-wrap:hover .logo-marquee-track{ animation-play-state:paused; }
 .logo-chip{
   display:flex; align-items:center; justify-content:center;
-  height:92px; width:180px; flex-shrink:0; margin-right:14px;
-  opacity:.72; filter:grayscale(1) brightness(1.7);
+  height:130px; width:240px; flex-shrink:0; margin-right:14px;
+  opacity:.75; filter:grayscale(1) brightness(1.7);
   transition:opacity .3s ease, filter .3s ease, transform .3s var(--ease-soft);
 }
 .logo-chip:hover{ opacity:1; filter:grayscale(0) brightness(1); transform:translateY(-3px); }
-.logo-chip img{ max-height:38px; max-width:80%; object-fit:contain; }
-@media (max-width:720px){ .logo-chip{ height:76px; width:150px; } .logo-chip img{ max-height:30px; } }
+.logo-chip img{ max-height:58px; max-width:78%; object-fit:contain; }
+@media (max-width:720px){ .logo-chip{ height:100px; width:190px; } .logo-chip img{ max-height:44px; } }
 
 /* ============ TOOLS / INTEGRATIONS GRID ============ */
 
