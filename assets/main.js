@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(reduceMotion){
       loaderEl.style.display = 'none';
       loaderTotalMs = 0;
+      document.body.classList.add('lb-open');
       return;
     }
 
@@ -89,9 +90,30 @@ document.addEventListener('DOMContentLoaded', function(){
     setTimeout(function(){
       loaderEl.classList.add('out');
       document.body.classList.remove('loading');
+      document.body.classList.add('lb-open');
       setTimeout(function(){ loaderEl.style.display = 'none'; }, 750);
     }, duration + 650);
   })();
+
+  /* ---------- SCROLL PROGRESS (trailer-style timeline at the top) ---------- */
+  try{
+    var progressEl = document.getElementById('scrollProgress');
+    if(progressEl){
+      var ticking = false;
+      function updateProgress(){
+        var doc = document.documentElement;
+        var scrollTop = window.scrollY || doc.scrollTop;
+        var max = (doc.scrollHeight - doc.clientHeight) || 1;
+        var pct = Math.min(100, Math.max(0, (scrollTop / max) * 100));
+        progressEl.style.width = pct + '%';
+        ticking = false;
+      }
+      window.addEventListener('scroll', function(){
+        if(!ticking){ requestAnimationFrame(updateProgress); ticking = true; }
+      }, {passive:true});
+      updateProgress();
+    }
+  } catch(err){}
 
   /* ---------- NAV SCROLL STATE ---------- */
   try{
