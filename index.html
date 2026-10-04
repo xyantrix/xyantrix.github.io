@@ -33,9 +33,15 @@
   </div>
   <div class="loader-progress"></div>
 </div>
-<div class="letterbox lb-top" aria-hidden="true"></div>
-<div class="letterbox lb-bottom" aria-hidden="true"></div>
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- 3D geometric easter-egg shapes -->
+<div class="geo3d-layer" id="geo3dLayer" aria-hidden="true">
+  <div class="geo3d geo3d-cube" data-depth="0.12" style="top:18%;left:8%"><div class="geo3d-face geo3d-front"></div><div class="geo3d-face geo3d-back"></div><div class="geo3d-face geo3d-right"></div><div class="geo3d-face geo3d-left"></div><div class="geo3d-face geo3d-top"></div><div class="geo3d-face geo3d-bottom"></div></div>
+  <div class="geo3d geo3d-octa" data-depth="0.20" style="top:65%;left:82%"></div>
+  <div class="geo3d geo3d-ring" data-depth="0.08" style="top:40%;right:5%"></div>
+  <div class="geo3d geo3d-tri" data-depth="0.15" style="bottom:10%;left:15%"></div>
+</div>
 <nav id="nav">
   <div class="nav-inner">
     <a href="#top" class="nav-brand">
@@ -91,7 +97,7 @@
       <div class="hero-mock" id="heroMock" aria-hidden="true">
         <div class="mock-bar">
           <span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span>
-          <span class="mock-title">ap-automation-run.xlsm — this week</span>
+          <span class="mock-title" id="mockTitle">ap-automation-run.xlsm — this week</span>
         </div>
         <div class="mock-body">
           <div class="mock-list">

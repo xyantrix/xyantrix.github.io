@@ -9,16 +9,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- LOADER — logo + 100-language "Welcome" cycle ---------- */
-  var loaderTotalMs = 2000; /* language-cycle duration, used to time the hero reveal below */
+  /* ---------- LOADER — logo + language "Welcome" cycle ---------- */
+  var loaderTotalMs = 2000;
   (function loader(){
     var loaderEl = document.getElementById('loader');
     var wordEl = document.getElementById('loaderWord');
     var langEl = document.getElementById('loaderLangName');
     if(!loaderEl) return;
 
-    /* "Welcome" in 100 languages. English always lands last so the
-       cycle resolves on the word every visitor will read instantly. */
     var WELCOMES = [
       ['English','Welcome'],['Spanish','Bienvenido'],['French','Bienvenue'],['German','Willkommen'],
       ['Italian','Benvenuto'],['Portuguese','Bem-vindo'],['Dutch','Welkom'],['Swedish','Välkommen'],
@@ -52,22 +50,19 @@ document.addEventListener('DOMContentLoaded', function(){
     if(reduceMotion){
       loaderEl.style.display = 'none';
       loaderTotalMs = 0;
-      document.body.classList.add('lb-open');
       return;
     }
 
     document.body.classList.add('loading');
 
-    /* pick a fresh, randomized subset every load so it never repeats
-       the same sequence twice — English "Welcome" always resolves it */
-    var pool = WELCOMES.slice(1); // exclude English, added back at the end
+    var pool = WELCOMES.slice(1);
     for(var i = pool.length - 1; i > 0; i--){
       var j = Math.floor(Math.random() * (i+1));
       var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
     }
-    var sequence = pool.slice(0, 21).concat([WELCOMES[0]]); // 21 random + English
+    var sequence = pool.slice(0, 21).concat([WELCOMES[0]]);
     var n = sequence.length;
-    var duration = loaderTotalMs; // ms — matches heroDelay timing below
+    var duration = loaderTotalMs;
 
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){ loaderEl.classList.add('progressing'); });
@@ -75,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     sequence.forEach(function(pair, k){
       var t = k / (n - 1);
-      var eased = 1 - Math.pow(1 - t, 3); // ease-out cubic: fast start, slow finish
+      var eased = 1 - Math.pow(1 - t, 3);
       var at = Math.round(duration * eased);
       setTimeout(function(){
         wordEl.textContent = pair[1];
@@ -87,15 +82,91 @@ document.addEventListener('DOMContentLoaded', function(){
       }, at);
     });
 
+    /* Smooth fade: loader fades out completely, then site fades in.
+       No letterbox bars, no hard cut — just a clean dissolve. */
     setTimeout(function(){
       loaderEl.classList.add('out');
       document.body.classList.remove('loading');
-      document.body.classList.add('lb-open');
-      setTimeout(function(){ loaderEl.style.display = 'none'; }, 750);
+      setTimeout(function(){ loaderEl.style.display = 'none'; }, 850);
     }, duration + 650);
   })();
 
-  /* ---------- SCROLL PROGRESS (trailer-style timeline at the top) ---------- */
+  /* ---------- HERO MOCKUP RANDOMIZER — unique every visit ---------- */
+  (function randomizeMockup(){
+    var VENDORS = [
+      ['Bansal Freight Pvt Ltd','INV-88231','3-way match'],
+      ['Orion Cloud Services','INV-88240','GST verified'],
+      ['Reliable Packaging Co.','INV-88255','awaiting GRN'],
+      ['Vertex Consulting LLP','INV-88261','TDS applied'],
+      ['Mumbai Logistics Ltd','INV-88273','3-way match'],
+      ['Sterling Components','INV-88288','GST verified'],
+      ['Apex Trading Co.','INV-88294','awaiting GRN'],
+      ['GreenLine Transport','INV-88301','TDS applied'],
+      ['Nimbus Tech Solutions','INV-88315','3-way match'],
+      ['Coromandel Supplies','INV-88322','GST verified'],
+      ['Pioneer Freight Mgmt','INV-88338','awaiting GRN'],
+      ['Quantum Packaging LLP','INV-88344','TDS applied'],
+      ['Summit Industries','INV-88357','3-way match'],
+      ['Verma Steel Works','INV-88360','GST verified'],
+      ['Delta Marine Services','INV-88372','awaiting GRN']
+    ];
+
+    function randAmount(){
+      var lakhs = Math.floor(Math.random() * 2) + 1;
+      var thousands = Math.floor(Math.random() * 90) + 10;
+      var hundreds = Math.floor(Math.random() * 100);
+      return '\u20B9' + lakhs + ',' + thousands + ',' + hundreds.toString().padStart(2,'0');
+    }
+
+    function shuffle(arr){
+      var a = arr.slice();
+      for(var i = a.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i+1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+
+    var picked = shuffle(VENDORS).slice(0, 4);
+    var rows = document.querySelectorAll('.mock-row');
+    rows.forEach(function(row, idx){
+      if(idx >= picked.length) return;
+      var v = picked[idx];
+      var isPending = v[2].indexOf('awaiting') !== -1;
+      var vendorEl = row.querySelector('.mock-vendor');
+      var subEl = row.querySelector('.mock-sub');
+      var amtEl = row.querySelector('.mock-amt');
+      var statusEl = row.querySelector('.mock-status');
+      if(vendorEl) vendorEl.textContent = v[0];
+      if(subEl) subEl.textContent = v[1] + ' \u00B7 ' + v[2];
+      if(amtEl) amtEl.textContent = randAmount();
+      if(statusEl){
+        statusEl.textContent = isPending ? 'Pending' : 'Matched';
+        statusEl.className = 'mock-status ' + (isPending ? 'pending' : 'matched');
+      }
+    });
+
+    var titleEl = document.getElementById('mockTitle');
+    if(titleEl){
+      var WEEKS = ['this week','last week','week 39','this cycle','current run','latest batch'];
+      var pick = Math.floor(Math.random() * WEEKS.length);
+      titleEl.textContent = 'ap-automation-run.xlsm \u2014 ' + WEEKS[pick];
+    }
+
+    var valEls = document.querySelectorAll('.mock-stat-val');
+    if(valEls.length >= 2){
+      valEls[0].textContent = Math.floor(Math.random() * 80) + 80;
+      var pct = (96 + Math.random() * 3.8).toFixed(1);
+      valEls[1].textContent = pct + '%';
+    }
+
+    var bars = document.querySelectorAll('.mock-bars span');
+    bars.forEach(function(b){
+      b.style.height = (Math.floor(Math.random() * 60) + 35) + '%';
+    });
+  })();
+
+  /* ---------- SCROLL PROGRESS ---------- */
   try{
     var progressEl = document.getElementById('scrollProgress');
     if(progressEl){
@@ -143,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   } catch(err){}
 
-  /* ---------- TEXT SPLIT (blur + fade word entrance) ---------- */
+  /* ---------- TEXT SPLIT ---------- */
   try{
     var wordCounter = 0;
     function splitWords(node){
@@ -181,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function(){
   try{
     var heroCopy = document.querySelector('.hero-copy');
     var heroTitle = document.querySelector('.hero-title');
-    var heroDelay = reduceMotion ? 60 : (loaderTotalMs + 550);
+    var heroDelay = reduceMotion ? 60 : (loaderTotalMs + 650);
     setTimeout(function(){
       if(heroTitle) heroTitle.classList.add('visible');
       if(heroCopy) heroCopy.classList.add('hero-in');
@@ -304,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var mock = document.getElementById('heroMock');
     var heroSection = document.querySelector('.hero');
     if(mock){
-      setTimeout(function(){ mock.classList.add('mock-in'); }, reduceMotion ? 60 : (loaderTotalMs + 780));
+      setTimeout(function(){ mock.classList.add('mock-in'); }, reduceMotion ? 60 : (loaderTotalMs + 880));
     }
     if(mock && heroSection && window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reduceMotion){
       heroSection.addEventListener('mousemove', function(e){
@@ -315,6 +386,89 @@ document.addEventListener('DOMContentLoaded', function(){
         mock.style.transform = 'translate(' + (px*10) + 'px,' + (py*10) + 'px)';
       });
       heroSection.addEventListener('mouseleave', function(){ mock.style.transform = ''; });
+    }
+  } catch(err){}
+
+  /* ---------- 3D GEOMETRIC EASTER EGGS ---------- */
+  try{
+    if(reduceMotion) throw new Error('reduced motion');
+
+    var geoLayer = document.getElementById('geo3dLayer');
+    var shapes = document.querySelectorAll('.geo3d');
+    if(!geoLayer || !shapes.length) throw new Error('no shapes');
+
+    var mouseX = 0, mouseY = 0, scrollY = 0;
+    var tickingGeo = false;
+
+    /* Parallax + rotation following mouse */
+    if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+      window.addEventListener('mousemove', function(e){
+        mouseX = (e.clientX / window.innerWidth - 0.5);
+        mouseY = (e.clientY / window.innerHeight - 0.5);
+        if(!tickingGeo){
+          requestAnimationFrame(updateGeo);
+          tickingGeo = true;
+        }
+      }, {passive:true});
+    }
+
+    window.addEventListener('scroll', function(){
+      scrollY = window.scrollY;
+      if(!tickingGeo){
+        requestAnimationFrame(updateGeo);
+        tickingGeo = true;
+      }
+    }, {passive:true});
+
+    function updateGeo(){
+      tickingGeo = false;
+      shapes.forEach(function(shape, i){
+        var depth = parseFloat(shape.getAttribute('data-depth')) || 0.1;
+        var idx = i + 1;
+        /* parallax offset based on mouse + scroll */
+        var px = mouseX * 60 * depth * (idx % 2 ? 1 : -1);
+        var py = mouseY * 40 * depth;
+        var sy = scrollY * depth * 0.3;
+        /* continuous rotation from mouse */
+        var rx = mouseY * 25 * depth;
+        var ry = mouseX * 35 * depth * (idx % 2 ? 1 : -1);
+        shape.style.transform = 'translate(' + px + 'px,' + (py + sy) + 'px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) rotateZ(' + (idx * 7) + 'deg)';
+      });
+    }
+    updateGeo();
+
+    /* Easter egg: click a shape to make it spin */
+    shapes.forEach(function(shape){
+      shape.addEventListener('click', function(){
+        if(shape.classList.contains('geo3d-spin')) return;
+        shape.classList.add('geo3d-spin');
+        setTimeout(function(){ shape.classList.remove('geo3d-spin'); }, 2000);
+      });
+    });
+
+    /* Easter egg: Konami code reveals a burst of shapes */
+    var konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    var konamiIdx = 0;
+    document.addEventListener('keydown', function(e){
+      var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      if(key === konami[konamiIdx]){
+        konamiIdx++;
+        if(konamiIdx === konami.length){
+          konamiIdx = 0;
+          triggerBurst();
+        }
+      } else {
+        konamiIdx = (key === konami[0]) ? 1 : 0;
+      }
+    });
+
+    function triggerBurst(){
+      shapes.forEach(function(shape, i){
+        setTimeout(function(){
+          shape.classList.add('geo3d-burst');
+          setTimeout(function(){ shape.classList.remove('geo3d-burst'); }, 1500);
+        }, i * 120);
+      });
     }
   } catch(err){}
 

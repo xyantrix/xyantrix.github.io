@@ -227,16 +227,21 @@ h1,h2,h3{ font-family:var(--display); font-weight:800; letter-spacing:-0.03em; c
   .split-ready.visible .grad{ animation:none; }
 }
 
-/* ============ LETTERBOX — dark, matches site ============ */
-.letterbox{
-  position:fixed; left:0; right:0; height:9vh; min-height:52px; background:var(--bg); z-index:998; pointer-events:none;
-  transition:transform 1.1s cubic-bezier(.62,0,.32,1) .15s;
+/* ============ SITE FADE-IN — smooth dissolve after loader ============ */
+main, #nav, .footer, .marquee-wrap, .scroll-progress{
+  opacity:0;
+  transition:opacity 1.2s var(--ease) .2s;
 }
-.letterbox.lb-top{ top:0; }
-.letterbox.lb-bottom{ bottom:0; }
-body.lb-open .letterbox.lb-top{ transform:translateY(-100%); }
-body.lb-open .letterbox.lb-bottom{ transform:translateY(100%); }
-@media (prefers-reduced-motion: reduce){ .letterbox{ display:none; } }
+body:not(.loading) main,
+body:not(.loading) #nav,
+body:not(.loading) .footer,
+body:not(.loading) .marquee-wrap,
+body:not(.loading) .scroll-progress{
+  opacity:1;
+}
+@media (prefers-reduced-motion: reduce){
+  main, #nav, .footer, .marquee-wrap, .scroll-progress{ opacity:1 !important; transition:none !important; }
+}
 
 /* ============ SCROLL PROGRESS ============ */
 .scroll-progress{
@@ -708,3 +713,95 @@ a.contact-row:hover{ padding-left:8px; color:var(--accent); }
 
 /* ============ MAGNETIC HELPERS ============ */
 .magnetic{ will-change:transform; }
+
+/* ============ 3D GEOMETRIC EASTER EGGS ============ */
+.geo3d-layer{
+  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  perspective:800px;
+}
+@media (max-width:700px){ .geo3d-layer{ display:none; } }
+
+.geo3d{
+  position:absolute; pointer-events:auto; cursor:pointer;
+  transform-style:preserve-3d;
+  transition:transform .15s linear;
+  will-change:transform;
+}
+
+/* ---- 3D Cube ---- */
+.geo3d-cube{
+  width:60px; height:60px;
+}
+.geo3d-cube .geo3d-face{
+  position:absolute; width:60px; height:60px;
+  border:1px solid var(--accent-ring);
+  background:var(--accent-dim);
+  backface-visibility:visible;
+}
+.geo3d-cube .geo3d-front  { transform: translateZ(30px); }
+.geo3d-cube .geo3d-back   { transform: translateZ(-30px) rotateY(180deg); }
+.geo3d-cube .geo3d-right  { transform: translateX(30px) rotateY(90deg); }
+.geo3d-cube .geo3d-left   { transform: translateX(-30px) rotateY(-90deg); }
+.geo3d-cube .geo3d-top    { transform: translateY(-30px) rotateX(90deg); }
+.geo3d-cube .geo3d-bottom { transform: translateY(30px) rotateX(-90deg); }
+
+/* ---- Octahedron (diamond) ---- */
+.geo3d-octa{
+  width:50px; height:50px;
+  background:var(--accent-dim);
+  border:1px solid var(--accent-ring);
+  clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+/* ---- Ring (torus-like) ---- */
+.geo3d-ring{
+  width:70px; height:70px;
+  border:2px solid var(--border-hi);
+  border-radius:50%;
+  background:transparent;
+}
+.geo3d-ring::before{
+  content:''; position:absolute; inset:8px;
+  border:1px solid var(--accent-ring);
+  border-radius:50%;
+}
+
+/* ---- Triangle ---- */
+.geo3d-tri{
+  width:0; height:0;
+  border-left:35px solid transparent;
+  border-right:35px solid transparent;
+  border-bottom:60px solid var(--accent-dim);
+  filter:drop-shadow(0 0 1px var(--accent-ring));
+}
+
+/* ---- Spin easter egg (click) ---- */
+@keyframes geo3dSpin{
+  0%{ transform:rotateZ(0deg) scale(1); }
+  50%{ transform:rotateZ(180deg) rotateX(360deg) scale(1.3); }
+  100%{ transform:rotateZ(360deg) rotateX(720deg) scale(1); }
+}
+.geo3d-spin{
+  animation:geo3dSpin 2s var(--ease) forwards !important;
+  transition:none !important;
+}
+
+/* ---- Burst easter egg (Konami code) ---- */
+@keyframes geo3dBurst{
+  0%{ transform:scale(1) rotateZ(0deg); opacity:0.5; }
+  30%{ transform:scale(2.5) rotateZ(120deg); opacity:1; }
+  100%{ transform:scale(1) rotateZ(360deg); opacity:0.5; }
+}
+.geo3d-burst{
+  animation:geo3dBurst 1.5s var(--ease) forwards !important;
+  transition:none !important;
+}
+
+/* ---- Hover glow on shapes ---- */
+.geo3d:hover{
+  filter:drop-shadow(0 0 12px var(--accent-ring));
+}
+
+@media (prefers-reduced-motion: reduce){
+  .geo3d-layer{ display:none; }
+}
