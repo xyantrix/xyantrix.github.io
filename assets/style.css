@@ -77,7 +77,7 @@ body{
   position:relative;
 }
 
-/* ============ GEOMETRIC GRID BACKGROUND with moving stroke ============ */
+/* ============ GEOMETRIC GRID BACKGROUND ============ */
 body::before{
   content:'';
   position:absolute; top:0; left:0; right:0; height:1200px; z-index:0; pointer-events:none;
@@ -87,23 +87,6 @@ body::before{
   background-size:48px 48px;
   mask-image:linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 80%);
   -webkit-mask-image:linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 80%);
-}
-/* moving stroke through the grid — a subtle scanning line */
-body::before{
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, transparent 0%, rgba(224,85,59,0.06) 48%, rgba(224,85,59,0.12) 50%, rgba(224,85,59,0.06) 52%, transparent 100%);
-  background-size:48px 48px, 48px 48px, 600px 100%;
-  background-repeat:repeat, repeat, no-repeat;
-  animation:gridStroke 8s linear infinite;
-}
-@keyframes gridStroke{
-  0%{ background-position:0 0, 0 0, -600px 0; }
-  100%{ background-position:0 0, 0 0, calc(100vw + 600px) 0; }
-}
-@media (prefers-reduced-motion: reduce){
-  body::before{ animation:none; }
 }
 /* large geometric circle floating behind hero */
 body::after{
@@ -172,10 +155,12 @@ input,textarea{ font:inherit; color:inherit; }
 ::selection{ background:var(--accent); color:var(--bg); }
 
 .wrap{ max-width:1200px; margin:0 auto; padding:0 32px; position:relative; z-index:1; }
+@media (max-width:520px){ .wrap{ padding:0 18px; } }
 main{ position:relative; z-index:1; }
 
 section{ padding:130px 0; position:relative; }
 @media (max-width:720px){ section{ padding:84px 0; } }
+@media (max-width:520px){ section{ padding:60px 0; } }
 
 /* ============ MARK / LOGO ============ */
 .mark-icon{
@@ -203,7 +188,7 @@ h1,h2,h3{ font-family:var(--display); font-weight:800; letter-spacing:-0.03em; c
 .section-header{ max-width:720px; margin-bottom:56px; }
 .section-header.center{ margin-left:auto; margin-right:auto; text-align:center; }
 .section-title{
-  font-size:clamp(30px, 4vw, 48px); line-height:1.08; margin-top:16px; font-weight:800;
+  font-size:clamp(26px, 4vw, 48px); line-height:1.08; margin-top:16px; font-weight:800;
   letter-spacing:-0.035em;
 }
 .section-sub{ margin-top:16px; font-size:16.5px; color:var(--text-dim); line-height:1.65; max-width:56ch; }
@@ -416,7 +401,11 @@ body.loading{ overflow:hidden; }
 }
 .hero-inner{ display:grid; grid-template-columns:1fr; gap:40px; align-items:center; max-width:960px; margin:0 auto; }
 @media (min-width:1000px){
-  .hero-inner{ margin:0; max-width:none; padding-left:4%; }
+  .hero-inner{ margin:0; max-width:none; padding-left:4%; grid-template-columns:1fr 1fr; }
+}
+@media (max-width:520px){
+  .hero{ padding-top:120px; padding-bottom:50px; min-height:auto; }
+  .hero-inner{ gap:28px; }
 }
 .hero-badges{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px; }
 .badge-solid{
@@ -429,9 +418,10 @@ body.loading{ overflow:hidden; }
 .badge-outline{
   font-size:12.5px; color:var(--text-dim); padding:8px 14px; border:1px solid var(--border); border-radius:var(--r-pill);
 }
-.hero-title{ font-size:clamp(42px, 6.5vw, 80px); line-height:1.02; font-weight:800; letter-spacing:-0.04em; }
+.hero-title{ font-size:clamp(34px, 6.5vw, 80px); line-height:1.02; font-weight:800; letter-spacing:-0.04em; }
 .hero-title br + .grad{ display:inline-block; margin-top:4px; }
 .hero-desc{ margin:24px 0 0; font-size:17.5px; color:var(--text-dim); max-width:56ch; line-height:1.7; }
+@media (max-width:520px){ .hero-desc{ font-size:15.5px; line-height:1.65; } }
 .hero-copy{ opacity:0; transform:translateY(14px); transition:opacity .9s var(--ease), transform .9s var(--ease); }
 .hero-copy.hero-in{ opacity:1; transform:translateY(0); }
 .hero-actions{ display:flex; flex-wrap:wrap; gap:14px; margin-top:36px; }
@@ -454,6 +444,7 @@ body.loading{ overflow:hidden; }
 }
 .btn-secondary:hover{ border-color:var(--accent); background:var(--accent-dim); transform:translateY(-1px); }
 .hero-meta{ display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin-top:42px; font-family:var(--mono); font-size:12px; color:var(--text-faint); letter-spacing:0.02em; }
+@media (max-width:520px){ .hero-meta{ gap:10px; font-size:10.5px; margin-top:28px; } }
 .meta-dot{ width:4px; height:4px; border-radius:50%; background:var(--accent); }
 
 /* ---- hero mockup panel ---- */
@@ -470,12 +461,15 @@ body.loading{ overflow:hidden; }
   transition:opacity 1s var(--ease) .1s, transform 1s var(--ease) .1s;
 }
 .hero-mock.mock-in{ opacity:1; transform:translateY(0); }
+@media (max-width:520px){ .hero-mock{ border-radius:var(--r-lg); } }
+.hero-mock.mock-in{ opacity:1; transform:translateY(0); }
 .mock-bar{ display:flex; align-items:center; gap:8px; padding:14px 20px; border-bottom:1px solid var(--border); background:var(--panel-2); }
 .mock-dot{ width:10px; height:10px; border-radius:50%; background:var(--panel-hi); border:1px solid var(--border-hi); }
 .mock-title{ margin-left:8px; font-family:var(--mono); font-size:11px; color:var(--text-faint); }
 .mock-body{ display:grid; grid-template-columns:1.3fr 1fr; gap:0; }
 .mock-list{ padding:22px 24px; border-right:1px solid var(--border); }
 .mock-row{ display:flex; justify-content:space-between; align-items:center; padding:13px 0; border-top:1px solid var(--border); font-size:13.5px; }
+@media (max-width:520px){ .mock-row{ flex-direction:column; align-items:flex-start; gap:6px; } .mock-row > div:last-child{ text-align:left !important; } }
 .mock-row:first-child{ border-top:none; }
 .mock-vendor{ color:var(--text); font-weight:700; }
 .mock-sub{ color:var(--text-faint); font-size:11.5px; margin-top:2px; }
@@ -486,9 +480,11 @@ body.loading{ overflow:hidden; }
 .mock-side{ padding:22px 24px; display:flex; flex-direction:column; gap:18px; }
 .mock-stat-lbl{ font-family:var(--mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); }
 .mock-stat-val{ font-size:28px; font-weight:800; margin-top:6px; letter-spacing:-0.03em; color:var(--text); }
+@media (max-width:520px){ .mock-stat-val{ font-size:22px; } }
 .mock-bars{ display:flex; align-items:flex-end; gap:5px; height:56px; margin-top:8px; }
 .mock-bars span{ flex:1; background:linear-gradient(180deg, var(--accent-soft), var(--accent)); border-radius:3px 3px 0 0; opacity:.85; }
 @media (max-width:720px){ .mock-body{ grid-template-columns:1fr; } .mock-list{ border-right:none; border-bottom:1px solid var(--border); } }
+@media (max-width:520px){ .mock-list{ padding:16px 16px; } .mock-side{ padding:16px 16px; } .mock-bar{ padding:10px 14px; } .mock-title{ font-size:10px; } }
 
 /* ============ SECTION VARIANTS ============ */
 .contact-section, .cred-section, .exp-section, .faq-section{ position:relative; }
@@ -511,7 +507,9 @@ body.loading{ overflow:hidden; }
 .about-inner{ display:grid; grid-template-columns:1fr 0.72fr; gap:70px; align-items:start; }
 @media (min-width:900px){ .about-photo{ margin-top:60px; } }
 .about-text p{ color:var(--text-dim); font-size:16px; line-height:1.8; margin-top:18px; max-width:52ch; }
+@media (max-width:520px){ .about-text p{ font-size:14.5px; line-height:1.7; } }
 .about-facts{ display:flex; gap:34px; margin-top:34px; flex-wrap:wrap; }
+@media (max-width:520px){ .about-facts{ gap:20px; } .af-value{ font-size:14.5px; } }
 .af-label{ display:block; font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px; }
 .af-value{ font-size:16.5px; font-weight:800; }
 .about-photo-frame{
@@ -558,6 +556,7 @@ body.loading{ overflow:hidden; }
 
 /* ============ EXPERIENCE ============ */
 .exp-timeline{ position:relative; padding-left:56px; }
+@media (max-width:520px){ .exp-timeline{ padding-left:42px; } .exp-timeline::before{ left:14px; } .exp-num{ left:-42px; width:32px; height:32px; font-size:10px; } }
 .exp-timeline::before{ content:''; position:absolute; left:19px; top:6px; bottom:6px; width:1.5px; background:linear-gradient(to bottom, var(--border-hi), transparent); }
 .exp-card{ position:relative; padding:0 0 52px 0; }
 .exp-card:last-child{ padding-bottom:0; }
@@ -569,6 +568,7 @@ body.loading{ overflow:hidden; }
 .exp-card.current .exp-num{ border-color:var(--accent); background:var(--accent); color:var(--bg); box-shadow:0 0 0 4px var(--accent-dim); }
 .exp-head{ display:flex; justify-content:space-between; align-items:baseline; gap:18px; flex-wrap:wrap; margin-bottom:16px; }
 .exp-head h3{ font-size:21px; font-weight:800; letter-spacing:-0.02em; }
+@media (max-width:520px){ .exp-head h3{ font-size:18px; } .exp-head{ flex-direction:column; gap:6px; } .exp-bullets li{ font-size:14px; line-height:1.6; } }
 .exp-co{ color:var(--text-dim); font-size:13.5px; margin-top:4px; }
 .exp-date{ font-family:var(--mono); font-size:12px; color:var(--text-faint); white-space:nowrap; }
 .exp-bullets li{ position:relative; padding-left:20px; color:var(--text-dim); font-size:15px; line-height:1.7; margin-bottom:8px; }
@@ -618,11 +618,13 @@ body.loading{ overflow:hidden; }
 .stats-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; text-align:center; }
 .stats-row .stat-chip{ background:var(--panel); padding:44px 20px; }
 .stats-row .stat-value{ font-size:48px; font-weight:800; display:block; color:var(--accent); letter-spacing:-0.04em; }
+@media (max-width:520px){ .stats-row .stat-value{ font-size:34px; } .stats-row .stat-chip{ padding:28px 14px; } .stats-row .stat-label{ font-size:10.5px; } }
 .stats-row .stat-label{ font-family:var(--mono); font-size:12px; color:var(--text-dim); margin-top:8px; display:block; text-transform:uppercase; letter-spacing:0.05em; }
 @media (max-width:820px){ .stats-row{ grid-template-columns:1fr 1fr; } }
 
 .cred-grid{ display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:22px; }
 .cred-panel{ background:var(--panel); border:1px solid var(--border-hi); border-radius:var(--r-lg); padding:40px; box-shadow:var(--shadow-sm); }
+@media (max-width:520px){ .cred-panel{ padding:24px 20px; } }
 .cred-panel h3{ font-size:16px; margin-bottom:20px; font-weight:800; letter-spacing:-0.02em; }
 .cert-list{ display:flex; flex-direction:column; gap:0; }
 .cert-item{ display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-top:1px solid var(--border); font-size:14px; color:var(--text-dim); }
@@ -662,6 +664,7 @@ body.loading{ overflow:hidden; }
   width:100%; display:flex; justify-content:space-between; align-items:center; text-align:left;
   padding:24px 4px; font-size:17px; font-weight:800; font-family:var(--sans); color:var(--text); letter-spacing:-0.02em;
 }
+@media (max-width:520px){ .faq-q{ font-size:15px; padding:18px 2px; } .faq-a p{ font-size:14px; } }
 .faq-icon{ font-family:var(--mono); color:var(--text-faint); font-size:20px; transition:transform .3s var(--ease-soft), color .3s; flex-shrink:0; margin-left:20px; }
 .faq-item.open .faq-icon{ transform:rotate(45deg); color:var(--accent); }
 .faq-a{ max-height:0; overflow:hidden; transition:max-height .4s var(--ease-soft); }
@@ -674,6 +677,7 @@ body.loading{ overflow:hidden; }
   border:1px solid var(--border-hi); border-radius:var(--r-xl); background:var(--panel); overflow:hidden;
   box-shadow:var(--shadow-lg);
 }
+@media (max-width:520px){ .cta-banner{ padding:50px 22px; } }
 .cta-banner::before{ content:''; position:absolute; inset:0; background:radial-gradient(600px 300px at 50% 0%, var(--accent-dim), transparent 70%); pointer-events:none; }
 .cta-banner .section-title{ position:relative; }
 .cta-banner p{ position:relative; margin-top:18px; color:var(--text-dim); font-size:16px; max-width:48ch; margin-left:auto; margin-right:auto; }
@@ -689,6 +693,7 @@ a.contact-row:hover{ padding-left:8px; color:var(--accent); }
 .cr-k{ font-family:var(--mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-faint); }
 .cr-v{ font-size:14.5px; font-weight:700; }
 .contact-form{ background:var(--panel); border:1px solid var(--border-hi); border-radius:var(--r-lg); padding:34px; box-shadow:var(--shadow-sm); }
+@media (max-width:520px){ .contact-form{ padding:22px 18px; } }
 .cf-title{ font-size:19px; font-weight:800; margin-bottom:22px; letter-spacing:-0.02em; }
 .cf-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 .cf-field{ margin-bottom:18px; }
@@ -731,135 +736,10 @@ a.contact-row:hover{ padding-left:8px; color:var(--accent); }
 /* ============ MAGNETIC HELPERS ============ */
 .magnetic{ will-change:transform; }
 
-/* ============ 3D WIREFRAME SHAPES — Three.js aesthetic ============ */
-.geo-canvas{
+/* ============ AMBIENT ORB CANVAS — modern particle field ============ */
+.orb-canvas{
   position:fixed; inset:0; z-index:0; pointer-events:none;
   width:100%; height:100%;
 }
-@media (max-width:700px){ .geo-canvas{ display:none; } }
-
-.geo3d-layer{
-  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
-  perspective:1200px; perspective-origin:50% 40%;
-}
-@media (max-width:700px){ .geo3d-layer{ display:none; } }
-
-.geo3d{
-  position:absolute; pointer-events:auto; cursor:pointer;
-  transform-style:preserve-3d;
-  transition:filter .3s ease;
-  will-change:transform;
-  opacity:0;
-  animation:geoFadeIn 1.5s var(--ease) .5s forwards;
-}
-@keyframes geoFadeIn{ to{ opacity:1; } }
-
-/* shared edge style — thin glowing wireframe lines */
-.geo3d .wc-edge, .geo3d .ic-line, .geo3d .py-edge{
-  position:absolute;
-  background:linear-gradient(90deg, transparent, var(--accent-ring) 20%, var(--accent) 50%, var(--accent-ring) 80%, transparent);
-  opacity:0.5;
-  border-radius:1px;
-  pointer-events:none;
-}
-
-/* ---- Wireframe Cube (12 edges) ---- */
-.geo3d-wirecube{ width:80px; height:80px; }
-.geo3d-wirecube .wc-edge{
-  height:1px; width:80px;
-  background:linear-gradient(90deg, transparent, rgba(224,85,59,0.5) 15%, rgba(224,85,59,0.7) 50%, rgba(224,85,59,0.5) 85%, transparent);
-}
-.wc-e1  { transform: translateZ(40px); top:0; left:0; }
-.wc-e2  { transform: translateZ(40px); top:80px; left:0; }
-.wc-e3  { transform: translateZ(40px) rotate(90deg); top:40px; left:-40px; }
-.wc-e4  { transform: translateZ(40px) rotate(90deg); top:40px; left:40px; }
-.wc-e5  { transform: translateZ(-40px); top:0; left:0; }
-.wc-e6  { transform: translateZ(-40px); top:80px; left:0; }
-.wc-e7  { transform: translateZ(-40px) rotate(90deg); top:40px; left:-40px; }
-.wc-e8  { transform: translateZ(-40px) rotate(90deg); top:40px; left:40px; }
-.wc-e9  { transform: rotateY(90deg) translateZ(40px); top:0; left:0; width:80px; }
-.wc-e10 { transform: rotateY(90deg) translateZ(40px); top:80px; left:0; width:80px; }
-.wc-e11 { transform: rotateY(-90deg) translateZ(40px); top:0; left:0; width:80px; }
-.wc-e12 { transform: rotateY(-90deg) translateZ(40px); top:80px; left:0; width:80px; }
-
-/* ---- Wireframe Icosahedron (15 lines as abstract triangulation) ---- */
-.geo3d-icosa{ width:70px; height:70px; }
-.geo3d-icosa .ic-line{
-  height:1px; transform-origin:left center;
-  background:linear-gradient(90deg, transparent, rgba(224,85,59,0.35) 15%, rgba(224,85,59,0.6) 50%, rgba(224,85,59,0.35) 85%, transparent);
-}
-.ic-l1  { width:70px; top:0; left:0; transform: rotate(0deg); }
-.ic-l2  { width:70px; top:0; left:0; transform: rotate(60deg); }
-.ic-l3  { width:70px; top:0; left:0; transform: rotate(120deg); }
-.ic-l4  { width:70px; top:70px; left:0; transform: rotate(0deg); }
-.ic-l5  { width:70px; top:70px; left:0; transform: rotate(-60deg); }
-.ic-l6  { width:70px; top:70px; left:0; transform: rotate(-120deg); }
-.ic-l7  { width:49px; top:10px; left:10px; transform: rotate(45deg); }
-.ic-l8  { width:49px; top:10px; left:20px; transform: rotate(-45deg); }
-.ic-l9  { width:49px; top:60px; left:10px; transform: rotate(-45deg); }
-.ic-l10 { width:49px; top:60px; left:20px; transform: rotate(45deg); }
-.ic-l11 { width:35px; top:35px; left:0; transform: rotate(90deg); }
-.ic-l12 { width:35px; top:35px; left:35px; transform: rotate(90deg); }
-.ic-l13 { width:55px; top:17px; left:8px; transform: rotate(25deg); }
-.ic-l14 { width:55px; top:17px; left:8px; transform: rotate(-25deg); }
-.ic-l15 { width:40px; top:35px; left:15px; transform: rotate(90deg); }
-
-/* ---- Wireframe Torus ---- */
-.geo3d-torus{
-  width:80px; height:80px;
-  border:1px solid rgba(224,85,59,0.25);
-  border-radius:50%;
-  background:transparent;
-}
-.geo3d-torus::before{
-  content:''; position:absolute; inset:12px;
-  border:1px solid rgba(224,85,59,0.4);
-  border-radius:50%;
-}
-.geo3d-torus::after{
-  content:''; position:absolute; inset:24px;
-  border:1px solid rgba(224,85,59,0.2);
-  border-radius:50%;
-}
-
-/* ---- Wireframe Pyramid / Tetrahedron (6 edges) ---- */
-.geo3d-pyr{ width:60px; height:60px; }
-.geo3d-pyr .py-edge{
-  height:1px;
-  background:linear-gradient(90deg, transparent, rgba(224,85,59,0.5) 15%, rgba(224,85,59,0.7) 50%, rgba(224,85,59,0.5) 85%, transparent);
-}
-.py-e1 { width:60px; top:60px; left:0; }
-.py-e2 { width:60px; top:0; left:0; transform: rotate(-60deg); transform-origin:left bottom; }
-.py-e3 { width:60px; top:0; left:60px; transform: rotate(60deg); transform-origin:right bottom; }
-.py-e4 { width:52px; top:0; left:30px; transform: rotate(90deg) translateX(-26px); }
-.py-e5 { width:52px; top:0; left:0; transform: rotate(-30deg); transform-origin:left bottom; }
-.py-e6 { width:52px; top:0; left:60px; transform: rotate(30deg) translateX(-52px); transform-origin:left bottom; }
-
-/* ---- Hover glow ---- */
-.geo3d:hover{
-  filter:drop-shadow(0 0 8px rgba(224,85,59,0.5));
-}
-
-/* ---- Spin easter egg (click) ---- */
-@keyframes geo3dSpin{
-  0%{ transform:rotateZ(0deg) rotateX(0deg) scale(1); }
-  50%{ transform:rotateZ(180deg) rotateX(360deg) scale(1.4); }
-  100%{ transform:rotateZ(360deg) rotateX(720deg) scale(1); }
-}
-.geo3d-spin{
-  animation:geo3dSpin 2s var(--ease) forwards !important;
-}
-
-/* ---- Burst easter egg (Konami code) ---- */
-@keyframes geo3dBurst{
-  0%{ filter:drop-shadow(0 0 0 rgba(224,85,59,0)); opacity:0.6; }
-  30%{ filter:drop-shadow(0 0 25px rgba(224,85,59,0.8)); opacity:1; }
-  100%{ filter:drop-shadow(0 0 0 rgba(224,85,59,0)); opacity:0.6; }
-}
-.geo3d-burst{
-  animation:geo3dBurst 1.5s var(--ease) forwards !important;
-}
-
-@media (prefers-reduced-motion: reduce){
-  .geo3d-layer, .geo-canvas{ display:none; }
-}
+@media (max-width:700px){ .orb-canvas{ opacity:0.5; } }
+@media (prefers-reduced-motion: reduce){ .orb-canvas{ display:none; } }

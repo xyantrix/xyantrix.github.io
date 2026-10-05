@@ -389,73 +389,118 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   } catch(err){}
 
-  /* ---------- 3D WIREFRAME SHAPES + CANVAS GRID STROKE ---------- */
+  /* ---------- AMBIENT ORB CANVAS — modern particle field ---------- */
   try{
     if(reduceMotion) throw new Error('reduced motion');
 
-    var geoLayer = document.getElementById('geo3dLayer');
-    var shapes = document.querySelectorAll('.geo3d');
-    if(!geoLayer || !shapes.length) throw new Error('no shapes');
+    var canvas = document.getElementById('orbCanvas');
+    if(!canvas) throw new Error('no canvas');
+    var ctx = canvas.getContext('2d');
 
-    var mouseX = 0, mouseY = 0;
-    var targetMX = 0, targetMY = 0;
-    var scrollY = 0;
+    var cw = 0, ch = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    function resizeCanvas(){
+      cw = window.innerWidth;
+      ch = window.innerHeight;
+      canvas.width = cw * dpr;
+      canvas.height = ch * dpr;
+      canvas.style.width = cw + 'px';
+      canvas.style.height = ch + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
+    /* particle count scales with screen size */
+    var particleCount = Math.min(55, Math.floor(cw * ch / 22000));
+    var orbs = [];
+    var accentRGB = [224, 85, 59];
+
+    for(var i = 0; i < particleCount; i++){
+      orbs.push({
+        x: Math.random() * cw,
+        y: Math.random() * ch,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.12,
+        r: Math.random() * 1.8 + 0.4,
+        baseAlpha: Math.random() * 0.25 + 0.04,
+        pulsePhase: Math.random() * Math.PI * 2,
+        pulseSpeed: Math.random() * 0.008 + 0.003,
+        drift: Math.random() * 0.5 + 0.3
+      });
+    }
+
+    /* mouse parallax */
+    var mx = 0, my = 0, tmx = 0, tmy = 0;
     if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
       window.addEventListener('mousemove', function(e){
-        targetMX = (e.clientX / window.innerWidth - 0.5);
-        targetMY = (e.clientY / window.innerHeight - 0.5);
+        tmx = (e.clientX / cw - 0.5);
+        tmy = (e.clientY / ch - 0.5);
       }, {passive:true});
     }
 
-    window.addEventListener('scroll', function(){
-      scrollY = window.scrollY;
-    }, {passive:true});
+    var t = 0;
 
-    /* Continuous render loop — like Three.js requestAnimationFrame */
-    var frameCount = 0;
-    function renderLoop(){
-      frameCount++;
-      /* smooth mouse interpolation */
-      mouseX += (targetMX - mouseX) * 0.06;
-      mouseY += (targetMY - mouseY) * 0.06;
+    function renderOrbs(){
+      t += 0.01;
+      mx += (tmx - mx) * 0.04;
+      my += (tmy - my) * 0.04;
 
-      shapes.forEach(function(shape, i){
-        if(shape.classList.contains('geo3d-spin') || shape.classList.contains('geo3d-burst')) return;
-        var depth = parseFloat(shape.getAttribute('data-depth')) || 0.1;
-        var rotSpeed = parseFloat(shape.getAttribute('data-rot')) || 0.3;
-        var idx = i + 1;
-        var dir = idx % 2 ? 1 : -1;
+      ctx.clearRect(0, 0, cw, ch);
 
-        /* parallax */
-        var px = mouseX * 50 * depth * dir;
-        var py = mouseY * 35 * depth;
-        var sy = scrollY * depth * 0.2;
+      /* draw connecting lines between nearby particles */
+      ctx.lineWidth = 0.5;
+      for(var a = 0; a < orbs.length; a++){
+        for(var b = a + 1; b < orbs.length; b++){
+          var dx = orbs[a].x - orbs[b].x;
+          var dy = orbs[a].y - orbs[b].y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if(dist < 130){
+            var alpha = (1 - dist / 130) * 0.06;
+            ctx.strokeStyle = 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + alpha + ')';
+            ctx.beginPath();
+            ctx.moveTo(orbs[a].x, orbs[a].y);
+            ctx.lineTo(orbs[b].x, orbs[b].y);
+            ctx.stroke();
+          }
+        }
+      }
 
-        /* continuous auto-rotation + mouse influence */
-        var autoRy = frameCount * rotSpeed * dir;
-        var autoRx = frameCount * rotSpeed * 0.6 * dir;
-        var rx = autoRx + mouseY * 20 * depth;
-        var ry = autoRy + mouseX * 30 * depth * dir;
-        var rz = Math.sin(frameCount * 0.008 * rotSpeed) * 8 * dir;
+      /* draw particles with soft glow */
+      orbs.forEach(function(o){
+        o.x += o.vx + mx * o.drift;
+        o.y += o.vy + my * o.drift;
+        o.pulsePhase += o.pulseSpeed;
 
-        shape.style.transform = 'translate3d(' + px + 'px,' + (py + sy) + 'px,0) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) rotateZ(' + rz + 'deg)';
+        if(o.x < -20) o.x = cw + 20;
+        if(o.x > cw + 20) o.x = -20;
+        if(o.y < -20) o.y = ch + 20;
+        if(o.y > ch + 20) o.y = -20;
+
+        var pulse = (Math.sin(o.pulsePhase) + 1) * 0.5;
+        var alpha = o.baseAlpha + pulse * 0.12;
+        var radius = o.r + pulse * 0.6;
+
+        /* glow halo */
+        var grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, radius * 4);
+        grad.addColorStop(0, 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + (alpha * 0.4) + ')');
+        grad.addColorStop(1, 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(o.x, o.y, radius * 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* core dot */
+        ctx.fillStyle = 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + alpha + ')';
+        ctx.beginPath();
+        ctx.arc(o.x, o.y, radius, 0, Math.PI * 2);
+        ctx.fill();
       });
 
-      requestAnimationFrame(renderLoop);
+      requestAnimationFrame(renderOrbs);
     }
-    renderLoop();
+    renderOrbs();
 
-    /* Easter egg: click a shape to make it spin */
-    shapes.forEach(function(shape){
-      shape.addEventListener('click', function(){
-        if(shape.classList.contains('geo3d-spin')) return;
-        shape.classList.add('geo3d-spin');
-        setTimeout(function(){ shape.classList.remove('geo3d-spin'); }, 2000);
-      });
-    });
-
-    /* Easter egg: Konami code reveals a burst of shapes */
+    /* Easter egg: Konami code triggers a particle burst */
     var konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
     var konamiIdx = 0;
     document.addEventListener('keydown', function(e){
@@ -464,90 +509,33 @@ document.addEventListener('DOMContentLoaded', function(){
         konamiIdx++;
         if(konamiIdx === konami.length){
           konamiIdx = 0;
-          triggerBurst();
+          orbs.forEach(function(o){
+            o.vx = (Math.random() - 0.5) * 4;
+            o.vy = (Math.random() - 0.5) * 4;
+            o.baseAlpha = 0.4;
+            setTimeout(function(){ o.vx = (Math.random() - 0.5) * 0.18; o.vy = (Math.random() - 0.5) * 0.12; o.baseAlpha = Math.random() * 0.25 + 0.04; }, 2000);
+          });
         }
       } else {
         konamiIdx = (key === konami[0]) ? 1 : 0;
       }
     });
 
-    function triggerBurst(){
-      shapes.forEach(function(shape, i){
-        setTimeout(function(){
-          shape.classList.add('geo3d-burst');
-          setTimeout(function(){ shape.classList.remove('geo3d-burst'); }, 1500);
-        }, i * 120);
+    /* Easter egg: click anywhere on background to create a ripple burst */
+    document.addEventListener('click', function(e){
+      if(e.target.closest('a, button, input, textarea, .faq-q, .nav-burger, form')) return;
+      orbs.forEach(function(o){
+        var dx = o.x - e.clientX;
+        var dy = o.y - e.clientY;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if(dist < 200){
+          var force = (1 - dist / 200) * 3;
+          o.vx += (dx / dist) * force;
+          o.vy += (dy / dist) * force;
+          setTimeout(function(){ o.vx = (Math.random() - 0.5) * 0.18; o.vy = (Math.random() - 0.5) * 0.12; }, 1500);
+        }
       });
-    }
-
-    /* ---------- CANVAS: subtle moving stroke through grid ---------- */
-    var canvas = document.getElementById('geoCanvas');
-    if(canvas){
-      var ctx = canvas.getContext('2d');
-      var cw = 0, ch = 0;
-      function resizeCanvas(){
-        cw = canvas.width = window.innerWidth;
-        ch = canvas.height = window.innerHeight;
-      }
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-
-      var strokeX = -300;
-      var strokeSpeed = 1.2;
-      var dots = [];
-
-      /* floating accent particles drifting through the grid */
-      for(var d = 0; d < 18; d++){
-        dots.push({
-          x: Math.random() * 2000,
-          y: Math.random() * 1200,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.15,
-          r: Math.random() * 1.5 + 0.5,
-          a: Math.random() * 0.3 + 0.05
-        });
-      }
-
-      function drawCanvas(){
-        ctx.clearRect(0, 0, cw, ch);
-
-        /* moving vertical stroke — a soft accent beam sweeping across */
-        strokeX += strokeSpeed;
-        if(strokeX > cw + 300) strokeX = -300;
-
-        var grad = ctx.createLinearGradient(strokeX - 200, 0, strokeX + 200, 0);
-        grad.addColorStop(0, 'rgba(224,85,59,0)');
-        grad.addColorStop(0.5, 'rgba(224,85,59,0.06)');
-        grad.addColorStop(1, 'rgba(224,85,59,0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(strokeX - 200, 0, 400, ch);
-
-        /* thin bright line at center of the beam */
-        ctx.strokeStyle = 'rgba(224,85,59,0.08)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(strokeX, 0);
-        ctx.lineTo(strokeX, ch);
-        ctx.stroke();
-
-        /* floating particles */
-        dots.forEach(function(d){
-          d.x += d.vx;
-          d.y += d.vy;
-          if(d.x < -10) d.x = cw + 10;
-          if(d.x > cw + 10) d.x = -10;
-          if(d.y < -10) d.y = ch + 10;
-          if(d.y > ch + 10) d.y = -10;
-          ctx.fillStyle = 'rgba(224,85,59,' + d.a + ')';
-          ctx.beginPath();
-          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        requestAnimationFrame(drawCanvas);
-      }
-      drawCanvas();
-    }
+    });
   } catch(err){}
 
 });
