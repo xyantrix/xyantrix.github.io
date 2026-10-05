@@ -36,11 +36,28 @@
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
 <!-- 3D geometric easter-egg shapes -->
+<canvas id="geoCanvas" class="geo-canvas" aria-hidden="true"></canvas>
+
 <div class="geo3d-layer" id="geo3dLayer" aria-hidden="true">
-  <div class="geo3d geo3d-cube" data-depth="0.12" style="top:18%;left:8%"><div class="geo3d-face geo3d-front"></div><div class="geo3d-face geo3d-back"></div><div class="geo3d-face geo3d-right"></div><div class="geo3d-face geo3d-left"></div><div class="geo3d-face geo3d-top"></div><div class="geo3d-face geo3d-bottom"></div></div>
-  <div class="geo3d geo3d-octa" data-depth="0.20" style="top:65%;left:82%"></div>
-  <div class="geo3d geo3d-ring" data-depth="0.08" style="top:40%;right:5%"></div>
-  <div class="geo3d geo3d-tri" data-depth="0.15" style="bottom:10%;left:15%"></div>
+  <div class="geo3d geo3d-wirecube" data-depth="0.12" data-rot="0.3" style="top:16%;left:6%">
+    <div class="wc-edge wc-e1"></div><div class="wc-edge wc-e2"></div><div class="wc-edge wc-e3"></div>
+    <div class="wc-edge wc-e4"></div><div class="wc-edge wc-e5"></div><div class="wc-edge wc-e6"></div>
+    <div class="wc-edge wc-e7"></div><div class="wc-edge wc-e8"></div><div class="wc-edge wc-e9"></div>
+    <div class="wc-edge wc-e10"></div><div class="wc-edge wc-e11"></div><div class="wc-edge wc-e12"></div>
+  </div>
+  <div class="geo3d geo3d-icosa" data-depth="0.22" data-rot="0.5" style="top:58%;left:78%">
+    <div class="ic-line ic-l1"></div><div class="ic-line ic-l2"></div><div class="ic-line ic-l3"></div>
+    <div class="ic-line ic-l4"></div><div class="ic-line ic-l5"></div><div class="ic-line ic-l6"></div>
+    <div class="ic-line ic-l7"></div><div class="ic-line ic-l8"></div><div class="ic-line ic-l9"></div>
+    <div class="ic-line ic-l10"></div><div class="ic-line ic-l11"></div><div class="ic-line ic-l12"></div>
+    <div class="ic-line ic-l13"></div><div class="ic-line ic-l14"></div><div class="ic-line ic-l15"></div>
+  </div>
+  <div class="geo3d geo3d-torus" data-depth="0.16" data-rot="0.4" style="top:38%;right:4%"></div>
+  <div class="geo3d geo3d-pyr" data-depth="0.10" data-rot="0.25" style="bottom:8%;left:14%">
+    <div class="py-edge py-e1"></div><div class="py-edge py-e2"></div>
+    <div class="py-edge py-e3"></div><div class="py-edge py-e4"></div>
+    <div class="py-edge py-e5"></div><div class="py-edge py-e6"></div>
+  </div>
 </div>
 <nav id="nav">
   <div class="nav-inner">

@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   } catch(err){}
 
-  /* ---------- 3D GEOMETRIC EASTER EGGS ---------- */
+  /* ---------- 3D WIREFRAME SHAPES + CANVAS GRID STROKE ---------- */
   try{
     if(reduceMotion) throw new Error('reduced motion');
 
@@ -397,45 +397,54 @@ document.addEventListener('DOMContentLoaded', function(){
     var shapes = document.querySelectorAll('.geo3d');
     if(!geoLayer || !shapes.length) throw new Error('no shapes');
 
-    var mouseX = 0, mouseY = 0, scrollY = 0;
-    var tickingGeo = false;
+    var mouseX = 0, mouseY = 0;
+    var targetMX = 0, targetMY = 0;
+    var scrollY = 0;
 
-    /* Parallax + rotation following mouse */
     if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
       window.addEventListener('mousemove', function(e){
-        mouseX = (e.clientX / window.innerWidth - 0.5);
-        mouseY = (e.clientY / window.innerHeight - 0.5);
-        if(!tickingGeo){
-          requestAnimationFrame(updateGeo);
-          tickingGeo = true;
-        }
+        targetMX = (e.clientX / window.innerWidth - 0.5);
+        targetMY = (e.clientY / window.innerHeight - 0.5);
       }, {passive:true});
     }
 
     window.addEventListener('scroll', function(){
       scrollY = window.scrollY;
-      if(!tickingGeo){
-        requestAnimationFrame(updateGeo);
-        tickingGeo = true;
-      }
     }, {passive:true});
 
-    function updateGeo(){
-      tickingGeo = false;
+    /* Continuous render loop — like Three.js requestAnimationFrame */
+    var frameCount = 0;
+    function renderLoop(){
+      frameCount++;
+      /* smooth mouse interpolation */
+      mouseX += (targetMX - mouseX) * 0.06;
+      mouseY += (targetMY - mouseY) * 0.06;
+
       shapes.forEach(function(shape, i){
+        if(shape.classList.contains('geo3d-spin') || shape.classList.contains('geo3d-burst')) return;
         var depth = parseFloat(shape.getAttribute('data-depth')) || 0.1;
+        var rotSpeed = parseFloat(shape.getAttribute('data-rot')) || 0.3;
         var idx = i + 1;
-        /* parallax offset based on mouse + scroll */
-        var px = mouseX * 60 * depth * (idx % 2 ? 1 : -1);
-        var py = mouseY * 40 * depth;
-        var sy = scrollY * depth * 0.3;
-        /* continuous rotation from mouse */
-        var rx = mouseY * 25 * depth;
-        var ry = mouseX * 35 * depth * (idx % 2 ? 1 : -1);
-        shape.style.transform = 'translate(' + px + 'px,' + (py + sy) + 'px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) rotateZ(' + (idx * 7) + 'deg)';
+        var dir = idx % 2 ? 1 : -1;
+
+        /* parallax */
+        var px = mouseX * 50 * depth * dir;
+        var py = mouseY * 35 * depth;
+        var sy = scrollY * depth * 0.2;
+
+        /* continuous auto-rotation + mouse influence */
+        var autoRy = frameCount * rotSpeed * dir;
+        var autoRx = frameCount * rotSpeed * 0.6 * dir;
+        var rx = autoRx + mouseY * 20 * depth;
+        var ry = autoRy + mouseX * 30 * depth * dir;
+        var rz = Math.sin(frameCount * 0.008 * rotSpeed) * 8 * dir;
+
+        shape.style.transform = 'translate3d(' + px + 'px,' + (py + sy) + 'px,0) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) rotateZ(' + rz + 'deg)';
       });
+
+      requestAnimationFrame(renderLoop);
     }
-    updateGeo();
+    renderLoop();
 
     /* Easter egg: click a shape to make it spin */
     shapes.forEach(function(shape){
@@ -469,6 +478,75 @@ document.addEventListener('DOMContentLoaded', function(){
           setTimeout(function(){ shape.classList.remove('geo3d-burst'); }, 1500);
         }, i * 120);
       });
+    }
+
+    /* ---------- CANVAS: subtle moving stroke through grid ---------- */
+    var canvas = document.getElementById('geoCanvas');
+    if(canvas){
+      var ctx = canvas.getContext('2d');
+      var cw = 0, ch = 0;
+      function resizeCanvas(){
+        cw = canvas.width = window.innerWidth;
+        ch = canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      var strokeX = -300;
+      var strokeSpeed = 1.2;
+      var dots = [];
+
+      /* floating accent particles drifting through the grid */
+      for(var d = 0; d < 18; d++){
+        dots.push({
+          x: Math.random() * 2000,
+          y: Math.random() * 1200,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.15,
+          r: Math.random() * 1.5 + 0.5,
+          a: Math.random() * 0.3 + 0.05
+        });
+      }
+
+      function drawCanvas(){
+        ctx.clearRect(0, 0, cw, ch);
+
+        /* moving vertical stroke — a soft accent beam sweeping across */
+        strokeX += strokeSpeed;
+        if(strokeX > cw + 300) strokeX = -300;
+
+        var grad = ctx.createLinearGradient(strokeX - 200, 0, strokeX + 200, 0);
+        grad.addColorStop(0, 'rgba(224,85,59,0)');
+        grad.addColorStop(0.5, 'rgba(224,85,59,0.06)');
+        grad.addColorStop(1, 'rgba(224,85,59,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(strokeX - 200, 0, 400, ch);
+
+        /* thin bright line at center of the beam */
+        ctx.strokeStyle = 'rgba(224,85,59,0.08)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(strokeX, 0);
+        ctx.lineTo(strokeX, ch);
+        ctx.stroke();
+
+        /* floating particles */
+        dots.forEach(function(d){
+          d.x += d.vx;
+          d.y += d.vy;
+          if(d.x < -10) d.x = cw + 10;
+          if(d.x > cw + 10) d.x = -10;
+          if(d.y < -10) d.y = ch + 10;
+          if(d.y > ch + 10) d.y = -10;
+          ctx.fillStyle = 'rgba(224,85,59,' + d.a + ')';
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(drawCanvas);
+      }
+      drawCanvas();
     }
   } catch(err){}
 
