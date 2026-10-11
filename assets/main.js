@@ -1,51 +1,26 @@
 /* ============================================================
    PIYUSH TOMAR — PORTFOLIO
+   reactbits.dev-inspired features:
+   - Tech-text loader (code slot typing)
+   - Target cursor (4-corner follow + lock)
+   - Dot field background (dotted gradient with cursor bulge)
+   - Scroll reveal text (unblur on scroll)
    Every feature isolated in its own try/catch. Pure vanilla JS,
-   zero dependencies — runs from a double-clicked file or GitHub
-   Pages. Reduced-motion visitors get instant, static equivalents.
+   zero dependencies. Reduced-motion visitors get static equivalents.
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function(){
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var loaderTotalMs = 2400;
 
-  /* ---------- LOADER — logo + language "Welcome" cycle ---------- */
-  var loaderTotalMs = 2000;
+  /* ---------- LOADER — tech-text code slot ---------- */
   (function loader(){
     var loaderEl = document.getElementById('loader');
-    var wordEl = document.getElementById('loaderWord');
-    var langEl = document.getElementById('loaderLangName');
+    var codeEl = document.getElementById('loaderCode');
+    var barEl = document.getElementById('loaderBar');
     if(!loaderEl) return;
-
-    var WELCOMES = [
-      ['English','Welcome'],['Spanish','Bienvenido'],['French','Bienvenue'],['German','Willkommen'],
-      ['Italian','Benvenuto'],['Portuguese','Bem-vindo'],['Dutch','Welkom'],['Swedish','Välkommen'],
-      ['Norwegian','Velkommen'],['Danish','Velkommen'],['Finnish','Tervetuloa'],['Icelandic','Velkomin'],
-      ['Polish','Witamy'],['Czech','Vítejte'],['Slovak','Vitajte'],['Hungarian','Üdvözöljük'],
-      ['Romanian','Bine ați venit'],['Bulgarian','Добре дошли'],['Greek','Καλώς ήρθατε'],['Russian','Добро пожаловать'],
-      ['Ukrainian','Ласкаво просимо'],['Turkish','Hoş geldiniz'],['Arabic','أهلاً وسهلاً'],['Hebrew','ברוכים הבאים'],
-      ['Persian','خوش آمدید'],['Urdu','خوش آمدید'],['Hindi','स्वागत है'],['Bengali','স্বাগতম'],
-      ['Punjabi','ਜੀ ਆਇਆਂ ਨੂੰ'],['Gujarati','સ્વાગત છે'],['Marathi','स्वागत आहे'],['Tamil','வரவேற்கிறோம்'],
-      ['Telugu','స్వాగతం'],['Kannada','ಸ್ವಾಗತ'],['Malayalam','സ്വാഗതം'],['Sinhala','ආයුබෝවන්'],
-      ['Nepali','स्वागत छ'],['Thai','ยินดีต้อนรับ'],['Lao','ຍິນດີຕ້ອນຮັບ'],['Khmer','សូមស្វាគមន៍'],
-      ['Vietnamese','Chào mừng'],['Indonesian','Selamat datang'],['Malay','Selamat datang'],['Filipino','Maligayang pagdating'],
-      ['Japanese','ようこそ'],['Korean','환영합니다'],['Mandarin','欢迎'],['Cantonese','歡迎'],
-      ['Mongolian','Тавтай морил'],['Kazakh','Қош келдіңіз'],['Uzbek','Xush kelibsiz'],['Georgian','კეთილი იყოს თქვენი მობრძანება'],
-      ['Armenian','Բարի գալուստ'],['Azerbaijani','Xoş gəldiniz'],['Swahili','Karibu'],['Zulu','Wamukelekile'],
-      ['Xhosa','Wamkelekile'],['Amharic','እንኳን ደህና መጡ'],['Somali','Soo dhawoow'],['Hausa','Barka da zuwa'],
-      ['Yoruba','Kaabo'],['Igbo','Nnọọ'],['Afrikaans','Welkom'],['Croatian','Dobrodošli'],
-      ['Serbian','Добродошли'],['Bosnian','Dobrodošli'],['Slovenian','Dobrodošli'],['Macedonian','Добредојдовте'],
-      ['Albanian','Mirë se vini'],['Lithuanian','Sveiki atvykę'],['Latvian','Laipni lūdzam'],['Estonian','Tere tulemast'],
-      ['Maltese','Merħba'],['Irish','Fáilte'],['Welsh','Croeso'],['Scots Gaelic','Fàilte'],
-      ['Basque','Ongi etorri'],['Catalan','Benvingut'],['Galician','Benvido'],['Luxembourgish','Wëllkomm'],
-      ['Yiddish','ברוכים הבאים'],['Esperanto','Bonvenon'],['Haitian Creole','Byenveni'],['Samoan','Talofa'],
-      ['Maori','Nau mai'],['Hawaiian','E komo mai'],['Fijian','Ni sa bula'],['Tongan','Talitali fiefia'],
-      ['Malagasy','Tongasoa'],['Burmese','ကြိုဆိုပါတယ်'],['Tibetan','བཀྲ་ཤིས་བདེ་ལེགས'],['Punjabi (Shahmukhi)','خوش آمدید'],
-      ['Sindhi','ڀليڪار'],['Pashto','ښه راغلاست'],['Kurdish','Bi xêr hatî'],['Tatar','Рәхим итегез'],
-      ['Chechen','Марша догIийла'],['Corsican','Benvenuti'],['Sardinian','Beni benius'],['Breton','Degemer mat'],
-      ['Faroese','Vælkomin'],['Greenlandic','Tikilluarit'],['Quechua','Allin hamusqayki'],['Guarani','Tereg̃uahẽ porã'],
-      ['Aymara','Aski jutawi'],['Zulu (formal)','Siyakwamukela'],['Chichewa','Takulandirani'],['Sesotho','Rea o amohela']
-    ];
 
     if(reduceMotion){
       loaderEl.style.display = 'none';
@@ -53,45 +28,54 @@ document.addEventListener('DOMContentLoaded', function(){
       return;
     }
 
+    var CODE_LINES = [
+      '> initializing finance ops...',
+      '> loading automation modules...',
+      '> VBA macros ......... OK',
+      '> Power BI dashboards . OK',
+      '> Power Automate flows  OK',
+      '> AI scripting ....... OK',
+      '> ERP systems: Oracle, NetSuite, Navision, Tally',
+      '> 3-way matching engine ready',
+      '> GST/TDS compliance verified',
+      '> system online.'
+    ];
+
+    var fullText = CODE_LINES.join('\n');
+    var charIndex = 0;
+
     document.body.classList.add('loading');
 
-    var pool = WELCOMES.slice(1);
-    for(var i = pool.length - 1; i > 0; i--){
-      var j = Math.floor(Math.random() * (i+1));
-      var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+    function typeNext(){
+      if(charIndex >= fullText.length){
+        return;
+      }
+      charIndex++;
+      codeEl.textContent = fullText.substring(0, charIndex);
+      codeEl.scrollTop = codeEl.scrollHeight;
+      var ch = fullText[charIndex - 1];
+      var delay = ch === '\n' ? 80 : (Math.random() * 22 + 12);
+      setTimeout(typeNext, delay);
     }
-    var sequence = pool.slice(0, 21).concat([WELCOMES[0]]);
-    var n = sequence.length;
-    var duration = loaderTotalMs;
 
     requestAnimationFrame(function(){
-      requestAnimationFrame(function(){ loaderEl.classList.add('progressing'); });
-    });
-
-    sequence.forEach(function(pair, k){
-      var t = k / (n - 1);
-      var eased = 1 - Math.pow(1 - t, 3);
-      var at = Math.round(duration * eased);
-      setTimeout(function(){
-        wordEl.textContent = pair[1];
-        langEl.textContent = pair[0];
-        if(k === n - 1){
-          wordEl.classList.add('final');
-          loaderEl.classList.add('confirm');
+      requestAnimationFrame(function(){
+        typeNext();
+        if(barEl){
+          barEl.style.transition = 'width ' + (loaderTotalMs - 400) + 'ms cubic-bezier(.32,.72,0,1)';
+          barEl.style.width = '100%';
         }
-      }, at);
+      });
     });
 
-    /* Smooth fade: loader fades out completely, then site fades in.
-       No letterbox bars, no hard cut — just a clean dissolve. */
     setTimeout(function(){
       loaderEl.classList.add('out');
       document.body.classList.remove('loading');
-      setTimeout(function(){ loaderEl.style.display = 'none'; }, 850);
-    }, duration + 650);
+      setTimeout(function(){ loaderEl.style.display = 'none'; }, 800);
+    }, loaderTotalMs + 300);
   })();
 
-  /* ---------- HERO MOCKUP RANDOMIZER — unique every visit ---------- */
+  /* ---------- HERO MOCKUP RANDOMIZER ---------- */
   (function randomizeMockup(){
     var VENDORS = [
       ['Bansal Freight Pvt Ltd','INV-88231','3-way match'],
@@ -214,47 +198,49 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   } catch(err){}
 
-  /* ---------- TEXT SPLIT ---------- */
+  /* ---------- SCROLL REVEAL TEXT (reactbits-style unblur) ---------- */
   try{
-    var wordCounter = 0;
-    function splitWords(node){
-      Array.prototype.slice.call(node.childNodes).forEach(function(child){
-        if(child.nodeType === 3){
-          var parts = child.textContent.split(/(\s+)/);
-          var frag = document.createDocumentFragment();
-          parts.forEach(function(part){
-            if(part === '') return;
-            if(/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(part)); return; }
-            var outer = document.createElement('span');
-            outer.className = 'word';
-            var inner = document.createElement('span');
-            inner.className = 'word-inner';
-            inner.textContent = part;
-            inner.style.transitionDelay = (Math.min(wordCounter, 14) * 42) + 'ms';
-            wordCounter++;
-            outer.appendChild(inner);
-            frag.appendChild(outer);
-          });
-          node.replaceChild(frag, child);
-        } else if(child.nodeType === 1 && child.tagName !== 'BR' && !child.classList.contains('grad')){
-          splitWords(child);
-        }
-      });
+    var scrollReveals = document.querySelectorAll('.scroll-reveal');
+
+    function applyScrollReveal(el, progress){
+      var blurAmount = Math.max(0, 8 * (1 - progress));
+      var opacityAmount = Math.max(0.15, 1 - (1 - progress) * 0.85);
+      var translateY = Math.max(0, 20 * (1 - progress));
+      el.style.filter = 'blur(' + blurAmount.toFixed(2) + 'px)';
+      el.style.opacity = opacityAmount.toFixed(3);
+      el.style.transform = 'translateY(' + translateY.toFixed(1) + 'px)';
     }
-    document.querySelectorAll('.hero-title, .section-title').forEach(function(el){
-      wordCounter = 0;
-      splitWords(el);
-      el.classList.add('split-ready');
-    });
+
+    if(reduceMotion){
+      scrollReveals.forEach(function(el){
+        el.style.filter = 'none';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    } else {
+      scrollReveals.forEach(function(el){ applyScrollReveal(el, 0); });
+
+      if('IntersectionObserver' in window){
+        var srObs = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){
+            if(e.isIntersecting){
+              applyScrollReveal(e.target, 1);
+              srObs.unobserve(e.target);
+            }
+          });
+        }, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
+        scrollReveals.forEach(function(el){ srObs.observe(el); });
+      } else {
+        scrollReveals.forEach(function(el){ applyScrollReveal(el, 1); });
+      }
+    }
   } catch(err){}
 
   /* ---------- HERO ENTRANCE SEQUENCE ---------- */
   try{
     var heroCopy = document.querySelector('.hero-copy');
-    var heroTitle = document.querySelector('.hero-title');
-    var heroDelay = reduceMotion ? 60 : (loaderTotalMs + 650);
+    var heroDelay = reduceMotion ? 60 : (loaderTotalMs + 400);
     setTimeout(function(){
-      if(heroTitle) heroTitle.classList.add('visible');
       if(heroCopy) heroCopy.classList.add('hero-in');
     }, heroDelay);
   } catch(err){}
@@ -276,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function(){
     var reveals = document.querySelectorAll('.reveal');
     function markVisible(el){
       el.classList.add('visible');
-      el.querySelectorAll('.split-ready').forEach(function(sp){ sp.classList.add('visible'); });
     }
     if('IntersectionObserver' in window){
       var revObs = new IntersectionObserver(function(entries){
@@ -335,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   /* ---------- MAGNETIC BUTTONS ---------- */
   try{
-    if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+    if(hasFinePointer){
       document.querySelectorAll('.magnetic').forEach(function(btn){
         btn.addEventListener('mousemove', function(e){
           var rect = btn.getBoundingClientRect();
@@ -361,13 +346,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
   /* ---------- SPOTLIGHT (mouse-reactive glow on cards) ---------- */
   try{
-    document.querySelectorAll('.spot').forEach(function(card){
-      card.addEventListener('mousemove', function(e){
-        var rect = card.getBoundingClientRect();
-        card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
-        card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    if(hasFinePointer){
+      document.querySelectorAll('.spot').forEach(function(card){
+        card.addEventListener('mousemove', function(e){
+          var rect = card.getBoundingClientRect();
+          card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+          card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+        });
       });
-    });
+    }
   } catch(err){}
 
   /* ---------- HERO MOCKUP ENTRANCE + PARALLAX ---------- */
@@ -375,9 +362,9 @@ document.addEventListener('DOMContentLoaded', function(){
     var mock = document.getElementById('heroMock');
     var heroSection = document.querySelector('.hero');
     if(mock){
-      setTimeout(function(){ mock.classList.add('mock-in'); }, reduceMotion ? 60 : (loaderTotalMs + 880));
+      setTimeout(function(){ mock.classList.add('mock-in'); }, reduceMotion ? 60 : (loaderTotalMs + 600));
     }
-    if(mock && heroSection && window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reduceMotion){
+    if(mock && heroSection && hasFinePointer && !reduceMotion){
       heroSection.addEventListener('mousemove', function(e){
         if(!mock.classList.contains('mock-in')) return;
         var rect = heroSection.getBoundingClientRect();
@@ -389,11 +376,68 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   } catch(err){}
 
-  /* ---------- AMBIENT ORB CANVAS — modern particle field ---------- */
+  /* ---------- TARGET CURSOR (reactbits-style 4-corner follow) ---------- */
+  try{
+    if(!hasFinePointer || reduceMotion) throw new Error('skip');
+    var cursor = document.getElementById('targetCursor');
+    if(!cursor) throw new Error('no cursor');
+
+    var mouseX = 0, mouseY = 0;
+    var curX = 0, curY = 0;
+    var isActive = false;
+    var isLocked = false;
+    var lockRect = null;
+
+    document.addEventListener('mousemove', function(e){
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if(!isActive){ curX = mouseX; curY = mouseY; isActive = true; }
+    }, {passive:true});
+
+    var lockTargets = document.querySelectorAll('a, button, input, textarea, .faq-q, .nav-burger, .proj-card, .cap-card, .cred-panel, .stat-chip');
+    lockTargets.forEach(function(el){
+      el.addEventListener('mouseenter', function(){
+        lockRect = el.getBoundingClientRect();
+        isLocked = true;
+        cursor.classList.add('locked');
+      });
+      el.addEventListener('mouseleave', function(){
+        isLocked = false;
+        lockRect = null;
+        cursor.classList.remove('locked');
+      });
+    });
+
+    function animateCursor(){
+      if(isLocked && lockRect){
+        var cx = lockRect.left + lockRect.width / 2;
+        var cy = lockRect.top + lockRect.height / 2;
+        curX += (cx - curX) * 0.18;
+        curY += (cy - curY) * 0.18;
+        var w = lockRect.width + 16;
+        var h = lockRect.height + 16;
+        cursor.style.setProperty('--tw', w + 'px');
+        cursor.style.setProperty('--th', h + 'px');
+      } else {
+        curX += (mouseX - curX) * 0.2;
+        curY += (mouseY - curY) * 0.2;
+        cursor.style.setProperty('--tw', '28px');
+        cursor.style.setProperty('--th', '28px');
+      }
+      cursor.style.transform = 'translate(' + curX + 'px,' + curY + 'px) translate(-50%, -50%)';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    document.addEventListener('mouseleave', function(){ cursor.style.opacity = '0'; });
+    document.addEventListener('mouseenter', function(){ cursor.style.opacity = '1'; });
+  } catch(err){}
+
+  /* ---------- DOT FIELD BACKGROUND (reactbits-style dotted gradient) ---------- */
   try{
     if(reduceMotion) throw new Error('reduced motion');
 
-    var canvas = document.getElementById('orbCanvas');
+    var canvas = document.getElementById('dotCanvas');
     if(!canvas) throw new Error('no canvas');
     var ctx = canvas.getContext('2d');
 
@@ -410,132 +454,83 @@ document.addEventListener('DOMContentLoaded', function(){
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    /* particle count scales with screen size */
-    var particleCount = Math.min(55, Math.floor(cw * ch / 22000));
-    var orbs = [];
+    /* dot grid configuration */
+    var DOT_SPACING = 38;
+    var DOT_RADIUS = 1.1;
+    var BULGE_RADIUS = 160;
+    var BULGE_STRENGTH = 1.8;
     var accentRGB = [224, 85, 59];
 
-    for(var i = 0; i < particleCount; i++){
-      orbs.push({
-        x: Math.random() * cw,
-        y: Math.random() * ch,
-        vx: (Math.random() - 0.5) * 0.18,
-        vy: (Math.random() - 0.5) * 0.12,
-        r: Math.random() * 1.8 + 0.4,
-        baseAlpha: Math.random() * 0.25 + 0.04,
-        pulsePhase: Math.random() * Math.PI * 2,
-        pulseSpeed: Math.random() * 0.008 + 0.003,
-        drift: Math.random() * 0.5 + 0.3
-      });
-    }
+    var mouseX2 = -9999, mouseY2 = -9999;
+    var tmx2 = -9999, tmy2 = -9999;
 
-    /* mouse parallax */
-    var mx = 0, my = 0, tmx = 0, tmy = 0;
-    if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+    if(hasFinePointer){
       window.addEventListener('mousemove', function(e){
-        tmx = (e.clientX / cw - 0.5);
-        tmy = (e.clientY / ch - 0.5);
+        tmx2 = e.clientX;
+        tmy2 = e.clientY;
+      }, {passive:true});
+      window.addEventListener('mouseleave', function(){
+        tmx2 = -9999; tmy2 = -9999;
       }, {passive:true});
     }
 
-    var t = 0;
-
-    function renderOrbs(){
-      t += 0.01;
-      mx += (tmx - mx) * 0.04;
-      my += (tmy - my) * 0.04;
+    function renderDots(){
+      mouseX2 += (tmx2 - mouseX2) * 0.1;
+      mouseY2 += (tmy2 - mouseY2) * 0.1;
 
       ctx.clearRect(0, 0, cw, ch);
 
-      /* draw connecting lines between nearby particles */
-      ctx.lineWidth = 0.5;
-      for(var a = 0; a < orbs.length; a++){
-        for(var b = a + 1; b < orbs.length; b++){
-          var dx = orbs[a].x - orbs[b].x;
-          var dy = orbs[a].y - orbs[b].y;
+      var cols = Math.ceil(cw / DOT_SPACING) + 2;
+      var rows = Math.ceil(ch / DOT_SPACING) + 2;
+      var offsetX = (cw % DOT_SPACING) / 2;
+      var offsetY = (ch % DOT_SPACING) / 2;
+
+      for(var r = 0; r < rows; r++){
+        for(var c = 0; c < cols; c++){
+          var bx = c * DOT_SPACING + offsetX;
+          var by = r * DOT_SPACING + offsetY;
+
+          var dx = bx - mouseX2;
+          var dy = by - mouseY2;
           var dist = Math.sqrt(dx * dx + dy * dy);
-          if(dist < 130){
-            var alpha = (1 - dist / 130) * 0.06;
-            ctx.strokeStyle = 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + alpha + ')';
-            ctx.beginPath();
-            ctx.moveTo(orbs[a].x, orbs[a].y);
-            ctx.lineTo(orbs[b].x, orbs[b].y);
-            ctx.stroke();
+
+          var px = bx, py = by;
+          var radius = DOT_RADIUS;
+          var alpha = 0.06;
+          var useAccent = false;
+
+          if(dist < BULGE_RADIUS && dist > 0.01){
+            var force = Math.pow(1 - dist / BULGE_RADIUS, 2);
+            px = bx + (dx / dist) * force * BULGE_STRENGTH * 8;
+            py = by + (dy / dist) * force * BULGE_STRENGTH * 8;
+            radius = DOT_RADIUS + force * 2.2;
+            alpha = 0.06 + force * 0.5;
+            useAccent = true;
           }
+
+          if(useAccent){
+            var grad = ctx.createRadialGradient(px, py, 0, px, py, radius * 3);
+            grad.addColorStop(0, 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + (alpha * 0.5) + ')');
+            grad.addColorStop(1, 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(px, py, radius * 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + alpha + ')';
+          } else {
+            ctx.fillStyle = 'rgba(237,234,227,' + alpha + ')';
+          }
+
+          ctx.beginPath();
+          ctx.arc(px, py, radius, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
-      /* draw particles with soft glow */
-      orbs.forEach(function(o){
-        o.x += o.vx + mx * o.drift;
-        o.y += o.vy + my * o.drift;
-        o.pulsePhase += o.pulseSpeed;
-
-        if(o.x < -20) o.x = cw + 20;
-        if(o.x > cw + 20) o.x = -20;
-        if(o.y < -20) o.y = ch + 20;
-        if(o.y > ch + 20) o.y = -20;
-
-        var pulse = (Math.sin(o.pulsePhase) + 1) * 0.5;
-        var alpha = o.baseAlpha + pulse * 0.12;
-        var radius = o.r + pulse * 0.6;
-
-        /* glow halo */
-        var grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, radius * 4);
-        grad.addColorStop(0, 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + (alpha * 0.4) + ')');
-        grad.addColorStop(1, 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(o.x, o.y, radius * 4, 0, Math.PI * 2);
-        ctx.fill();
-
-        /* core dot */
-        ctx.fillStyle = 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + alpha + ')';
-        ctx.beginPath();
-        ctx.arc(o.x, o.y, radius, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      requestAnimationFrame(renderOrbs);
+      requestAnimationFrame(renderDots);
     }
-    renderOrbs();
-
-    /* Easter egg: Konami code triggers a particle burst */
-    var konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-    var konamiIdx = 0;
-    document.addEventListener('keydown', function(e){
-      var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-      if(key === konami[konamiIdx]){
-        konamiIdx++;
-        if(konamiIdx === konami.length){
-          konamiIdx = 0;
-          orbs.forEach(function(o){
-            o.vx = (Math.random() - 0.5) * 4;
-            o.vy = (Math.random() - 0.5) * 4;
-            o.baseAlpha = 0.4;
-            setTimeout(function(){ o.vx = (Math.random() - 0.5) * 0.18; o.vy = (Math.random() - 0.5) * 0.12; o.baseAlpha = Math.random() * 0.25 + 0.04; }, 2000);
-          });
-        }
-      } else {
-        konamiIdx = (key === konami[0]) ? 1 : 0;
-      }
-    });
-
-    /* Easter egg: click anywhere on background to create a ripple burst */
-    document.addEventListener('click', function(e){
-      if(e.target.closest('a, button, input, textarea, .faq-q, .nav-burger, form')) return;
-      orbs.forEach(function(o){
-        var dx = o.x - e.clientX;
-        var dy = o.y - e.clientY;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if(dist < 200){
-          var force = (1 - dist / 200) * 3;
-          o.vx += (dx / dist) * force;
-          o.vy += (dy / dist) * force;
-          setTimeout(function(){ o.vx = (Math.random() - 0.5) * 0.18; o.vy = (Math.random() - 0.5) * 0.12; }, 1500);
-        }
-      });
-    });
+    renderDots();
   } catch(err){}
 
 });

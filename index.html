@@ -20,22 +20,37 @@
 </head>
 <body>
 
+<!-- ====== TECH-TEXT LOADER (reactbits style) ====== -->
 <div id="loader">
-  <div class="loader-eclipse" id="loaderEclipse"></div>
-  <div class="loader-mark-wrap">
-    <div class="loader-bleed"></div>
-    <div class="loader-ring"></div>
-    <span class="loader-mark mark-icon" aria-hidden="true"></span>
+  <div class="loader-grid" aria-hidden="true"></div>
+  <div class="loader-content">
+    <div class="loader-code-slot">
+      <div class="loader-code-line" id="loaderCode"></div>
+      <div class="loader-cursor-blink"></div>
+    </div>
+    <div class="loader-mark-row">
+      <span class="loader-mark mark-icon" aria-hidden="true"></span>
+      <span class="loader-brand">Piyush Tomar</span>
+    </div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar" id="loaderBar"></div>
+    </div>
   </div>
-  <div class="loader-lang">
-    <div class="loader-word" id="loaderWord">Welcome</div>
-    <div class="loader-langname" id="loaderLangName">English</div>
-  </div>
-  <div class="loader-progress"></div>
 </div>
 
+<!-- ====== TARGET CURSOR (reactbits style) ====== -->
+<div class="target-cursor" id="targetCursor" aria-hidden="true">
+  <span class="tc-corner tc-tl"></span>
+  <span class="tc-corner tc-tr"></span>
+  <span class="tc-corner tc-bl"></span>
+  <span class="tc-corner tc-br"></span>
+  <span class="tc-dot"></span>
+</div>
+
+<!-- ====== DOT FIELD BACKGROUND (reactbits style) ====== -->
+<canvas id="dotCanvas" class="dot-canvas" aria-hidden="true"></canvas>
+
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-<canvas id="orbCanvas" class="orb-canvas" aria-hidden="true"></canvas>
 
 <nav id="nav">
   <div class="nav-inner">
@@ -74,8 +89,8 @@
         <div class="hero-badges">
           <a href="#contact" class="badge-solid"><span class="dot"></span>Officer 1C, CMA CGM GBS — building automation-first finance ops</a>
         </div>
-        <h1 class="hero-title">Finance, run<br><span class="grad">on automation.</span></h1>
-        <p class="hero-desc">I close the gap between the invoice and the ledger, then automate it shut — 3-way matching, GST/TDS compliance, and reconciliations, driven by Excel VBA, Power BI, Power Automate &amp; AI-assisted scripting across Oracle, NetSuite, Navision &amp; Tally.</p>
+        <h1 class="hero-title scroll-reveal">Finance, run<br><span class="grad">on automation.</span></h1>
+        <p class="hero-desc scroll-reveal">I close the gap between the invoice and the ledger, then automate it shut — 3-way matching, GST/TDS compliance, and reconciliations, driven by Excel VBA, Power BI, Power Automate &amp; AI-assisted scripting across Oracle, NetSuite, Navision &amp; Tally.</p>
         <div class="hero-actions">
           <a href="#contact" class="btn-primary magnetic">Get in touch <span>&#8594;</span></a>
           <a href="#experience" class="btn-secondary magnetic">View experience</a>
@@ -203,7 +218,7 @@
   <div class="wrap about-inner">
     <div class="about-text reveal">
       <div class="eyebrow">About</div>
-      <h2 class="section-title">The numbers person<br><span class="grad">who automates the boring parts.</span></h2>
+      <h2 class="section-title scroll-reveal">The numbers person<br><span class="grad">who automates the boring parts.</span></h2>
       <p>Currently an Officer 1C at CMA CGM GBS, I validate container bookings and operational transactions, then build the automation around them — Excel VBA macros, Power BI dashboards, and Power Automate flows that turn manual AP work into a system that runs itself.</p>
       <p>Before that, I ran end-to-end Accounts Payable at CarTrade Tech (CarWale, BikeWale &amp; OLX) — 3-way matching, vendor reconciliations, and GST/TDS compliance across Oracle, NetSuite, Navision &amp; Tally. I led the Navision-to-Oracle data migration and resolved 100+ system issues during the NetSuite implementation, automating reconciliations and reporting along the way.</p>
       <p>I hold a BMS in Finance from Pillai HOC College and certifications from IBM SkillBuild in Corporate Finance, Data Analysis, and SAP Basics.</p>
@@ -226,7 +241,7 @@
   <div class="wrap">
     <div class="section-header reveal">
       <div class="eyebrow">Experience</div>
-      <h2 class="section-title">Where I've built <span class="grad">this skillset.</span></h2>
+      <h2 class="section-title scroll-reveal">Where I've built <span class="grad">this skillset.</span></h2>
     </div>
     <div class="exp-timeline">
       <div class="exp-card current reveal">
@@ -304,7 +319,7 @@
   <div class="wrap">
     <div class="section-header reveal">
       <div class="eyebrow">Projects</div>
-      <h2 class="section-title">Beyond day-to-day <span class="grad">operations.</span></h2>
+      <h2 class="section-title scroll-reveal">Beyond day-to-day <span class="grad">operations.</span></h2>
     </div>
     <div class="proj-grid">
       <div class="proj-card spot reveal">
@@ -363,7 +378,7 @@
   <div class="wrap">
     <div class="section-header reveal">
       <div class="eyebrow">Capabilities</div>
-      <h2 class="section-title">What I actually <span class="grad">handle, day to day.</span></h2>
+      <h2 class="section-title scroll-reveal">What I actually <span class="grad">handle, day to day.</span></h2>
     </div>
     <div class="cap-grid">
       <div class="cap-card large spot reveal">
@@ -386,7 +401,7 @@
   <div class="wrap">
     <div class="section-header reveal">
       <div class="eyebrow">How I work</div>
-      <h2 class="section-title">From invoice to <span class="grad">close, in three moves.</span></h2>
+      <h2 class="section-title scroll-reveal">From invoice to <span class="grad">close, in three moves.</span></h2>
     </div>
     <div class="process-grid">
       <div class="process-card reveal">
@@ -413,7 +428,7 @@
   <div class="wrap">
     <div class="section-header reveal">
       <div class="eyebrow">Why it's different</div>
-      <h2 class="section-title">The usual way, <span class="grad">vs. how I run it.</span></h2>
+      <h2 class="section-title scroll-reveal">The usual way, <span class="grad">vs. how I run it.</span></h2>
     </div>
     <div class="compare-grid reveal">
       <div class="compare-col other">
@@ -441,7 +456,7 @@
   <div class="wrap">
     <div class="section-header reveal">
       <div class="eyebrow">Tools</div>
-      <h2 class="section-title">Fluent across <span class="grad">the whole stack.</span></h2>
+      <h2 class="section-title scroll-reveal">Fluent across <span class="grad">the whole stack.</span></h2>
     </div>
   </div>
   <div class="logo-marquee-wrap reveal">
@@ -475,7 +490,7 @@
   <div class="wrap">
     <div class="section-header reveal">
       <div class="eyebrow">Credentials</div>
-      <h2 class="section-title">The record, <span class="grad">by the numbers.</span></h2>
+      <h2 class="section-title scroll-reveal">The record, <span class="grad">by the numbers.</span></h2>
     </div>
     <div class="stats-row reveal">
       <div class="stat-chip"><span class="stat-value" data-count="450" data-suffix="+">0</span><span class="stat-label">Invoices / month</span></div>
@@ -510,7 +525,7 @@
   <div class="wrap">
     <div class="section-header center reveal">
       <div class="eyebrow">FAQ</div>
-      <h2 class="section-title">Things recruiters <span class="grad">usually ask.</span></h2>
+      <h2 class="section-title scroll-reveal">Things recruiters <span class="grad">usually ask.</span></h2>
     </div>
     <div class="faq-list reveal">
       <div class="faq-item"><button class="faq-q">Do you build the automation tools yourself?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes — Excel VBA macros, Power BI dashboards, and Power Automate flows, plus AI-assisted scripting to strengthen AP controls. I build the tool and run the process it automates.</p></div></div>
@@ -526,7 +541,7 @@
 <section>
   <div class="wrap">
     <div class="cta-banner reveal">
-      <h2 class="section-title">Ready to automate<br>your <span class="grad">finance operations?</span></h2>
+      <h2 class="section-title scroll-reveal">Ready to automate<br>your <span class="grad">finance operations?</span></h2>
       <p>Open to finance, AP, and automation-focused roles — I respond directly and promptly to every message.</p>
       <div class="hero-actions"><a href="#contact" class="btn-primary magnetic">Get in touch <span>&#8594;</span></a></div>
     </div>
@@ -538,7 +553,7 @@
   <div class="wrap">
     <div class="section-header center reveal">
       <div class="eyebrow">Contact</div>
-      <h2 class="section-title">Let's talk about<br>your next <span class="grad">hire.</span></h2>
+      <h2 class="section-title scroll-reveal">Let's talk about<br>your next <span class="grad">hire.</span></h2>
     </div>
     <div class="contact-inner">
       <div class="contact-left reveal">
