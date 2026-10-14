@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function(){
   (function loader(){
     var loaderEl = document.getElementById('loader');
     var codeEl = document.getElementById('loaderCode');
+    var cursorEl = codeEl ? codeEl.querySelector('.loader-cursor-blink') : null;
     var barEl = document.getElementById('loaderBar');
     if(!loaderEl) return;
 
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       charIndex++;
       codeEl.textContent = fullText.substring(0, charIndex);
+      if(cursorEl) codeEl.appendChild(cursorEl);
       codeEl.scrollTop = codeEl.scrollHeight;
       var ch = fullText[charIndex - 1];
       var delay = ch === '\n' ? 80 : (Math.random() * 22 + 12);
@@ -202,36 +204,18 @@ document.addEventListener('DOMContentLoaded', function(){
   try{
     var scrollReveals = document.querySelectorAll('.scroll-reveal');
 
-    function applyScrollReveal(el, progress){
-      var blurAmount = Math.max(0, 8 * (1 - progress));
-      var opacityAmount = Math.max(0.15, 1 - (1 - progress) * 0.85);
-      var translateY = Math.max(0, 20 * (1 - progress));
-      el.style.filter = 'blur(' + blurAmount.toFixed(2) + 'px)';
-      el.style.opacity = opacityAmount.toFixed(3);
-      el.style.transform = 'translateY(' + translateY.toFixed(1) + 'px)';
-    }
-
     if(reduceMotion){
-      scrollReveals.forEach(function(el){
-        el.style.filter = 'none';
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-      });
+      scrollReveals.forEach(function(el){ el.classList.add('sr-in'); });
     } else {
-      scrollReveals.forEach(function(el){ applyScrollReveal(el, 0); });
-
       if('IntersectionObserver' in window){
         var srObs = new IntersectionObserver(function(entries){
           entries.forEach(function(e){
-            if(e.isIntersecting){
-              applyScrollReveal(e.target, 1);
-              srObs.unobserve(e.target);
-            }
+            if(e.isIntersecting){ e.target.classList.add('sr-in'); srObs.unobserve(e.target); }
           });
         }, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
         scrollReveals.forEach(function(el){ srObs.observe(el); });
       } else {
-        scrollReveals.forEach(function(el){ applyScrollReveal(el, 1); });
+        scrollReveals.forEach(function(el){ el.classList.add('sr-in'); });
       }
     }
   } catch(err){}
@@ -382,6 +366,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var cursor = document.getElementById('targetCursor');
     if(!cursor) throw new Error('no cursor');
 
+    cursor.style.opacity = '0';
     var mouseX = 0, mouseY = 0;
     var curX = 0, curY = 0;
     var isActive = false;
@@ -391,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.addEventListener('mousemove', function(e){
       mouseX = e.clientX;
       mouseY = e.clientY;
-      if(!isActive){ curX = mouseX; curY = mouseY; isActive = true; }
+      if(!isActive){ curX = mouseX; curY = mouseY; isActive = true; cursor.style.opacity = '1'; }
     }, {passive:true});
 
     var lockTargets = document.querySelectorAll('a, button, input, textarea, .faq-q, .nav-burger, .proj-card, .cap-card, .cred-panel, .stat-chip');
