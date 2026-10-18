@@ -116,7 +116,7 @@ function clickSpark(){
 /* ---- TiltCard ---- */
 function tilt(){
   if(!FINE||RM) return;
-  document.querySelectorAll('.proj-card,.cap-card,.process-card,.stat-chip').forEach(function(el){
+  document.querySelectorAll('.proj,.cap,.step,.stat').forEach(function(el){
     var raf=0;
     el.addEventListener('pointermove',function(e){
       if(!el.classList.contains('visible'))return;
@@ -142,11 +142,11 @@ function scrollVelocity(){
 
 ready(function(){
   safe(aurora);safe(dotGrid);safe(clickSpark);safe(tilt);safe(scrollVelocity);
-  safe(function(){splitText(document.querySelector('.hero-title'));});
+  safe(function(){splitText(document.querySelector('.hero h1'));});
   safe(function(){
     var rows=document.querySelectorAll('.mock-vendor');
     if(!rows.length||!('IntersectionObserver' in window)) return;
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);setTimeout(function(){decrypt(e.target,800);},(RM?0:2900));}});},{threshold:.4});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);setTimeout(function(){decrypt(e.target,800);},(RM?0:1900));}});},{threshold:.4});
     rows.forEach(function(r){io.observe(r);});
     document.querySelectorAll('.cr-v,.af-value').forEach(function(el){el.addEventListener('mouseenter',function(){decrypt(el,500);});});
   });
