@@ -3,8 +3,7 @@
    reactbits.dev-inspired features:
    - Tech-text loader (code slot typing)
    - Target cursor (4-corner follow + lock)
-   - Dot field background (dotted gradient with cursor bulge)
-   - Scroll reveal text (unblur on scroll)
+      - Scroll reveal text (unblur on scroll)
    Every feature isolated in its own try/catch. Pure vanilla JS,
    zero dependencies. Reduced-motion visitors get static equivalents.
    ============================================================ */
@@ -365,13 +364,14 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!hasFinePointer || reduceMotion) throw new Error('skip');
     var cursor = document.getElementById('targetCursor');
     if(!cursor) throw new Error('no cursor');
+    document.documentElement.classList.add('has-tc');
 
     cursor.style.opacity = '0';
     var mouseX = 0, mouseY = 0;
     var curX = 0, curY = 0;
     var isActive = false;
     var isLocked = false;
-    var lockRect = null;
+    var lockRect = null, lockEl = null;
 
     document.addEventListener('mousemove', function(e){
       mouseX = e.clientX;
@@ -382,18 +382,19 @@ document.addEventListener('DOMContentLoaded', function(){
     var lockTargets = document.querySelectorAll('a, button, input, textarea, .faq-q, .nav-burger, .proj-card, .cap-card, .cred-panel, .stat-chip');
     lockTargets.forEach(function(el){
       el.addEventListener('mouseenter', function(){
-        lockRect = el.getBoundingClientRect();
+        lockEl = el; lockRect = el.getBoundingClientRect();
         isLocked = true;
         cursor.classList.add('locked');
       });
       el.addEventListener('mouseleave', function(){
         isLocked = false;
-        lockRect = null;
+        lockRect = null; lockEl = null;
         cursor.classList.remove('locked');
       });
     });
 
     function animateCursor(){
+      if(isLocked && lockEl){ lockRect = lockEl.getBoundingClientRect(); }
       if(isLocked && lockRect){
         var cx = lockRect.left + lockRect.width / 2;
         var cy = lockRect.top + lockRect.height / 2;
@@ -416,106 +417,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
     document.addEventListener('mouseleave', function(){ cursor.style.opacity = '0'; });
     document.addEventListener('mouseenter', function(){ cursor.style.opacity = '1'; });
-  } catch(err){}
-
-  /* ---------- DOT FIELD BACKGROUND (reactbits-style dotted gradient) ---------- */
-  try{
-    if(reduceMotion) throw new Error('reduced motion');
-
-    var canvas = document.getElementById('dotCanvas');
-    if(!canvas) throw new Error('no canvas');
-    var ctx = canvas.getContext('2d');
-
-    var cw = 0, ch = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
-    function resizeCanvas(){
-      cw = window.innerWidth;
-      ch = window.innerHeight;
-      canvas.width = cw * dpr;
-      canvas.height = ch * dpr;
-      canvas.style.width = cw + 'px';
-      canvas.style.height = ch + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    /* dot grid configuration */
-    var DOT_SPACING = 38;
-    var DOT_RADIUS = 1.1;
-    var BULGE_RADIUS = 160;
-    var BULGE_STRENGTH = 1.8;
-    var accentRGB = [224, 85, 59];
-
-    var mouseX2 = -9999, mouseY2 = -9999;
-    var tmx2 = -9999, tmy2 = -9999;
-
-    if(hasFinePointer){
-      window.addEventListener('mousemove', function(e){
-        tmx2 = e.clientX;
-        tmy2 = e.clientY;
-      }, {passive:true});
-      window.addEventListener('mouseleave', function(){
-        tmx2 = -9999; tmy2 = -9999;
-      }, {passive:true});
-    }
-
-    function renderDots(){
-      mouseX2 += (tmx2 - mouseX2) * 0.1;
-      mouseY2 += (tmy2 - mouseY2) * 0.1;
-
-      ctx.clearRect(0, 0, cw, ch);
-
-      var cols = Math.ceil(cw / DOT_SPACING) + 2;
-      var rows = Math.ceil(ch / DOT_SPACING) + 2;
-      var offsetX = (cw % DOT_SPACING) / 2;
-      var offsetY = (ch % DOT_SPACING) / 2;
-
-      for(var r = 0; r < rows; r++){
-        for(var c = 0; c < cols; c++){
-          var bx = c * DOT_SPACING + offsetX;
-          var by = r * DOT_SPACING + offsetY;
-
-          var dx = bx - mouseX2;
-          var dy = by - mouseY2;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-
-          var px = bx, py = by;
-          var radius = DOT_RADIUS;
-          var alpha = 0.06;
-          var useAccent = false;
-
-          if(dist < BULGE_RADIUS && dist > 0.01){
-            var force = Math.pow(1 - dist / BULGE_RADIUS, 2);
-            px = bx + (dx / dist) * force * BULGE_STRENGTH * 8;
-            py = by + (dy / dist) * force * BULGE_STRENGTH * 8;
-            radius = DOT_RADIUS + force * 2.2;
-            alpha = 0.06 + force * 0.5;
-            useAccent = true;
-          }
-
-          if(useAccent){
-            var grad = ctx.createRadialGradient(px, py, 0, px, py, radius * 3);
-            grad.addColorStop(0, 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + (alpha * 0.5) + ')');
-            grad.addColorStop(1, 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',0)');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(px, py, radius * 3, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(' + accentRGB[0] + ',' + accentRGB[1] + ',' + accentRGB[2] + ',' + alpha + ')';
-          } else {
-            ctx.fillStyle = 'rgba(237,234,227,' + alpha + ')';
-          }
-
-          ctx.beginPath();
-          ctx.arc(px, py, radius, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      requestAnimationFrame(renderDots);
-    }
-    renderDots();
   } catch(err){}
 
 });
