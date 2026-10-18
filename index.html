@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
 <title>Piyush Tomar — Finance &amp; Automation Executive</title>
 <meta name="description" content="Finance &amp; Automation Executive — end-to-end P2P cycles, GST/TDS compliance and reconciliations, automated with Excel VBA, Power BI, Power Automate &amp; AI-assisted scripting across Oracle, NetSuite, Navision &amp; Tally.">
 <meta property="og:title" content="Piyush Tomar — Finance & Automation Executive">
 <meta property="og:description" content="End-to-end Accounts Payable, GST/TDS compliance and reconciliation — automated with Excel VBA, Power BI &amp; Power Automate across Oracle, NetSuite, Navision &amp; Tally.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://bolt.new/static/og_default.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 <meta name="theme-color" content="#08090A">
 <link rel="icon" type="image/svg+xml" href="dragon-seal.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,6 +46,7 @@
 </div>
 
 <!-- ====== DOT FIELD BACKGROUND (reactbits style) ====== -->
+<canvas id="aurora" class="aurora" aria-hidden="true"></canvas>
 <canvas id="dotCanvas" class="dot-canvas" aria-hidden="true"></canvas>
 
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
@@ -88,7 +88,7 @@
         <div class="hero-badges">
           <a href="#contact" class="badge-solid"><span class="dot"></span>Officer 1C, CMA CGM GBS — building automation-first finance ops</a>
         </div>
-        <h1 class="hero-title scroll-reveal">Finance, run<br><span class="grad">on automation.</span></h1>
+        <h1 class="hero-title">Finance, run<br><span class="grad">on automation.</span></h1>
         <p class="hero-desc scroll-reveal">I close the gap between the invoice and the ledger, then automate it shut — 3-way matching, GST/TDS compliance, and reconciliations, driven by Excel VBA, Power BI, Power Automate &amp; AI-assisted scripting across Oracle, NetSuite, Navision &amp; Tally.</p>
         <div class="hero-actions">
           <a href="#contact" class="btn-primary magnetic">Get in touch <span>&#8594;</span></a>
@@ -229,7 +229,7 @@
     </div>
     <div class="about-photo reveal">
       <div class="about-photo-frame">
-        <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar">
+        <img src="https://i.ibb.co/spTFBm9B/Linkedin-and-email.jpg" alt="Piyush Tomar" onerror="this.closest('.about-photo-frame').classList.add('noimg');this.remove()">
       </div>
     </div>
   </div>
@@ -614,6 +614,7 @@
   </div>
 </footer>
 
+<script src="assets/reactbits.js"></script>
 <script src="assets/main.js"></script>
 </body>
 </html>
