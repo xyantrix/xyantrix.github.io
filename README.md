@@ -41,3 +41,13 @@ assets/*.png        ERP logos
 - **Vault password** — `VALID_USER` / `VALID_PASS` in `contact-vault.html`.
   Anyone can read these in the page source, so treat it as obscurity, not
   security.
+
+## Theme layer (Framer-style)
+
+`assets/theme.css` loads after `style.css` and restyles the site: dark palette,
+aurora hero, glass cards, gradient accents, loader. `assets/fx.js` adds the
+loader counter, scroll reveals, count-up figures, card spotlight, cursor glow,
+magnetic buttons and scroll progress. Change the palette in the `:root` block at
+the top of `theme.css` (`--grad`, `--violet`, `--cyan`). Honors
+`prefers-reduced-motion`. Delete the theme link in `index.html` to go back to
+the original Swiss look.
