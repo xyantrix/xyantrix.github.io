@@ -7,7 +7,7 @@
 
   /* Word-by-word masked reveal on section headings */
   safe(function () {
-    var hs = $$('h2'), io = 'IntersectionObserver' in window && new IntersectionObserver(function (en) {
+    var hs = $$('h2:not(.cta-h)'), io = 'IntersectionObserver' in window && new IntersectionObserver(function (en) {
       en.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add('sp-in'); io.unobserve(x.target); } });
     }, { threshold: .3 });
     hs.forEach(function (h) {
@@ -41,7 +41,7 @@
   /* Spotlight glow + 3D tilt on cards */
   safe(function () {
     if (!fine) return;
-    $$('.bc,.sc,.job,.fg,.ledger,.ps').forEach(function (c) {
+    $$('.bc,.sc,.job,.fg,.ledger,.ps,.t,.r,.cm').forEach(function (c) {
       c.addEventListener('pointermove', function (e) {
         var r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
         c.style.setProperty('--mx', x + 'px'); c.style.setProperty('--my', y + 'px');
