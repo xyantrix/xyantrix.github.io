@@ -22,5 +22,7 @@ assets/*.png          ERP logos
 
 - Logo: the dragon seal is inlined once as `<symbol id="seal">` at the top of each page and reused by the loader, nav, hero watermark and vault. Gradient colours come from `--acc`, `--acc2`, `--acc3` in `:root`.
 
-## Luxe layer
-`assets/luxe.css` + `assets/luxe.js` add the champagne-gold palette, serif display type, custom cursor, magnetic buttons, spotlight/tilt cards, word-by-word heading reveals, label scramble and hero parallax. Palette tokens are at the top of `luxe.css`. Delete both files (and their two tags in `index.html`) to revert.
+## Revamp
+`assets/luxe.css` + `assets/luxe.js` add the platinum & iris palette, serif display type, custom cursor, magnetic buttons, spotlight/tilt cards, word-by-word heading reveals, label scramble and hero parallax. Palette tokens are at the top of `luxe.css`. Delete both files (and their two tags in `index.html`) to revert.
+`assets/revamp.css` + `revamp.js` add the bento About, stacking experience cards, visual project cards, live clock and CTA.
+`assets/v3.css` adds the agency-style flow: centered hero with the intact crest logo, Results, Services list and Approach comparison.
