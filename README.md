@@ -21,3 +21,6 @@ assets/*.png          ERP logos
   For reliability save it as `assets/portrait.jpg` and update the `src`.
 
 - Logo: the dragon seal is inlined once as `<symbol id="seal">` at the top of each page and reused by the loader, nav, hero watermark and vault. Gradient colours come from `--acc`, `--acc2`, `--acc3` in `:root`.
+
+## Luxe layer
+`assets/luxe.css` + `assets/luxe.js` add the champagne-gold palette, serif display type, custom cursor, magnetic buttons, spotlight/tilt cards, word-by-word heading reveals, label scramble and hero parallax. Palette tokens are at the top of `luxe.css`. Delete both files (and their two tags in `index.html`) to revert.
