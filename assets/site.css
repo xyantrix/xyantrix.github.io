@@ -91,7 +91,7 @@ h3{font:600 1.2rem/1.3 var(--sans);letter-spacing:-.015em}
 .pill{pointer-events:auto;display:flex;align-items:center;gap:4px;height:56px;padding:6px 6px 6px 18px;border-radius:999px;background:rgb(12 13 22/.6);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border:1px solid var(--line);box-shadow:0 14px 44px -16px rgb(0 0 0/.7),inset 0 1px 0 rgb(255 255 255/.06);max-width:100%;transition:background .4s,border-color .4s}
 .nav.scrolled .pill{background:rgb(10 11 18/.78);border-color:var(--line2)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:-.01em;white-space:nowrap;margin-right:14px}
-.brand svg{width:20px;height:26px;fill:url(#lgu);flex:none;transition:transform .6s var(--ease),filter .4s}
+.brand svg{overflow:visible;width:21px;height:27px;fill:url(#lgu);flex:none;transition:transform .6s var(--ease),filter .4s}
 .brand:hover svg{transform:rotate(-8deg) scale(1.12);filter:drop-shadow(0 0 8px var(--a2))}
 .nl{padding:8px 15px;border-radius:999px;font-size:14px;color:var(--mut);transition:color .25s,background .25s;white-space:nowrap}
 .nl:hover{color:var(--ink)}.nl.on{color:var(--ink);background:rgb(255 255 255/.08)}
@@ -124,7 +124,7 @@ h3{font:600 1.2rem/1.3 var(--sans);letter-spacing:-.015em}
 .hero::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(560px circle at var(--mx,50%) var(--my,18%),color-mix(in srgb,var(--a2) 16%,transparent),transparent 70%)}
 .hero .wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
 .crest{width:clamp(50px,6vw,68px);margin-bottom:26px;filter:drop-shadow(0 0 22px color-mix(in srgb,var(--a2) 55%,transparent));animation:float 7s ease-in-out infinite alternate}
-.crest svg{width:100%;height:auto;fill:url(#lgu)}
+.crest svg{width:100%;height:auto;overflow:visible;fill:url(#lgu)}
 @keyframes float{to{transform:translateY(-6px)}}
 .stat{display:inline-flex;align-items:center;gap:10px;padding:8px 18px 8px 14px;border:1px solid var(--line);border-radius:999px;background:rgb(255 255 255/.035);font-size:14px;color:var(--mut);margin-bottom:clamp(26px,4vw,40px)}
 .dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2.2s infinite;flex:none}
@@ -339,7 +339,6 @@ footer{margin-top:var(--sec);border-top:1px solid var(--line);padding:clamp(48px
 .fc .mono{margin-bottom:6px;color:var(--dim)}
 .fc a{color:var(--mut);transition:color .3s;width:fit-content}
 @media (hover:hover){.fc a:hover{color:var(--ink)}}
-.wm{font:300 clamp(2.8rem,15vw,12rem)/.9 var(--serif);letter-spacing:-.05em;margin:clamp(56px,9vw,96px) 0 28px;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgb(255 255 255/.16);background:radial-gradient(circle 360px at var(--mx,-40%) var(--my,50%),var(--a1),var(--a2) 45%,transparent 75%);-webkit-background-clip:text;background-clip:text;padding-bottom:.08em;user-select:none}
 .fb{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--dim);font-size:14px;padding-top:20px;border-top:1px solid var(--line)}
 .fb a:hover{color:var(--ink)}
 
@@ -434,3 +433,18 @@ html:not(.js) .wd i{transform:none}
 }
 @media (min-width:900px){.ln:nth-child(-n+2){flex:0 0 auto}}
 .proof .pl{flex:1 1 100%;justify-content:center}
+
+/* Footer wordmark: stroke draws, fills, then a light runs along the outline */
+.wms{display:block;width:100%;height:auto;margin:clamp(56px,9vw,96px) 0 28px;overflow:visible;font:300 200px/1 var(--serif);letter-spacing:-.02em;user-select:none}
+.wms text{stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round;paint-order:stroke}
+.wms .w0{fill:rgb(255 255 255/0);stroke:url(#wsg);stroke-dasharray:2400;stroke-dashoffset:2400}
+.wms .w1{fill:url(#wrg);stroke:none;opacity:0;transition:opacity .5s}
+.wms:hover .w1{opacity:1}
+.wms .w2{fill:none;stroke:#fff;stroke-opacity:.85;stroke-dasharray:130 2270;stroke-dashoffset:0;opacity:0}
+.wms.in .w0{animation:wdraw 3.2s cubic-bezier(.65,0,.35,1) forwards,wfill 1.4s ease 2.5s forwards}
+.wms.in .w2{opacity:1;animation:wrun 7s linear 3.4s infinite}
+@keyframes wdraw{to{stroke-dashoffset:0}}@keyframes wfill{to{fill:rgb(255 255 255/.06)}}@keyframes wrun{to{stroke-dashoffset:-2400}}
+html:not(.js) .wms .w0{stroke-dashoffset:0}
+@media (max-width:700px){.wms text{stroke-width:3.4}}
+@media (prefers-reduced-motion:reduce){.wms .w0{stroke-dashoffset:0;fill:rgb(255 255 255/.06)}.wms .w2{display:none}}
+@media (max-width:900px){.fb{padding-right:64px}}
