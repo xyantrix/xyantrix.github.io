@@ -7,7 +7,7 @@ The old layered files (style, luxe, revamp, v3, anim, bits, main .css/.js) are g
 ```
 index.html            Main site
 contact-vault.html    Unlinked, password-gated contact page
-Website_logo.png      Favicon
+favicon.png / Website_logo.png   Favicon (padded so round tab icons never crop it)
 assets/site.css       All styles. Colour palettes + tokens at the very top
 assets/site.js        Loader, palette dock, animations, strips, nav, form, vault gate
 assets/*.png          ERP logos
