@@ -26,3 +26,5 @@ assets/*.png          ERP logos
 `assets/luxe.css` + `assets/luxe.js` add the platinum & iris palette, serif display type, custom cursor, magnetic buttons, spotlight/tilt cards, word-by-word heading reveals, label scramble and hero parallax. Palette tokens are at the top of `luxe.css`. Delete both files (and their two tags in `index.html`) to revert.
 `assets/revamp.css` + `revamp.js` add the bento About, stacking experience cards, visual project cards, live clock and CTA.
 `assets/v3.css` adds the agency-style flow: centered hero with the intact crest logo, Results, Services list and Approach comparison.
+`assets/anim.css` + `anim.js`: four colour palettes (switcher at the bottom of the page; default set in the inline script in `index.html`), animated mesh background, staggered blur-rise reveals, scroll-scrubbed hero card, pointer glow.
+Hero constellation/dots and background grid were removed; the loader and section-change background blur follow the active palette (`anim.css`/`anim.js`).
