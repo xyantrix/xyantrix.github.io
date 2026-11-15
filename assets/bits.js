@@ -17,7 +17,7 @@
 
   /* Particles: drifting constellation that reacts to the cursor */
   safe(function () {
-    var hero = d.querySelector('.hero'); if (!hero || reduce) return;
+    var hero = null; if (!hero || reduce) return; /* constellation removed */
     var cv = d.createElement('canvas'); cv.className = 'pcv'; hero.insertBefore(cv, hero.firstChild);
     var x = cv.getContext('2d'), W, H, dpr = Math.min(devicePixelRatio || 1, 2), P = [], m = { x: -999, y: -999 }, on = true;
     function size() { W = hero.clientWidth; H = hero.clientHeight; cv.width = W * dpr; cv.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
